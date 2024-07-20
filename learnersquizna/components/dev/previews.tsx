@@ -5,6 +5,9 @@ import Index from "@/app/page";
 const ComponentPreviews = () => {
     return (
         <Previews palette={<PaletteTree/>}>
+            <ComponentPreview path="/PaletteTree">
+                <PaletteTree/>
+            </ComponentPreview>
             <ComponentPreview path="/Index">
                 <Index/>
             </ComponentPreview>
