@@ -1,15 +1,15 @@
-export default function Footer() {
+export function Footer() {
     return (
         <>
             <p>
-                lets make some beautiful things{" "}
+                hope this  {" "}
                 <a
                     href="https://frans-nekongo.com/"
                     target="_blank"
                     className="font-bold hover:underline"
                     rel="noreferrer"
                 >
-                    that last
+                    helps
                 </a>
             </p>
         </>
