@@ -5,16 +5,19 @@ import {CardBody, CardHeader} from "@nextui-org/card";
 import {Radio, RadioGroup} from "@nextui-org/radio";
 import QuestionsGet from "@/components/QuestionsGet"
 
+interface RadioOption{
+    value:string
+    description:string
+    label:string
+}
 interface QuestionCardProps {
     questionNumber: string;
     questionText: string
     imageSrc:string
-    radioDes1:string
-    radioDes2: string
-    radioDes3:string
+    radioOptions:RadioOption[]
 }
 
-export function Questioncard({ questionNumber,questionText, imageSrc, radioDes1,radioDes2,radioDes3 }: QuestionCardProps) {
+export function Questioncard({ questionNumber,questionText, imageSrc, radioOptions }: QuestionCardProps) {
     return (
         // grid-rows-3
         // <div className="grid grid-flow-row-dense grid-cols-2  gap-4">
@@ -32,16 +35,12 @@ export function Questioncard({ questionNumber,questionText, imageSrc, radioDes1,
                     />
                 </CardBody>
                 <CardHeader>
-                    <RadioGroup color="warning">
-                        <Radio value="" description={radioDes1}>
-                            A
+                    <RadioGroup color="warning" name={`question-${questionNumber}`}>
+                        {radioOptions.map((option) => (
+                        <Radio key={option.value} value={option.value} description={option.description}>
+                            {option.label}
                         </Radio>
-                        <Radio value="" description={radioDes2}>
-                            B
-                        </Radio>
-                        <Radio value="" description={radioDes3}>
-                            C
-                        </Radio>
+                    ))}
                     </RadioGroup>
                 </CardHeader>
             </Card>

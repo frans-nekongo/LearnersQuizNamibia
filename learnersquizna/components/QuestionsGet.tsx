@@ -18,10 +18,10 @@ export default function QuestionsGet() {
                 .schema("public")
                 .from('question')
                 .select('*')
-                .order('q_number',{ascending: true})
-                // .schema("public")
-                // .from('table_name')
-                // .select('*')
+                .order('q_number', {ascending: true})
+            // .schema("public")
+            // .from('table_name')
+            // .select('*')
 
             setPosts(table_name)
             setIsLoading(false)
@@ -44,8 +44,15 @@ export default function QuestionsGet() {
                     //     <p>Updated At: {post.updated_at}</p>
                     //     <p>Data: {post.data}</p>
                     // </Card>
-                    <Questioncard questionNumber={post.q_number} questionText={post.question_text} imageSrc={post.picture_link} radioDes1={post.answer} radioDes2={post.option_1} radioDes3={post.option_2}/>
-
+                    <Questioncard
+                        questionNumber={post.q_number}
+                        questionText={post.question_text}
+                        imageSrc={post.picture_link}
+                        radioOptions={[
+                           { value: "a", description: post.answer, label: "A" },
+                            { value: "b", description: post.option_1, label: "B" },
+                            { value: "c", description: post.option_2, label: "C" }
+                        ]}/>
                 ))
             )}
         </div>
