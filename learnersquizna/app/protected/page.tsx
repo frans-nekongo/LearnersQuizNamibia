@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import { redirect } from "next/navigation";
 import {Footer} from "@/components/Footer";
 import {Questioncard} from "@/components/Questioncard";
+import QuestionsGet from "@/components/QuestionsGet"
 
 export default async function ProtectedPage() {
   const supabase = createClient();
@@ -36,9 +37,10 @@ export default async function ProtectedPage() {
         <div className="flex-1 flex flex-col gap-20 max-w-4xl px-3">
           <Header/>
           <main className="flex-1 flex flex-col gap-6">
-            <h2 className="font-bold text-4xl mb-4">Next steps</h2>
-              <Questioncard/>
-            <FetchDataSteps/>
+            <h2 className="font-bold text-4xl mb-4 text-center">Select Question paper</h2>
+              {/*<Questioncard/>*/}
+              <QuestionsGet/>
+            {/*<FetchDataSteps/>*/}
           </main>
         </div>
 
