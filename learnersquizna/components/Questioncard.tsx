@@ -20,7 +20,7 @@ export function Questioncard({ questionNumber,questionText, imageSrc, radioDes1,
         // <div className="grid grid-flow-row-dense grid-cols-2  gap-4">
             <Card className="py-4 bg-white/5">
                 <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                    <p className="text-tiny font-semibold">{questionNumber}". "{questionText}
+                    <p className="text-tiny font-semibold">{questionNumber}. {questionText}
                     </p>
                 </CardHeader>
                 <CardBody className="overflow-visible py-2">

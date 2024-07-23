@@ -15,9 +15,10 @@ export default function QuestionsGet() {
 
             let {data: table_name, error} = await supabase
                 // .from('learnersquizNA.question')
-                .schema("learnersquizNA")
+                .schema("public")
                 .from('question')
                 .select('*')
+                .order('q_number',{ascending: true})
                 // .schema("public")
                 // .from('table_name')
                 // .select('*')
@@ -29,24 +30,24 @@ export default function QuestionsGet() {
         fetchPosts()
     }, [])
 
-    return isLoading ? <p>Loading</p> : <pre>{JSON.stringify(posts, null, 2)}</pre>
-    // return (
-    //     <div className="grid grid-flow-row-dense grid-cols-2  gap-4">
-    //         {posts.length === 0 ? (
-    //             <p>No data available</p>
-    //         ) : (
-    //             posts.map((post) => (
-    //                 // <Card key={post.id} className="py-4 bg-white/5">
-    //                 //     <h3>{post.name}</h3>
-    //                 //     <p>ID: {post.id}</p>
-    //                 //     <p>Inserted At: {post.inserted_at}</p>
-    //                 //     <p>Updated At: {post.updated_at}</p>
-    //                 //     <p>Data: {post.data}</p>
-    //                 // </Card>
-    //                 <Questioncard questionNumber={post.id} questionText={post.name} imageSrc={""} radioDes1={""} radioDes2={""} radioDes3={""}/>
-    //
-    //             ))
-    //         )}
-    //     </div>
-    // )
+    // return isLoading ? <p>Loading</p> : <pre>{JSON.stringify(posts, null, 2)}</pre>
+    return (
+        <div className="grid grid-flow-row-dense grid-cols-2  gap-4">
+            {posts.length === 0 ? (
+                <p>No data available</p>
+            ) : (
+                posts.map((post) => (
+                    // <Card key={post.id} className="py-4 bg-white/5">
+                    //     <h3>{post.name}</h3>
+                    //     <p>ID: {post.id}</p>
+                    //     <p>Inserted At: {post.inserted_at}</p>
+                    //     <p>Updated At: {post.updated_at}</p>
+                    //     <p>Data: {post.data}</p>
+                    // </Card>
+                    <Questioncard questionNumber={post.q_number} questionText={post.question_text} imageSrc={post.picture_link} radioDes1={post.answer} radioDes2={post.option_1} radioDes3={post.option_2}/>
+
+                ))
+            )}
+        </div>
+    )
 }
