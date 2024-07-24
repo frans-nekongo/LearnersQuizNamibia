@@ -4,8 +4,13 @@ import {useEffect, useState} from 'react'
 import {createClient} from '@/utils/supabase/client'
 import {Card} from "@nextui-org/react";
 import {Questioncard} from "@/components/Questioncard";
+import {AnimateLoading} from "@/components/AnimateLoading";
 
-export default function QuestionsGet() {
+interface SectionBProps {
+    selectedSet?: string
+}
+
+export default function SectionB({selectedSet}: SectionBProps) {
     const [isLoading, setIsLoading] = useState(true)
     const [posts, setPosts] = useState<any>([])
     const supabase = createClient()
@@ -19,10 +24,8 @@ export default function QuestionsGet() {
                 .from('question')
                 .select('*')
                 .order('q_number', {ascending: true})
-                .eq('q_set', 'A')
-            // .schema("public")
-            // .from('table_name')
-            // .select('*')
+                .eq('section_text', 'SECTION B – SIGNS – ALL CODES')
+                .eq('q_set', selectedSet)
 
             setPosts(table_name)
             setIsLoading(false)
@@ -33,12 +36,21 @@ export default function QuestionsGet() {
 
     // return isLoading ? <p>Loading</p> : <pre>{JSON.stringify(posts, null, 2)}</pre>
     return isLoading ?
-        <p>Loading</p> :
+        <p>Loading</p>
+        // <AnimateLoading/>
+        :
         <div className="grid grid-flow-row-dense grid-cols-2  gap-4">
             {posts.length === 0 ? (
                 <p>No data available</p>
             ) : (
-                posts.map((post: { q_number: string; question_text: string; picture_link: string; answer: any; option_1: any; option_2: any; }) => (
+                posts.map((post: {
+                    q_number: string;
+                    question_text: string;
+                    picture_link: string;
+                    answer: any;
+                    option_1: any;
+                    option_2: any;
+                }) => (
                     <Questioncard
                         questionNumber={post.q_number}
                         questionText={post.question_text}
