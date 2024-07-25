@@ -1,9 +1,9 @@
-
 import {useEffect, useState} from 'react'
 import {createClient} from '@/utils/supabase/client'
 import {Questioncard} from "@/components/Questioncard";
 import {AnimateLoading} from "@/components/AnimateLoading";
 import {access} from "node:fs";
+import {any} from "prop-types";
 
 interface SectionBProps {/*change this when section move*/
     selectedSet?: string
@@ -22,12 +22,13 @@ function shuffleArray(array: any) {
     return array;
 }
 
-export default function SectionB({selectedSet,onScoreChange}: SectionBProps) {/*change this when section move*/
+export default function SectionB({selectedSet, onScoreChange}: SectionBProps) {/*change this when section move*/
     const [isLoading, setIsLoading] = useState(true)
     const [posts, setPosts] = useState<any>([])
     const supabase = createClient()
 
-    const [answers, setAnswers] = useState({});
+    const [answers
+        , setAnswers] = useState({});
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -50,9 +51,9 @@ export default function SectionB({selectedSet,onScoreChange}: SectionBProps) {/*
         fetchPosts()
     }, [selectedSet]);
 
- const handleAnswerChange = (questionNumber: string, value: string) => {
+    const handleAnswerChange = (questionNumber: string, value: string): any => {
         setAnswers((prevAnswers) => {
-            const updatedAnswers = {
+            const updatedAnswers: any = {
                 ...prevAnswers,
                 [questionNumber]: value
             };
@@ -121,11 +122,11 @@ export default function SectionB({selectedSet,onScoreChange}: SectionBProps) {/*
                                 }))}
                                 onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
                             />
-                            <p>
-                                selected option:{answers[post.q_number]}
-                                <br/>
-                                score:{calculateScore()}
-                            </p>
+                            {/*<p>*/}
+                            {/*    selected option:{answers[post.q_number]}*/}
+                            {/*    <br/>*/}
+                            {/*    score:{calculateScore()}*/}
+                            {/*</p>*/}
                         </>
                     );
                 })

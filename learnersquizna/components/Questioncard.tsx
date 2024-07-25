@@ -40,7 +40,6 @@ export function Questioncard({ questionNumber, questionText, imageSrc, radioOpti
                         </Radio>
                     ))}
                 </RadioGroup>
-                <p></p>
             </CardHeader>
         </Card>
     );

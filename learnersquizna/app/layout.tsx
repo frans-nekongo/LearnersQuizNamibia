@@ -10,8 +10,11 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Namibian Learners Test",
-  description: "A quiz to help practice for your Namibian Learners test",
+  title: 'Namibian Learners licence Test',
+  description: 'A quiz to help practice for your Namibian Learners licence test',
+    icons:{
+      icon:"./",
+    },
 };
 
 export default function RootLayout({

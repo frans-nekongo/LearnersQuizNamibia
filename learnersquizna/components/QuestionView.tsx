@@ -19,7 +19,7 @@ export function QuestionView() {
     const [sectionScores, setSectionScores] = useState({sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0});
 
 
-   const handleSectionScore = (section: string, score: number) => {
+   const handleSectionScore = (section: string, score: number):any => {
         setSectionScores((prevScores) => ({
             ...prevScores,
             [section]: score
