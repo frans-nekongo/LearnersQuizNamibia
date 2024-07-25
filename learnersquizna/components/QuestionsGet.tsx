@@ -31,6 +31,10 @@ export default function QuestionsGet() {
         fetchPosts()
     }, [])
 
+    function handleAnswerChange(q_number: string, value: string) {
+        return "";
+    }
+
     // return isLoading ? <p>Loading</p> : <pre>{JSON.stringify(posts, null, 2)}</pre>
     return isLoading ?
         <p>Loading</p> :
@@ -47,7 +51,7 @@ export default function QuestionsGet() {
                             {value: "a", description: post.answer, label: "A"},
                             {value: "b", description: post.option_1, label: "B"},
                             {value: "c", description: post.option_2, label: "C"}
-                        ]}/>
+                        ]} onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}/>
                 ))
             )}
         </div>

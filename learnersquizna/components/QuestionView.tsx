@@ -65,17 +65,17 @@ export function QuestionView() {
                     <h3 className="text-2xl font-semibold text-center">
                         SECTION C – RULES – ALL CODES
                     </h3>
-                    <SectionC selectedSet={selectedSet}/>
+                    <SectionC selectedSet={selectedSet} onScoreChange={(score) => handleSectionScore('sectionC', score)}/>
 
                     <h3 className="text-2xl font-semibold text-center">
                         SECTION D - MOTOR CYCLES ONLY
                     </h3>
-                    <SectionD selectedSet={selectedSet}/>
+                    <SectionD selectedSet={selectedSet} onScoreChange={(score) => handleSectionScore('sectionD', score)}/>
 
                     <h3 className="text-2xl font-semibold text-center">
                         SECTION E – LIGHT AND HEAVY VEHICLES ONLY
                     </h3>
-                    <SectionE selectedSet={selectedSet}/>
+                    <SectionE selectedSet={selectedSet} onScoreChange={(score) => handleSectionScore('sectionE', score)}/>
 
                     <Button color="primary" variant="flat" onClick={handleSubmit}>
                         Submit
