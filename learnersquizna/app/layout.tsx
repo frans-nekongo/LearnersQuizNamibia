@@ -8,12 +8,13 @@ const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
 
+var url ="https://isqkzbwoiunnqsltbfpa.supabase.co/storage/v1/object/public/WebsiteLogo/logo.ico?t=2024-07-25T21%3A32%3A36.405Z";
 export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: 'Namibian Learners licence Test',
   description: 'A quiz to help practice for your Namibian Learners licence test',
     icons:{
-      icon:"./",
+      icon:url
     },
 };
 
