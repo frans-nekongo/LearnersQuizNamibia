@@ -11,22 +11,21 @@ import waiting = Simulate.waiting;
 import {wait} from "next/dist/lib/wait";
 
 export function QuestionView() {
-    const [selectedSet, setSelectedSet] = useState(null); // Initialize with null to indicate no selection
-
+    const [selectedSet, setSelectedSet] = useState<string | null>(null);
     const [totalScore, setTotalScore] = useState(0);
     const [submitted, setSubmitted] = useState(false);
 
     const [sectionScores, setSectionScores] = useState({sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0});
 
 
-   const handleSectionScore = (section: string, score: number):any => {
+    const handleSectionScore = (section: string, score: number): any => {
         setSectionScores((prevScores) => ({
             ...prevScores,
             [section]: score
         }));
     };
 
-       const handleSubmit = () => {
+    const handleSubmit = () => {
         const finalScore = Object.values(sectionScores).reduce((acc, curr) => acc + curr, 0);
         setTotalScore(finalScore);
         setSubmitted(true);
@@ -60,7 +59,8 @@ export function QuestionView() {
                     <h3 className="text-2xl font-semibold text-center">
                         SECTION B – SIGNS – ALL CODES
                     </h3>
-                    <SectionB selectedSet={selectedSet} onScoreChange={(score) => handleSectionScore('sectionB', score)}/>
+                    <SectionB selectedSet={selectedSet}
+                              onScoreChange={(score) => handleSectionScore('sectionB', score)}/>
 
                     <h3 className="text-2xl font-semibold text-center">
                         SECTION C – RULES – ALL CODES

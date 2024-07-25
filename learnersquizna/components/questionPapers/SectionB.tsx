@@ -7,7 +7,7 @@ import {any} from "prop-types";
 
 interface SectionBProps {/*change this when section move*/
     selectedSet?: string
-    onScoreChange: (score: number) => null;
+    onScoreChange: (score: number) => void;
 }
 
 interface answer {
@@ -73,15 +73,15 @@ export default function SectionB({selectedSet, onScoreChange}: SectionBProps) {/
         });
     };
 
-    const calculateScore = () => {
-        let score = 0;
-        posts.forEach((post: { q_number: string | number; }) => {
-            if (answers[post.q_number] === "1") {
-                score += 1;
-            }
-        });
-        return score;
-    };
+    // const calculateScore = () => {
+    //     let score = 0;
+    //     posts.forEach((post: { q_number: string | number; }) => {
+    //         if (answers[post.q_number] === "1") {
+    //             score += 1;
+    //         }
+    //     });
+    //     return score;
+    // };
 
     return isLoading ? (
         <p>Loading</p>
