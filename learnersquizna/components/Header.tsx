@@ -22,7 +22,7 @@ export default function Header() {
                 Master your
             </p>
             <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center font-bold hover:underline">
-                Namibian Learners Test
+                Namibian Learners Test.
             </p>
 
             <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8"/>
