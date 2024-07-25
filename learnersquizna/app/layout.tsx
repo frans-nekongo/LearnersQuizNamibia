@@ -4,8 +4,8 @@ import React from "react";
 
 import {Providers} from "@/components/NextUI/Providers";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
+const defaultUrl = "https://namibianlearnerstest.netlify.app"
+  ? `https://namibianlearnerstest.netlify.app`
   : "http://localhost:3000";
 
 var url ="https://isqkzbwoiunnqsltbfpa.supabase.co/storage/v1/object/public/WebsiteLogo/logo.ico?t=2024-07-25T21%3A32%3A36.405Z";
