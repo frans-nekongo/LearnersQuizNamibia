@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="37bedd57-9e88-4c4e-893d-51dac4f83453" name="Changes" comment="temp;late adjustment to fit project criteria" />
+    <list default="true" id="37bedd57-9e88-4c4e-893d-51dac4f83453" name="Changes" comment="temp;late adjustment to fit project criteria">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -62,7 +64,7 @@
     "git-widget-placeholder": "main",
     "javascript.nodejs.core.library.configured.version": "22.4.1",
     "javascript.nodejs.core.library.typings.version": "20.14.11",
-    "last_opened_file_path": "/home/rxd/Documents/Projects/LEARNERS-QUIZ_ER/learnersquizna",
+    "last_opened_file_path": "/home/rxd/Documents/Projects/Frans-Nekongo-Portfolio",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -119,6 +121,7 @@
       <workItem from="1721559231236" duration="9018000" />
       <workItem from="1721587374388" duration="15597000" />
       <workItem from="1721648034733" duration="3660000" />
+      <workItem from="1721950941992" duration="1403000" />
     </task>
     <task id="LOCAL-00001" summary="started with template ,getting acquianted with files and structure">
       <option name="closed" value="true" />
