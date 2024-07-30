@@ -5,7 +5,7 @@ import {Snippet} from "@nextui-org/react";
 export default function SignUpUserSteps() {
     return (
         <ol className="flex flex-col gap-6">
-            <Step title="Sign up/ Create Account">
+            <Step title="Login/ Create Account">
                 <p>
                     Head over to the{" "}
                     <Link
@@ -21,6 +21,11 @@ export default function SignUpUserSteps() {
                     <Snippet symbol="password" color="danger" size="sm">demo</Snippet>
                 </div>
             </Step>
+            <Step title="Take quiz">
+                <p>
+                    Choose a paper...And practice like no ones watching.
+                </p>
+            </Step>
         </ol>
-);
+    );
 }
