@@ -99,7 +99,7 @@ export function QuestionView() {
                     </div>
 
                     {/* Timer toggle switch */}
-                    <div className="flex flex-row mt-4">
+                    <div className="flex flex-row mt-4 w-full justify-end items-center space-x-4">
                         <label className="flex items-center">
                             <span className="mr-2">Enable Timer</span>
                             <Switch
@@ -109,9 +109,10 @@ export function QuestionView() {
                             />
                         </label>
                         <Button color="secondary" variant="flat" onClick={() => setSelectedCode(null)}>
-                            Back to Licence Code Selection
+                            Back
                         </Button>
                     </div>
+
                 </div>
             )}
 
