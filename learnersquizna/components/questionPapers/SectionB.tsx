@@ -1,11 +1,12 @@
-
 import {useEffect, useState} from 'react';
 import {createClient} from '@/utils/supabase/client';
 import {Questioncard} from "@/components/Questioncard";
 
 interface SectionBProps {
-    selectedSet?: string;
-    onScoreChange: (score: number) => void;
+    selectedSet?: string,
+    onScoreChange: (score: number) => void,
+    submitted: boolean,
+    onSubmit?: () => void
 }
 
 interface AnswerOption {
@@ -13,7 +14,7 @@ interface AnswerOption {
     description: string;
 }
 
-export default function SectionB({selectedSet, onScoreChange}: SectionBProps) {
+export default function SectionB({selectedSet, onScoreChange, submitted, onSubmit}: SectionBProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState<any[]>([]);
     const [shuffledOptionsMap, setShuffledOptionsMap] = useState<{ [key: string]: AnswerOption[] }>({});
@@ -108,6 +109,8 @@ export default function SectionB({selectedSet, onScoreChange}: SectionBProps) {
                             label: ['A', 'B', 'C'][index] // Keep labels in A, B, C order
                         }))}
                         onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
+                        correctAnswer={post.answer} // Pass correct answer
+                        submitted={submitted} // Pass submitted state
                     />
                 ))
             )}

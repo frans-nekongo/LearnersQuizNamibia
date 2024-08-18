@@ -12,20 +12,20 @@ export default function Header() {
         <div className="flex flex-col gap-5 items-center">
             {/*<div className="flex gap-8 justify-center items-center">*/}
             {/*</div>*/}
-            <img
+            <Image
+                height={"350px"}
                 src={url}
-            />
+                alt={url}/>
 
             <h1 className="sr-only">Namibian Learners licence Test</h1>
 
-            <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center">
+            <p className="text-2xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center">
                 Master your
             </p>
-            <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center font-bold hover:underline">
+            <p className="text-2xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center font-bold hover:underline">
                 Namibian Learners Test.
             </p>
-
-            <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8"/>
+            <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-1"/>
         </div>
     );
 }
