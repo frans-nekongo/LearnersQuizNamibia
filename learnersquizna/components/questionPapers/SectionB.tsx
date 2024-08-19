@@ -1,6 +1,6 @@
-import {useEffect, useState} from 'react';
-import {createClient} from '@/utils/supabase/client';
-import {Questioncard} from "@/components/Questioncard";
+import { useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { Questioncard } from "@/components/Questioncard";
 
 interface SectionBProps {
     selectedSet?: string,
@@ -14,7 +14,7 @@ interface AnswerOption {
     description: string;
 }
 
-export default function SectionB({selectedSet, onScoreChange, submitted, onSubmit}: SectionBProps) {
+export default function SectionB({ selectedSet, onScoreChange, submitted, onSubmit }: SectionBProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState<any[]>([]);
     const [shuffledOptionsMap, setShuffledOptionsMap] = useState<{ [key: string]: AnswerOption[] }>({});
@@ -23,11 +23,11 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
 
     useEffect(() => {
         const fetchPosts = async () => {
-            let {data: table_name, error} = await supabase
+            let { data: table_name, error } = await supabase
                 .schema("public")
                 .from('question')
                 .select('*')
-                .order('q_number', {ascending: true})
+                .order('q_number', { ascending: true })
                 .eq('section_text', 'SECTION B – SIGNS – ALL CODES')
                 .eq('q_set', selectedSet);
 
@@ -41,9 +41,9 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
                 const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
                 nonNullData.forEach((post) => {
                     const options: AnswerOption[] = [
-                        {value: "1", description: post.answer},
-                        {value: "b", description: post.option_1},
-                        {value: "c", description: post.option_2}
+                        { value: "1", description: post.answer },
+                        { value: "b", description: post.option_1 },
+                        { value: "c", description: post.option_2 }
                     ];
 
                     // Assign options to A, B, C based on their values, unless it's not "A", "B", or "C"
@@ -111,6 +111,7 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
                         onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
                         correctAnswer={post.answer} // Pass correct answer
                         submitted={submitted} // Pass submitted state
+                        selectedAnswer={answers[post.q_number]} // Pass selected answer
                     />
                 ))
             )}

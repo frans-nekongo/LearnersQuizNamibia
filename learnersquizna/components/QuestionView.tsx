@@ -5,8 +5,9 @@ import SectionB from '@/components/questionPapers/SectionB';
 import SectionC from '@/components/questionPapers/SectionC';
 import SectionD from '@/components/questionPapers/SectionD';
 import SectionE from '@/components/questionPapers/SectionE';
-import {Button, Switch} from '@nextui-org/react';
-import {FaMotorcycle, FaCar, FaTruck} from 'react-icons/fa'; // Import icons
+import {Button, Switch, Modal, useDisclosure} from '@nextui-org/react';
+import {FaMotorcycle, FaCar, FaTruck} from 'react-icons/fa';
+import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal"; // Import icons
 
 export function QuestionView() {
     const [selectedCode, setSelectedCode] = useState<string | null>(null);
@@ -17,6 +18,8 @@ export function QuestionView() {
     const [timerEnabled, setTimerEnabled] = useState(false); // State to manage timer toggle
     const [timeLeft, setTimeLeft] = useState<number | null>(null); // State for timer
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // State to store interval ID
+
+    const {isOpen, onOpen, onClose} = useDisclosure(); // UseDisclosure for modal control
 
     const handleSectionScore = (section: string, score: number) => {
         setSectionScores(prevScores => ({
@@ -35,6 +38,9 @@ export function QuestionView() {
         if (intervalId) {
             clearInterval(intervalId);
         }
+
+        // Set the timer to zero
+        setTimeLeft(0);
     };
 
     useEffect(() => {
@@ -108,7 +114,8 @@ export function QuestionView() {
                                 onChange={() => setTimerEnabled(prev => !prev)}
                             />
                         </label>
-                        <Button color="secondary" variant="flat" onClick={() => setSelectedCode(null)}>
+                        <Button key="BackToSelectLearnersCode" color="secondary" variant="flat"
+                                onClick={() => setSelectedCode(null)}>
                             Back
                         </Button>
                     </div>
@@ -119,14 +126,14 @@ export function QuestionView() {
             {selectedSet && ( // Render appropriate sections based on selected code and set
                 <>
                     <Button
+                        key="BackToSelectQuestionPaper"
                         className="fixed z-40 bottom-[20px] right-2 p-2 text-black dark:text-white"
                         color="default"
                         variant="faded"
-                        onClick={() => setSelectedSet(null)}
+                        onClick={onOpen} // Show confirmation dialog
                     >
-                        Back
+                        Back/exit test
                     </Button>
-
 
                     <h3 className="text-2xl font-semibold text-center">
                         SECTION B – SIGNS – ALL CODES
@@ -140,7 +147,6 @@ export function QuestionView() {
                             }}
                             submitted={submitted}/>
                     </div>
-
 
                     <h3 className="text-2xl font-semibold text-center">
                         SECTION C – RULES – ALL CODES
@@ -185,6 +191,32 @@ export function QuestionView() {
                             </p>
                         </div>
                     )}
+
+                    {/* Confirmation Dialog */}
+                    <Modal
+                        backdrop="opaque"
+                        isOpen={isOpen}
+                        onOpenChange={onClose}
+                    >
+                        <ModalContent>
+                            <ModalHeader>Confirmation</ModalHeader>
+                            <ModalBody>
+                                Are you sure you want to leave or stop the test in progress?
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="warning" variant="light" onClick={() => {
+                                    setSelectedSet(null);
+                                    setSubmitted(false);
+                                    onClose();
+                                }}>
+                                    Yes
+                                </Button>
+                                <Button onClick={onClose}>
+                                    No
+                                </Button>
+                            </ModalFooter>
+                        </ModalContent>
+                    </Modal>
                 </>
             )}
         </>
