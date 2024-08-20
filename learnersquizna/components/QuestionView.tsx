@@ -1,6 +1,6 @@
 'use client';
 
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import SectionB from '@/components/questionPapers/SectionB';
 import SectionC from '@/components/questionPapers/SectionC';
 import SectionD from '@/components/questionPapers/SectionD';
@@ -15,11 +15,13 @@ export function QuestionView() {
     const [totalScore, setTotalScore] = useState(0);
     const [submitted, setSubmitted] = useState(false);
     const [sectionScores, setSectionScores] = useState({sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0});
-    const [timerEnabled, setTimerEnabled] = useState(false); // State to manage timer toggle
+    const [timerEnabled, setTimerEnabled] = useState(true); // State to manage timer toggle
     const [timeLeft, setTimeLeft] = useState<number | null>(null); // State for timer
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // State to store interval ID
 
     const {isOpen, onOpen, onClose} = useDisclosure(); // UseDisclosure for modal control
+    const timerSwitchRef = useRef<HTMLDivElement | null>(null); // Ref for timer switch container
+    const [isInitialRender, setIsInitialRender] = useState(true); // State to track initial render
 
     const handleSectionScore = (section: string, score: number) => {
         setSectionScores(prevScores => ({
@@ -66,21 +68,28 @@ export function QuestionView() {
         }
     }, [timerEnabled, selectedSet]);
 
+    useEffect(() => {
+        if (isInitialRender && timerSwitchRef.current && window.innerWidth <= 768) {
+            timerSwitchRef.current.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+            setIsInitialRender(false); // Update state to prevent further scroll into view actions
+        }
+    }, [isInitialRender, timerEnabled, selectedSet]);
+
     return (
         <>
             {!selectedCode && ( // Render code selection buttons
                 <div className="grid grid-flow-row-dense gap-5">
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Learners Licence Code</h2>
                     <div className="grid grid-flow-row-dense grid-cols-3 gap-4">
-                        <Button color="primary" variant="flat" onClick={() => setSelectedCode('Code 1')}
+                        <Button color="success" variant="bordered" onClick={() => setSelectedCode('Code 1')}
                                 startContent={<FaMotorcycle/>}>
                             Code 1
                         </Button>
-                        <Button color="primary" variant="flat" onClick={() => setSelectedCode('Code 2')}
+                        <Button color="warning" variant="bordered" onClick={() => setSelectedCode('Code 2')}
                                 startContent={<FaCar/>}>
                             Code 2
                         </Button>
-                        <Button color="primary" variant="flat" onClick={() => setSelectedCode('Code 3')}
+                        <Button color="danger" variant="bordered" onClick={() => setSelectedCode('Code 3')}
                                 startContent={<FaTruck/>}>
                             Code 3
                         </Button>
@@ -93,33 +102,42 @@ export function QuestionView() {
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Question Paper</h2>
 
                     <div className="grid grid-flow-row-dense grid-cols-3 gap-4">
-                        <Button color="primary" variant="flat" onClick={() => setSelectedSet('A')}>
+                        <Button className="border-black dark:border-white" variant="bordered"
+                                onClick={() => setSelectedSet('A')}>
                             A
                         </Button>
-                        <Button color="primary" variant="flat" onClick={() => setSelectedSet('B')}>
+
+                        <Button className="border-black dark:border-white" variant="bordered"
+                                onClick={() => setSelectedSet('B')}>
                             B
                         </Button>
-                        <Button color="primary" variant="flat" onClick={() => setSelectedSet('C')}>
+
+                        <Button className="border-black dark:border-white" variant="bordered"
+                                onClick={() => setSelectedSet('C')}>
                             C
                         </Button>
                     </div>
 
                     {/* Timer toggle switch */}
-                    <div className="flex flex-row mt-4 w-full justify-end items-center space-x-4">
+                    <div
+                        key="Timeswitch"
+                        className="flex flex-row w-full justify-end items-center "
+                        ref={timerSwitchRef}
+                    >
                         <label className="flex items-center">
                             <span className="mr-2">Enable Timer</span>
                             <Switch
+                                color={"success"}
                                 isSelected={timerEnabled}
-                                size="md"
+                                size="sm"
                                 onChange={() => setTimerEnabled(prev => !prev)}
                             />
                         </label>
-                        <Button key="BackToSelectLearnersCode" color="secondary" variant="flat"
+                        <Button key="BackToSelectLearnersCode" size={"sm"}  variant="flat"
                                 onClick={() => setSelectedCode(null)}>
                             Back
                         </Button>
                     </div>
-
                 </div>
             )}
 
@@ -185,7 +203,7 @@ export function QuestionView() {
                     {/* Timer overlay */}
                     {timerEnabled && timeLeft !== null && (
                         <div
-                            className="fixed z-1000 top-[65px] right-0 m-4 bg-black text-white dark:bg-white dark:text-black ] p-2 rounded-md shadow-lg">
+                            className="fixed z-1000 top-[30px] md:top-[55px] right-0 m-4 bg-black text-white dark:bg-white dark:text-black p-2 rounded-md shadow-lg">
                             <p className="text-lg">
                                 Time Left: {Math.floor(timeLeft / 60)}:{('0' + (timeLeft % 60)).slice(-2)}
                             </p>
@@ -207,6 +225,8 @@ export function QuestionView() {
                                 <Button color="warning" variant="light" onClick={() => {
                                     setSelectedSet(null);
                                     setSubmitted(false);
+                                    setSectionScores({sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0}); // Reset section scores
+                                    setTotalScore(0); // Reset total score to zero
                                     onClose();
                                 }}>
                                     Yes

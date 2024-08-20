@@ -23,7 +23,7 @@ export default async function ProtectedPage() {
     }
 
     return (
-        <div className="flex-1 w-full flex flex-col gap-2 items-center">
+        <div className="flex-1 w-full flex flex-col gap-0 md:gap-2 items-center">
             <Toast/>
 
             <div className="w-full">
@@ -31,11 +31,11 @@ export default async function ProtectedPage() {
                 {/*  This is a protected page that you can only see as an authenticated*/}
                 {/*  user*/}
                 {/*</div>*/}
-                <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                    <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
+                <nav className="w-full flex justify-center border-b border-b-foreground/10 h-10 md:h-14">
+                    <div className="w-full max-w-4xl flex justify-between p-3 items-center text-sm">
                         <p>v1.0</p>
                     </div>
-                    <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
+                    <div className="w-full max-w-4xl flex justify-between p-3 items-center  text-sm">
                         <a></a>
                         <AuthButton/>
                     </div>

@@ -9,10 +9,11 @@ export default function Header() {
     const url = "https://isqkzbwoiunnqsltbfpa.supabase.co/storage/v1/object/public/WebsiteLogo/logo_learnersquiz.png";
 
     return (
-        <div className="flex flex-col gap-5 items-center">
+        <div className="z-50 flex flex-col gap-5 items-center">
             {/*<div className="flex gap-8 justify-center items-center">*/}
             {/*</div>*/}
             <Image
+                className=""
                 height={"350px"}
                 src={url}
                 alt={url}/>
