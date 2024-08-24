@@ -9,6 +9,8 @@ import {Button, Switch, Modal, useDisclosure} from '@nextui-org/react';
 import {FaMotorcycle, FaCar, FaTruck} from 'react-icons/fa';
 import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal"; // Import icons
 
+type SectionKey = 'sectionB' | 'sectionC' | 'sectionD' | 'sectionE';
+
 export function QuestionView() {
     const [selectedCode, setSelectedCode] = useState<string | null>(null);
     const [selectedSet, setSelectedSet] = useState<string | null>(null);
@@ -44,6 +46,37 @@ export function QuestionView() {
         // Set the timer to zero
         setTimeLeft(0);
     };
+    const getWeakestSectionMessage = (): string => {
+        let relevantSections: SectionKey[] = ['sectionB', 'sectionC'];
+
+        if (selectedCode === 'Code 1') {
+            relevantSections.push('sectionD');
+        } else if (selectedCode === 'Code 2' || selectedCode === 'Code 3') {
+            relevantSections.push('sectionE');
+        }
+
+        let weakestSection: SectionKey = relevantSections[0];
+
+        relevantSections.forEach(section => {
+            if (sectionScores[section] < sectionScores[weakestSection]) {
+                weakestSection = section;
+            }
+        });
+
+        switch (weakestSection) {
+            case 'sectionB':
+                return 'work on signs';
+            case 'sectionC':
+                return 'work on rules';
+            case 'sectionD':
+                return 'work on motorcycles';
+            case 'sectionE':
+                return 'work on light and heavy vehicles';
+            default:
+                return 'improve your performance';
+        }
+    };
+
 
     useEffect(() => {
         if (timerEnabled && selectedSet) {
@@ -100,7 +133,6 @@ export function QuestionView() {
             {selectedCode && !selectedSet && ( // Render set selection buttons if a code is selected but not a set
                 <div className="grid grid-flow-row-dense gap-5">
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Question Paper</h2>
-
                     <div className="grid grid-flow-row-dense grid-cols-3 gap-4">
                         <Button className="border-black dark:border-white" variant="bordered"
                                 onClick={() => setSelectedSet('A')}>
@@ -133,7 +165,7 @@ export function QuestionView() {
                                 onChange={() => setTimerEnabled(prev => !prev)}
                             />
                         </label>
-                        <Button key="BackToSelectLearnersCode" size={"sm"}  variant="flat"
+                        <Button key="BackToSelectLearnersCode" size={"sm"} variant="flat"
                                 onClick={() => setSelectedCode(null)}>
                             Back
                         </Button>
@@ -197,8 +229,31 @@ export function QuestionView() {
                     </Button>
 
                     {submitted && (
-                        <p className="text-2xl font-semibold text-center">Total Score: {totalScore}</p>
+                        <div>
+                            <p className=" text-2xl font-semibold  text-center">Total Score: {totalScore}</p>
+                            <p className="text-sm font-light text-center">SECTION B – SIGNS – ALL
+                                CODES: {sectionScores.sectionB}</p>
+                            <p className="text-sm font-light text-center">SECTION C – RULES – ALL
+                                CODES: {sectionScores.sectionC}</p>
+                            {selectedCode === 'Code 1' && (
+                                <p className="text-sm font-light text-center">SECTION D - MOTOR CYCLES
+                                    ONLY: {sectionScores.sectionD}</p>
+                            )}
+                            {(selectedCode === 'Code 2' || selectedCode === 'Code 3') && (
+                                <p className="text-sm font-light text-center">SECTION E – LIGHT AND HEAVY VEHICLES
+                                    ONLY: {sectionScores.sectionE}</p>
+                            )}
+
+                            {/* Weakest Section Advice */}
+                            <div className="mt-4 text-center">
+                                <p className="text-lg font-bold text-red-600">
+                                    You need to {getWeakestSectionMessage()}.
+                                </p>
+                            </div>
+
+                        </div>
                     )}
+
 
                     {/* Timer overlay */}
                     {timerEnabled && timeLeft !== null && (

@@ -69,7 +69,7 @@ export default function SectionB({ selectedSet, onScoreChange, submitted, onSubm
         fetchPosts();
     }, [selectedSet]);
 
-    const handleAnswerChange = (questionNumber: string, value: string): string => {
+    const handleAnswerChange = (questionNumber: string,  value: string): string => {
         setAnswers((prevAnswers) => {
             const updatedAnswers = {
                 ...prevAnswers,
