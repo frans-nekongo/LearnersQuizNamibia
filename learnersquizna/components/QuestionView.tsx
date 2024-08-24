@@ -7,7 +7,10 @@ import SectionD from '@/components/questionPapers/SectionD';
 import SectionE from '@/components/questionPapers/SectionE';
 import {Button, Switch, Modal, useDisclosure} from '@nextui-org/react';
 import {FaMotorcycle, FaCar, FaTruck} from 'react-icons/fa';
-import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal"; // Import icons
+import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal";
+import {useTestsLeft} from '@/components/useTestsLeft';
+import {TestLeft} from "@/components/TestLeft";
+import {decrementTestsLeft} from "@/components/DecrementTests"; // Import useTestsLeft hook
 
 type SectionKey = 'sectionB' | 'sectionC' | 'sectionD' | 'sectionE';
 
@@ -21,9 +24,18 @@ export function QuestionView() {
     const [timeLeft, setTimeLeft] = useState<number | null>(null); // State for timer
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // State to store interval ID
 
+    const [clickCount, setClickCount] = useState(0); // Track number of clicks on disabled buttons
+    const [showPurchaseModal, setShowPurchaseModal] = useState(false); // Track modal visibility
+
     const {isOpen, onOpen, onClose} = useDisclosure(); // UseDisclosure for modal control
     const timerSwitchRef = useRef<HTMLDivElement | null>(null); // Ref for timer switch container
     const [isInitialRender, setIsInitialRender] = useState(true); // State to track initial render
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+
+    // Use the custom hook to get the number of tests left
+    // const testsLeft = useTestsLeft();
 
     const handleSectionScore = (section: string, score: number) => {
         setSectionScores(prevScores => ({
@@ -32,10 +44,14 @@ export function QuestionView() {
         }));
     };
 
-    const handleSubmit = () => {
+    const {testsLeft, decrementTestsLeftLocally} = useTestsLeft();
+
+    const handleSubmit = async () => {
         const finalScore = Object.values(sectionScores).reduce((acc, curr) => acc + curr, 0);
         setTotalScore(finalScore);
         setSubmitted(true);
+        setIsButtonDisabled(true); // Disable the button
+        await decrementTestsLeftLocally();
         console.log("Total Score:", finalScore);
 
         // Clear the timer if it exists
@@ -46,6 +62,7 @@ export function QuestionView() {
         // Set the timer to zero
         setTimeLeft(0);
     };
+
     const getWeakestSectionMessage = (): string => {
         let relevantSections: SectionKey[] = ['sectionB', 'sectionC'];
 
@@ -77,6 +94,15 @@ export function QuestionView() {
         }
     };
 
+    const handleDisabledButtonClick = () => {
+        setClickCount(prevCount => {
+            const newCount = prevCount + 1;
+            if (newCount > 3) {
+                setShowPurchaseModal(true);
+            }
+            return newCount;
+        });
+    };
 
     useEffect(() => {
         if (timerEnabled && selectedSet) {
@@ -110,6 +136,33 @@ export function QuestionView() {
 
     return (
         <>
+            <div
+                key="number of tests left"
+                className="fixed z-1000 top-[30px] md:top-[55px] left-[0px] m-4 bg-default text-black dark:bg-white dark:text-black p-2 rounded-md shadow-lg">
+                <div>
+                    <div>
+                        <p>{testsLeft !== null ? `${testsLeft} free tests left.` : 'Loading...'}</p>
+                    </div>
+                    {testsLeft === 0 && (
+                        <div className="text-sm mt-4 p-4 border border-red-500 rounded bg-red-100 text-red-700">
+                            <p className="font-bold">Buy tests to continue.</p>
+                            <p className="mt-2">Packages:</p>
+                            <ul className="list-disc list-inside mt-2">
+                                <li>5 more tests for N$30</li>
+                                <li>8 more tests for N$50</li>
+                                {/* Add more options as needed */}
+                            </ul>
+                            <p className="mt-2">
+                                Pay2Cell eWalllet etc
+                                <br/>
+                                to 0817173244
+                                <br/>
+                                make your email the reference
+                            </p>
+                        </div>
+                    )}
+                </div>
+            </div>
             {!selectedCode && ( // Render code selection buttons
                 <div className="grid grid-flow-row-dense gap-5">
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Learners Licence Code</h2>
@@ -134,18 +187,36 @@ export function QuestionView() {
                 <div className="grid grid-flow-row-dense gap-5">
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Question Paper</h2>
                     <div className="grid grid-flow-row-dense grid-cols-3 gap-4">
-                        <Button className="border-black dark:border-white" variant="bordered"
-                                onClick={() => setSelectedSet('A')}>
+                        <Button
+                            className="border-black dark:border-white"
+                            variant="bordered"
+                            onClick={() => {
+                                if (testsLeft === null || testsLeft < 1) {
+                                    handleDisabledButtonClick();
+                                } else {
+                                    setSelectedSet('A');
+                                }
+                            }}
+                            disabled={testsLeft === null || testsLeft < 1} // Disable button if testsLeft is less than 1
+                        >
                             A
                         </Button>
 
-                        <Button className="border-black dark:border-white" variant="bordered"
-                                onClick={() => setSelectedSet('B')}>
+                        <Button
+                            className="border-black dark:border-white"
+                            variant="bordered"
+                            onClick={() => setSelectedSet('B')}
+                            disabled={testsLeft === null || testsLeft < 1} // Disable button if testsLeft is less than 1
+                        >
                             B
                         </Button>
 
-                        <Button className="border-black dark:border-white" variant="bordered"
-                                onClick={() => setSelectedSet('C')}>
+                        <Button
+                            className="border-black dark:border-white"
+                            variant="bordered"
+                            onClick={() => setSelectedSet('C')}
+                            disabled={testsLeft === null || testsLeft < 1} // Disable button if testsLeft is less than 1
+                        >
                             C
                         </Button>
                     </div>
@@ -195,22 +266,27 @@ export function QuestionView() {
                             onSubmit={() => {
                                 handleSubmit();
                             }}
-                            submitted={submitted}/>
+                            submitted={submitted}
+                        />
                     </div>
 
                     <h3 className="text-2xl font-semibold text-center">
                         SECTION C – RULES – ALL CODES
                     </h3>
-                    <SectionC selectedSet={selectedSet}
-                              onScoreChange={(score) => handleSectionScore('sectionC', score)}/>
+                    <SectionC
+                        selectedSet={selectedSet}
+                        onScoreChange={(score) => handleSectionScore('sectionC', score)}
+                    />
 
                     {selectedCode === 'Code 1' && (
                         <>
                             <h3 className="text-2xl font-semibold text-center">
                                 SECTION D - MOTOR CYCLES ONLY
                             </h3>
-                            <SectionD selectedSet={selectedSet}
-                                      onScoreChange={(score) => handleSectionScore('sectionD', score)}/>
+                            <SectionD
+                                selectedSet={selectedSet}
+                                onScoreChange={(score) => handleSectionScore('sectionD', score)}
+                            />
                         </>
                     )}
 
@@ -219,12 +295,20 @@ export function QuestionView() {
                             <h3 className="text-2xl font-semibold text-center">
                                 SECTION E – LIGHT AND HEAVY VEHICLES ONLY
                             </h3>
-                            <SectionE selectedSet={selectedSet}
-                                      onScoreChange={(score) => handleSectionScore('sectionE', score)}/>
+                            <SectionE
+                                selectedSet={selectedSet}
+                                onScoreChange={(score) => handleSectionScore('sectionE', score)}
+                            />
                         </>
                     )}
 
-                    <Button key="submit button" color="primary" variant="flat" onClick={handleSubmit}>
+                    <Button
+                        key="submit button"
+                        color="primary"
+                        variant="flat"
+                        onClick={handleSubmit}
+                        disabled={isButtonDisabled}
+                    >
                         Submit
                     </Button>
 
@@ -250,20 +334,20 @@ export function QuestionView() {
                                     You need to {getWeakestSectionMessage()}.
                                 </p>
                             </div>
-
                         </div>
                     )}
-
 
                     {/* Timer overlay */}
-                    {timerEnabled && timeLeft !== null && (
-                        <div
-                            className="fixed z-1000 top-[30px] md:top-[55px] right-0 m-4 bg-black text-white dark:bg-white dark:text-black p-2 rounded-md shadow-lg">
-                            <p className="text-lg">
-                                Time Left: {Math.floor(timeLeft / 60)}:{('0' + (timeLeft % 60)).slice(-2)}
-                            </p>
-                        </div>
-                    )}
+                    {timerEnabled && timeLeft !== null &&
+                        (
+                            <div
+                                className="fixed z-1000 top-[30px] md:top-[55px] right-0 m-4 bg-black text-white dark:bg-white dark:text-black p-2 rounded-md shadow-lg">
+                                <p className="text-lg">
+                                    Time Left: {Math.floor(timeLeft / 60)}:{('0' + (timeLeft % 60)).slice(-2)}
+                                </p>
+                            </div>
+                        )
+                    }
 
                     {/* Confirmation Dialog */}
                     <Modal
@@ -282,6 +366,7 @@ export function QuestionView() {
                                     setSubmitted(false);
                                     setSectionScores({sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0}); // Reset section scores
                                     setTotalScore(0); // Reset total score to zero
+                                    setIsButtonDisabled(false); // Re-enable the submit button
                                     onClose();
                                 }}>
                                     Yes
@@ -294,6 +379,9 @@ export function QuestionView() {
                     </Modal>
                 </>
             )}
+
         </>
     );
 }
+
+
