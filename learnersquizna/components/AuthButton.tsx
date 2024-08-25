@@ -56,7 +56,7 @@ export default async function AuthButton() {
                 Hey, {userInfo?.Name_user || userEmail}!
             </p>
             <form action={redirectToPayments}>
-                <Button type="submit">
+                <Button variant={"bordered"} type="submit">
                     Buy Test
                 </Button>
             </form>
