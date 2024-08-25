@@ -47,7 +47,7 @@ export function TestLeft() {
                 <p>{testsLeft !== null ? `${testsLeft} free tests left.` : 'Loading...'}</p>
             </div>
             {testsLeft === 0 && (
-                <div className="text-sm mt-4 p-4 border border-red-500 rounded bg-red-100 text-red-700">
+                <div className=" z-1000 text-sm mt-4 p-4 border border-red-500 rounded bg-red-100 text-red-700">
                     <p className="font-bold">Buy tests to continue.</p>
                     <p className="mt-2">Packages:</p>
                     <ul className="list-disc list-inside mt-2">

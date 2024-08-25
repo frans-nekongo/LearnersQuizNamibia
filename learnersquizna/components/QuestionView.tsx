@@ -10,7 +10,8 @@ import {FaMotorcycle, FaCar, FaTruck} from 'react-icons/fa';
 import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal";
 import {useTestsLeft} from '@/components/useTestsLeft';
 import {TestLeft} from "@/components/TestLeft";
-import {decrementTestsLeft} from "@/components/DecrementTests"; // Import useTestsLeft hook
+import {decrementTestsLeft} from "@/components/DecrementTests";
+import {color} from "framer-motion"; // Import useTestsLeft hook
 
 type SectionKey = 'sectionB' | 'sectionC' | 'sectionD' | 'sectionE';
 
@@ -136,32 +137,26 @@ export function QuestionView() {
 
     return (
         <>
-            <div
-                key="number of tests left"
-                className="fixed z-1000 top-[30px] md:top-[55px] left-[0px] m-4 bg-default text-black dark:bg-white dark:text-black p-2 rounded-md shadow-lg">
-                <div>
-                    <div>
-                        <p>{testsLeft !== null ? `${testsLeft} free tests left.` : 'Loading...'}</p>
-                    </div>
-                    {testsLeft === 0 && (
-                        <div className="text-sm mt-4 p-4 border border-red-500 rounded bg-red-100 text-red-700">
-                            <p className="font-bold">Buy tests to continue.</p>
-                            <p className="mt-2">Packages:</p>
-                            <ul className="list-disc list-inside mt-2">
-                                <li>5 more tests for N$30</li>
-                                <li>8 more tests for N$50</li>
-                                {/* Add more options as needed */}
-                            </ul>
-                            <p className="mt-2">
-                                Pay2Cell eWalllet etc
-                                <br/>
-                                to 0817173244
-                                <br/>
-                                make your email the reference
-                            </p>
+            <div key="number of tests left"
+                 className="absolute z-1000 top-[30px] md:top-[55px] left-[0px] m-4 text-black dark:bg-white dark:text-black p-2 rounded-md shadow-lg bg-[#E6E9EA]">
+                <div className="flex flex-col items-center justify-center h-full w-full">
+                    <div className="flex flex-row justify-center items-center w-full">
+                        <div className="flex-grow text-center text-sm">
+                            <p>{testsLeft !== null ? `${testsLeft}  test(s) left` : 'Loading...'}</p>
                         </div>
-                    )}
+                        {/*{testsLeft === 0 && (*/}
+                        {/*    <div className="flex-grow text-center text-sm ms-2">*/}
+                        {/*        /!*<p className="font-bold">Buy tests to continue.</p>*!/*/}
+                        {/*        <Button variant={"bordered"}*/}
+                        {/*            // style={}*/}
+                        {/*                className="border-red-700 text-red-700">*/}
+                        {/*            Buy to continue*/}
+                        {/*        </Button>*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
+                    </div>
                 </div>
+
             </div>
             {!selectedCode && ( // Render code selection buttons
                 <div className="grid grid-flow-row-dense gap-5">
@@ -305,7 +300,7 @@ export function QuestionView() {
                     <Button
                         key="submit button"
                         color="primary"
-                        variant="flat"
+                        variant="bordered"
                         onClick={handleSubmit}
                         disabled={isButtonDisabled}
                     >

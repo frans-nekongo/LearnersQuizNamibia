@@ -1,17 +1,8 @@
-import DeployButton from "@/components/DeployButton";
 import AuthButton from "@/components/AuthButton";
 import {createClient} from "@/utils/supabase/server";
-import FetchDataSteps from "@/components/tutorial/FetchDataSteps";
-import Header from "@/components/Header";
 import {redirect} from "next/navigation";
 import {Footer} from "@/components/Footer";
-import {Questioncard} from "@/components/Questioncard";
-import QuestionsGet from "@/components/QuestionsGet"
-import {Button} from "@nextui-org/react";
-import {QuestionView} from "@/components/QuestionView";
 import {Toast} from "@/components/Toast";
-import {TestInfo} from "@/components/TestInfo";
-import {useTestsLeft} from "@/components/useTestsLeft";
 
 
 export default async function ProtectedPage() {
@@ -46,10 +37,9 @@ export default async function ProtectedPage() {
             </div>
 
             <div className="flex-1 flex flex-col gap-2 max-w-4xl px-3">
-                <Header/>
                 <main className="flex-1 flex flex-col gap-6">
-                    {/*<h2 className="font-bold text-4xl mb-4 text-center">Select Question paper</h2>*/}
-                    <QuestionView/>
+                    <h2 className="font-bold text-4xl mb-4 text-center">How To Buy More Tests</h2>
+                    {/*<QuestionView/>*/}
                     {/*<Questioncard/>*/}
                     {/*<QuestionsGet/>*/}
                     {/*<FetchDataSteps/>*/}
