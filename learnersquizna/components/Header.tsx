@@ -10,8 +10,6 @@ export default function Header() {
 
     return (
         <div className="z-50 flex flex-col gap-5 items-center">
-            {/*<div className="flex gap-8 justify-center items-center">*/}
-            {/*</div>*/}
             <Image
                 className=""
                 height={"350px"}

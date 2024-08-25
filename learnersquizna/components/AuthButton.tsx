@@ -56,9 +56,12 @@ export default async function AuthButton() {
                 Hey, {userInfo?.Name_user || userEmail}!
             </p>
             <form action={redirectToPayments}>
-                <Button variant={"bordered"} type="submit">
+                <button
+                    // variant={"bordered"}
+                    type="submit"
+                    className="py-2 px-4 text-red-700 dark:text-yellow-400 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover whitespace-nowrap">
                     Buy Test
-                </Button>
+                </button>
             </form>
             <form action={signOut}>
                 <button

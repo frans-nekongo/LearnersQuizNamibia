@@ -9,9 +9,6 @@ import {Button, Switch, Modal, useDisclosure} from '@nextui-org/react';
 import {FaMotorcycle, FaCar, FaTruck} from 'react-icons/fa';
 import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal";
 import {useTestsLeft} from '@/components/useTestsLeft';
-import {TestLeft} from "@/components/TestLeft";
-import {color} from "framer-motion";
-import {useSyncDecrementOnLoad} from "@/components/DecrementTests"; // Import useTestsLeft hook
 
 type SectionKey = 'sectionB' | 'sectionC' | 'sectionD' | 'sectionE';
 
@@ -132,25 +129,33 @@ export function QuestionView() {
         }
     }, [isInitialRender, timerEnabled, selectedSet]);
 
+    // JavaScript logic outside JSX
+    const text = `${testsLeft} test${testsLeft === 1 ? '' : 's'} left`;
+    // console.log(text); // Logs the result, useful for debugging
+    const sectionTotals = {
+        sectionB: 43, // Total questions in Section B
+        sectionC: 24, // Total questions in Section C
+        sectionD: 8,  // Total questions in Section D (if applicable)
+        sectionE: 12  // Total questions in Section E (if applicable)
+    };
+
+    const totalQuestions = sectionTotals.sectionB + sectionTotals.sectionC +
+        (selectedCode === 'Code 1' ? sectionTotals.sectionD : 0) +
+        ((selectedCode === 'Code 2' || selectedCode === 'Code 3') ? sectionTotals.sectionE : 0);
+
+    const percentage = totalScore > 0 ? ((totalScore / totalQuestions) * 100).toFixed(2) : '0';
+
     return (
         <>
             <div key="number of tests left"
-                 className="absolute z-1000 top-[30px] md:top-[55px] left-[0px] m-4 text-black dark:bg-white dark:text-black p-2 rounded-md shadow-lg bg-[#E6E9EA]">
+                 className="absolute z-1000 top-[30px] md:top-[55px] left-[0px] m-4 text-black dark:text-white p-2 rounded-md shadow-lg bg-[#E6E9EA] dark:bg-btn-background">
                 <div className="flex flex-col items-center justify-center h-full w-full">
                     <div className="flex flex-row justify-center items-center w-full">
                         <div className="flex-grow text-center text-sm">
-                            <p>{testsLeft !== null ? `${testsLeft}  test(s) left` : 'Loading...'}</p>
+                            <p>
+                                {typeof testsLeft === 'number' ? text : 'Loading...'}
+                            </p>
                         </div>
-                        {/*{testsLeft === 0 && (*/}
-                        {/*    <div className="flex-grow text-center text-sm ms-2">*/}
-                        {/*        /!*<p className="font-bold">Buy tests to continue.</p>*!/*/}
-                        {/*        <Button variant={"bordered"}*/}
-                        {/*            // style={}*/}
-                        {/*                className="border-red-700 text-red-700">*/}
-                        {/*            Buy to continue*/}
-                        {/*        </Button>*/}
-                        {/*    </div>*/}
-                        {/*)}*/}
                     </div>
                 </div>
 
@@ -307,28 +312,45 @@ export function QuestionView() {
                     </Button>
 
                     {submitted && (
-                        <div>
-                            <p className=" text-2xl font-semibold  text-center">Total Score: {totalScore}</p>
-                            <p className="text-sm font-light text-center">SECTION B – SIGNS – ALL
-                                CODES: {sectionScores.sectionB}</p>
-                            <p className="text-sm font-light text-center">SECTION C – RULES – ALL
-                                CODES: {sectionScores.sectionC}</p>
-                            {selectedCode === 'Code 1' && (
-                                <p className="text-sm font-light text-center">SECTION D - MOTOR CYCLES
-                                    ONLY: {sectionScores.sectionD}</p>
-                            )}
-                            {(selectedCode === 'Code 2' || selectedCode === 'Code 3') && (
-                                <p className="text-sm font-light text-center">SECTION E – LIGHT AND HEAVY VEHICLES
-                                    ONLY: {sectionScores.sectionE}</p>
-                            )}
+                        <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-lg">
+    {/* Total Score Section */}
+    <div className="text-center mb-4">
+        <p className="text-2xl font-semibold text-blue-600 dark:text-blue-400">Total Score: {totalScore}</p>
+        <p className="text-lg text-gray-700 dark:text-gray-300">({percentage}%)</p>
+    </div>
 
-                            {/* Weakest Section Advice */}
-                            <div className="mt-4 text-center">
-                                <p className="text-lg font-bold text-red-600">
-                                    You need to {getWeakestSectionMessage()}.
-                                </p>
-                            </div>
-                        </div>
+    {/* Section Scores */}
+    <div className="space-y-2">
+        <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+            <span>Section B:</span>
+            <span>{sectionScores.sectionB}/{sectionTotals.sectionB}</span>
+        </div>
+        <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+            <span>Section C:</span>
+            <span>{sectionScores.sectionC}/{sectionTotals.sectionC}</span>
+        </div>
+        {selectedCode === 'Code 1' && (
+            <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                <span>Section D:</span>
+                <span>{sectionScores.sectionD}/{sectionTotals.sectionD}</span>
+            </div>
+        )}
+        {(selectedCode === 'Code 2' || selectedCode === 'Code 3') && (
+            <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                <span>Section E:</span>
+                <span>{sectionScores.sectionE}/{sectionTotals.sectionE}</span>
+            </div>
+        )}
+    </div>
+
+    {/* Weakest Section Advice */}
+    <div className="mt-4 text-center">
+        <p className="text-lg font-semibold text-red-600 dark:text-red-400">
+            You need to {getWeakestSectionMessage()}.
+        </p>
+    </div>
+</div>
+
                     )}
 
                     {/* Timer overlay */}

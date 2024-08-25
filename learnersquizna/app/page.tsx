@@ -17,7 +17,7 @@ export default async function Index() {
 
     // If the user is already logged in, redirect them to the protected route
     if (user) {
-        return redirect("/protected");
+        return redirect("/protected/user");
     }
 
     const canInitSupabaseClient = () => {
