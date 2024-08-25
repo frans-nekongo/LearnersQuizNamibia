@@ -25,13 +25,16 @@ export default async function ProtectedPage() {
             <SyncDecrement />
 
             <div className="w-full">
-                <nav className="w-full flex justify-center border-b border-b-foreground/10 h-12 md:h-14">
+                <nav className="w-full flex justify-content- border-b border-b-foreground/10 h-12 md:h-14">
                     <div className="w-full max-w-4xl flex justify-between p-3 items-center text-sm">
                         <p>v1.0</p>
                     </div>
-                    <div className="w-full max-w-4xl flex justify-between p-3 items-center  text-sm">
+                    <div className="w-full max-w-4xl flex justify-between p-3 items-center text-sm">
+                        <div className="flex-grow"></div>
+                        {/* This div will push the AuthButton to the right */}
                         <AuthButton/>
                     </div>
+
                 </nav>
             </div>
 

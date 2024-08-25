@@ -59,7 +59,7 @@ export default async function AuthButton() {
                 <button
                     // variant={"bordered"}
                     type="submit"
-                    className="py-2 px-4 text-red-700 dark:text-yellow-400 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover whitespace-nowrap">
+                    className="py-2 px-4 text-[#CB011F] dark:text-yellow-400 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover whitespace-nowrap">
                     Buy Test
                 </button>
             </form>

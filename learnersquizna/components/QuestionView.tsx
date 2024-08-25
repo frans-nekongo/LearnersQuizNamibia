@@ -6,9 +6,10 @@ import SectionC from '@/components/questionPapers/SectionC';
 import SectionD from '@/components/questionPapers/SectionD';
 import SectionE from '@/components/questionPapers/SectionE';
 import {Button, Switch, Modal, useDisclosure} from '@nextui-org/react';
-import {FaMotorcycle, FaCar, FaTruck} from 'react-icons/fa';
+import {FaMotorcycle, FaCar, FaTruck, FaSign} from 'react-icons/fa';
 import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal";
 import {useTestsLeft} from '@/components/useTestsLeft';
+import ScoreSummary from "@/components/questionPapers/ScoreSummary";
 
 type SectionKey = 'sectionB' | 'sectionC' | 'sectionD' | 'sectionE';
 
@@ -164,17 +165,25 @@ export function QuestionView() {
                 <div className="grid grid-flow-row-dense gap-5">
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Learners Licence Code</h2>
                     <div className="grid grid-flow-row-dense grid-cols-3 gap-4">
-                        <Button color="success" variant="bordered" onClick={() => setSelectedCode('Code 1')}
+                        <Button className="border-[#01beba]" variant="bordered" onClick={() => setSelectedCode('Code 1')}
                                 startContent={<FaMotorcycle/>}>
                             Code 1
                         </Button>
-                        <Button color="warning" variant="bordered" onClick={() => setSelectedCode('Code 2')}
+                        <Button className="border-[#F4AB30]" variant="bordered" onClick={() => setSelectedCode('Code 2')}
                                 startContent={<FaCar/>}>
                             Code 2
                         </Button>
-                        <Button color="danger" variant="bordered" onClick={() => setSelectedCode('Code 3')}
+                        <Button className="border-[#CB011F]" variant="bordered" onClick={() => setSelectedCode('Code 3')}
                                 startContent={<FaTruck/>}>
                             Code 3
+                        </Button>
+                    </div>
+                    {/*if road sign is pressed*/}
+                    <div className="flex justify-center items-center h-full">
+                        <Button color="danger" variant="bordered"
+                            // onClick={}
+                                startContent={<FaSign/>}>
+                            SIGNS – ALL CODES
                         </Button>
                     </div>
                 </div>
@@ -312,45 +321,14 @@ export function QuestionView() {
                     </Button>
 
                     {submitted && (
-                        <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-    {/* Total Score Section */}
-    <div className="text-center mb-4">
-        <p className="text-2xl font-semibold text-blue-600 dark:text-blue-400">Total Score: {totalScore}</p>
-        <p className="text-lg text-gray-700 dark:text-gray-300">({percentage}%)</p>
-    </div>
-
-    {/* Section Scores */}
-    <div className="space-y-2">
-        <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-            <span>Section B:</span>
-            <span>{sectionScores.sectionB}/{sectionTotals.sectionB}</span>
-        </div>
-        <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-            <span>Section C:</span>
-            <span>{sectionScores.sectionC}/{sectionTotals.sectionC}</span>
-        </div>
-        {selectedCode === 'Code 1' && (
-            <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                <span>Section D:</span>
-                <span>{sectionScores.sectionD}/{sectionTotals.sectionD}</span>
-            </div>
-        )}
-        {(selectedCode === 'Code 2' || selectedCode === 'Code 3') && (
-            <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                <span>Section E:</span>
-                <span>{sectionScores.sectionE}/{sectionTotals.sectionE}</span>
-            </div>
-        )}
-    </div>
-
-    {/* Weakest Section Advice */}
-    <div className="mt-4 text-center">
-        <p className="text-lg font-semibold text-red-600 dark:text-red-400">
-            You need to {getWeakestSectionMessage()}.
-        </p>
-    </div>
-</div>
-
+                        <ScoreSummary
+                            totalScore={totalScore}
+                            percentage={percentage}
+                            sectionScores={sectionScores}
+                            sectionTotals={sectionTotals}
+                            selectedCode={selectedCode}
+                            getWeakestSectionMessage={getWeakestSectionMessage}
+                        />
                     )}
 
                     {/* Timer overlay */}
