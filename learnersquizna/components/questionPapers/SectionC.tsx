@@ -108,7 +108,7 @@ export default function SectionC({selectedSet, onScoreChange}: SectionCProps) {
                             label: ['A', 'B', 'C'][index] // Keep labels in A, B, C order
                         }))}
                         onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
-                    />
+                     correctAnswer={post.answer} selectedAnswer={answers[post.q_number]} submitted={true}/>
                 ))
             )}
         </div>

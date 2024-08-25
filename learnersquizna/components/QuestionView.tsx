@@ -10,8 +10,8 @@ import {FaMotorcycle, FaCar, FaTruck} from 'react-icons/fa';
 import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal";
 import {useTestsLeft} from '@/components/useTestsLeft';
 import {TestLeft} from "@/components/TestLeft";
-import {decrementTestsLeft} from "@/components/DecrementTests";
-import {color} from "framer-motion"; // Import useTestsLeft hook
+import {color} from "framer-motion";
+import {useSyncDecrementOnLoad} from "@/components/DecrementTests"; // Import useTestsLeft hook
 
 type SectionKey = 'sectionB' | 'sectionC' | 'sectionD' | 'sectionE';
 
@@ -34,9 +34,6 @@ export function QuestionView() {
 
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-
-    // Use the custom hook to get the number of tests left
-    // const testsLeft = useTestsLeft();
 
     const handleSectionScore = (section: string, score: number) => {
         setSectionScores(prevScores => ({
@@ -231,7 +228,8 @@ export function QuestionView() {
                                 onChange={() => setTimerEnabled(prev => !prev)}
                             />
                         </label>
-                        <Button key="BackToSelectLearnersCode" size={"sm"} variant="flat"
+                        <Button key="BackToSelectLearnersCode" size={"sm"} className=" border-black dark:border-white"
+                                variant="bordered"
                                 onClick={() => setSelectedCode(null)}>
                             Back
                         </Button>
@@ -241,6 +239,7 @@ export function QuestionView() {
 
             {selectedSet && ( // Render appropriate sections based on selected code and set
                 <>
+
                     <Button
                         key="BackToSelectQuestionPaper"
                         className="fixed z-40 bottom-[20px] right-2 p-2 text-black dark:text-white"

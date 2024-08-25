@@ -23,6 +23,17 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
 
     useEffect(() => {
         const fetchPosts = async () => {
+            const cacheKey = `sectionBData_${selectedSet}`;
+            const cachedData = localStorage.getItem(cacheKey);
+
+            if (cachedData) {
+                const parsedData = JSON.parse(cachedData);
+                setPosts(parsedData.posts);
+                setShuffledOptionsMap(parsedData.shuffledOptionsMap);
+                setIsLoading(false);
+                return;
+            }
+
             let {data: table_name, error} = await supabase
                 .schema("public")
                 .from('question')
@@ -33,34 +44,41 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
 
             if (error) {
                 console.error('Error fetching data:', error);
-            } else {
-                const nonNullData = table_name ?? []; // Provide an empty array if data is null
-                setPosts(nonNullData);
-
-                // Map each option to its designated position
-                const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
-                nonNullData.forEach((post) => {
-                    const options: AnswerOption[] = [
-                        {value: "1", description: post.answer},
-                        {value: "b", description: post.option_1},
-                        {value: "c", description: post.option_2}
-                    ];
-
-                    // Assign options to A, B, C based on their values, unless it's not "A", "B", or "C"
-                    newShuffledOptionsMap[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
-                        const option = options[index];
-                        if (option.description === label) {
-                            return option; // Keep A, B, C in their places
-                        } else if (option.description.match(/^[ABC]$/)) {
-                            // If description matches A, B, or C, assign accordingly
-                            return options.find(o => o.description === label) || option;
-                        } else {
-                            return option; // Keep non-A/B/C descriptions in their original place
-                        }
-                    });
-                });
-                setShuffledOptionsMap(newShuffledOptionsMap);
+                setIsLoading(false);
+                return;
             }
+
+            const nonNullData = table_name ?? []; // Provide an empty array if data is null
+            setPosts(nonNullData);
+
+            // Map each option to its designated position
+            const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
+            nonNullData.forEach((post) => {
+                const options: AnswerOption[] = [
+                    {value: "1", description: post.answer},
+                    {value: "b", description: post.option_1},
+                    {value: "c", description: post.option_2}
+                ];
+
+                // Assign options to A, B, C based on their values, unless it's not "A", "B", or "C"
+                newShuffledOptionsMap[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
+                    const option = options[index];
+                    if (option.description === label) {
+                        return option; // Keep A, B, C in their places
+                    } else if (option.description.match(/^[ABC]$/)) {
+                        // If description matches A, B, or C, assign accordingly
+                        return options.find(o => o.description === label) || option;
+                    } else {
+                        return option; // Keep non-A/B/C descriptions in their original place
+                    }
+                });
+            });
+            setShuffledOptionsMap(newShuffledOptionsMap);
+
+            // Save data to local storage
+            const dataToCache = {posts: nonNullData, shuffledOptionsMap: newShuffledOptionsMap};
+            localStorage.setItem(cacheKey, JSON.stringify(dataToCache));
+
             setIsLoading(false);
         };
 
