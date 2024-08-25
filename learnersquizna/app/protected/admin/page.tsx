@@ -6,7 +6,6 @@ import Header from "@/components/Header";
 import { redirect } from "next/navigation";
 import { Footer } from "@/components/Footer";
 import { Questioncard } from "@/components/Questioncard";
-import QuestionsGet from "@/components/QuestionsGet";
 import { Button } from "@nextui-org/react";
 import { QuestionView } from "@/components/QuestionView";
 import { Toast } from "@/components/Toast";
