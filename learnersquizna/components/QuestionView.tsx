@@ -165,7 +165,7 @@ export function QuestionView() {
                 <div className="grid grid-flow-row-dense gap-5">
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Learners Licence Code</h2>
                     <div className="grid grid-flow-row-dense grid-cols-3 gap-4">
-                        <Button className="border-[#01beba]" variant="bordered" onClick={() => setSelectedCode('Code 1')}
+                        <Button className="border-[#01A093]" variant="bordered" onClick={() => setSelectedCode('Code 1')}
                                 startContent={<FaMotorcycle/>}>
                             Code 1
                         </Button>

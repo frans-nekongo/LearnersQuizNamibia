@@ -1,6 +1,8 @@
 import {useEffect, useState} from 'react';
 import {createClient} from '@/utils/supabase/client';
 import {Questioncard} from "@/components/Questioncard";
+import {Image} from "@nextui-org/react";
+import SectionImage from "@/components/questionPapers/SectionImage";
 
 interface SectionBProps {
     selectedSet?: string,
@@ -110,27 +112,34 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
     return isLoading ? (
         <p>Loading</p>
     ) : (
-        <div className="grid grid-flow-row-dense grid-cols-2 gap-4">
-            {posts.length === 0 ? (
-                <p>No data available</p>
-            ) : (
-                posts.map((post) => (
-                    <Questioncard
-                        key={post.q_number}
-                        questionNumber={post.q_number}
-                        questionText={post.question_text}
-                        imageSrc={post.picture_link}
-                        radioOptions={shuffledOptionsMap[post.q_number].map((option, index) => ({
-                            ...option,
-                            label: ['A', 'B', 'C'][index] // Keep labels in A, B, C order
-                        }))}
-                        onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
-                        correctAnswer={post.answer} // Pass correct answer
-                        submitted={submitted} // Pass submitted state
-                        selectedAnswer={answers[post.q_number]} // Pass selected answer
-                    />
-                ))
-            )}
+        <div>
+            {/*<div className="flex flex-col p-4 items-center justify-center">*/}
+            {/*    Section Picture Here*/}
+            {/*    <SectionImage selectedSet={selectedSet ?? 'A'}/>*/}
+            {/*</div>*/}
+
+            <div className="grid grid-flow-row-dense grid-cols-2 gap-4">
+                {posts.length === 0 ? (
+                    <p>No data available</p>
+                ) : (
+                    posts.map((post) => (
+                        <Questioncard
+                            key={post.q_number}
+                            questionNumber={post.q_number}
+                            questionText={post.question_text}
+                            imageSrc={post.picture_link}
+                            radioOptions={shuffledOptionsMap[post.q_number].map((option, index) => ({
+                                ...option,
+                                label: ['A', 'B', 'C'][index] // Keep labels in A, B, C order
+                            }))}
+                            onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
+                            correctAnswer={post.answer} // Pass correct answer
+                            submitted={submitted} // Pass submitted state
+                            selectedAnswer={answers[post.q_number]} // Pass selected answer
+                        />
+                    ))
+                )}
+            </div>
         </div>
     );
 }
