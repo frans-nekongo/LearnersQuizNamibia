@@ -60,7 +60,7 @@ export default async function AuthButton() {
                     // variant={"bordered"}
                     type="submit"
                     className="py-2 px-4 text-[#CB011F] dark:text-yellow-400 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover whitespace-nowrap">
-                    Buy Test
+                    Buy More Tests
                 </button>
             </form>
             <form action={signOut}>
