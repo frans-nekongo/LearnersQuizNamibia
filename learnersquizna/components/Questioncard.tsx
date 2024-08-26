@@ -53,12 +53,14 @@ export function Questioncard({
                         name={`question-${questionNumber}`}
                         onValueChange={(value) => onAnswerChange(value)}
                         value={selectedAnswer}
+                        isDisabled={submitted}// Disable the radio group if submitted is true
                     >
                         {radioOptions.map((option) => (
                             <Radio
                                 key={option.value}
                                 value={option.value}
                                 description={option.description}
+                                // disabled={submitted} // Disable the radio button if submitted is true
                             >
                                 {option.label}
                             </Radio>
