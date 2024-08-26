@@ -165,15 +165,18 @@ export function QuestionView() {
                 <div className="grid grid-flow-row-dense gap-5">
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Learners Licence Code</h2>
                     <div className="grid grid-flow-row-dense grid-cols-3 gap-4">
-                        <Button className="border-[#01A093]" variant="bordered" onClick={() => setSelectedCode('Code 1')}
+                        <Button className="border-[#01A093]" variant="bordered"
+                                onClick={() => setSelectedCode('Code 1')}
                                 startContent={<FaMotorcycle/>}>
                             Code 1
                         </Button>
-                        <Button className="border-[#F4AB30]" variant="bordered" onClick={() => setSelectedCode('Code 2')}
+                        <Button className="border-[#F4AB30]" variant="bordered"
+                                onClick={() => setSelectedCode('Code 2')}
                                 startContent={<FaCar/>}>
                             Code 2
                         </Button>
-                        <Button className="border-[#CB011F]" variant="bordered" onClick={() => setSelectedCode('Code 3')}
+                        <Button className="border-[#CB011F]" variant="bordered"
+                                onClick={() => setSelectedCode('Code 3')}
                                 startContent={<FaTruck/>}>
                             Code 3
                         </Button>
@@ -284,7 +287,10 @@ export function QuestionView() {
                     <SectionC
                         selectedSet={selectedSet}
                         onScoreChange={(score) => handleSectionScore('sectionC', score)}
-                    />
+                        onSubmit={() => {
+                            handleSubmit();
+                        }}
+                        submitted={submitted}/>
 
                     {selectedCode === 'Code 1' && (
                         <>
@@ -294,7 +300,10 @@ export function QuestionView() {
                             <SectionD
                                 selectedSet={selectedSet}
                                 onScoreChange={(score) => handleSectionScore('sectionD', score)}
-                            />
+                                onSubmit={() => {
+                                    handleSubmit();
+                                }}
+                                submitted={submitted}/>
                         </>
                     )}
 
@@ -306,6 +315,10 @@ export function QuestionView() {
                             <SectionE
                                 selectedSet={selectedSet}
                                 onScoreChange={(score) => handleSectionScore('sectionE', score)}
+                                onSubmit={() => {
+                                    handleSubmit();
+                                }}
+                                submitted={submitted}
                             />
                         </>
                     )}
