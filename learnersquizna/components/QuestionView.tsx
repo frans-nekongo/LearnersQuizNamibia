@@ -10,6 +10,7 @@ import {FaMotorcycle, FaCar, FaTruck, FaSign} from 'react-icons/fa';
 import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal";
 import {useTestsLeft} from '@/components/useTestsLeft';
 import ScoreSummary from "@/components/questionPapers/ScoreSummary";
+import {ExtraTests} from "@/components/questionPapers/ExtraTests";
 
 type SectionKey = 'sectionB' | 'sectionC' | 'sectionD' | 'sectionE';
 
@@ -100,6 +101,8 @@ export function QuestionView() {
         });
     };
 
+    const [showExtraTests, setShowExtraTests] = useState(false);
+
     useEffect(() => {
         if (timerEnabled && selectedSet) {
             // Start the timer for 90 minutes (5400 seconds)
@@ -161,7 +164,7 @@ export function QuestionView() {
                 </div>
 
             </div>
-            {!selectedCode && ( // Render code selection buttons
+            {!selectedCode && !showExtraTests && ( // Hide options if `showExtraTests` is true
                 <div className="grid grid-flow-row-dense gap-5">
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Learners Licence Code</h2>
                     <div className="grid grid-flow-row-dense grid-cols-3 gap-4">
@@ -183,14 +186,33 @@ export function QuestionView() {
                     </div>
                     {/*if road sign is pressed*/}
                     <div className="flex justify-center items-center h-full">
-                        <Button color="danger" variant="bordered"
-                            // onClick={}
-                                startContent={<FaSign/>}>
+                        <Button
+                            color="danger"
+                            variant="bordered"
+                            onClick={() => setShowExtraTests(true)} // Update this line
+                            startContent={<FaSign/>}
+                        >
                             SIGNS – ALL CODES
                         </Button>
                     </div>
                 </div>
             )}
+
+            {showExtraTests && (
+                <>
+                    <Button
+                        className="fixed z-40 bottom-[20px] right-2 p-2 text-black dark:text-white"
+                        color="default"
+                        variant="faded"
+                        onClick={onOpen} // Show confirmation dialog
+                    >
+                        Back to Code Selection/exit
+                    </Button>
+
+                    <ExtraTests/>
+                </>
+            )}
+
 
             {selectedCode && !selectedSet && ( // Render set selection buttons if a code is selected but not a set
                 <div className="grid grid-flow-row-dense gap-5">
@@ -386,7 +408,45 @@ export function QuestionView() {
                     </Modal>
                 </>
             )}
+            {/* Confirmation Dialog */}
+            <Modal
+                backdrop="opaque"
+                isOpen={isOpen}
+                onOpenChange={onClose}
+            >
+                <ModalContent>
+                    <ModalHeader>Confirmation</ModalHeader>
+                    <ModalBody>
+                        Are you sure you want to leave or stop the test in progress?
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            color="warning"
+                            variant="light"
+                            onClick={() => {
+                                // Reset states
+                                setSelectedSet(null); // Go back to code selection
+                                setSubmitted(false); // Reset submission status
+                                setSectionScores({sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0}); // Reset section scores
+                                setTotalScore(0); // Reset total score to zero
+                                setIsButtonDisabled(false); // Re-enable the submit button
 
+                                // Close the modal
+                                onClose();
+
+                                // Close extra tests if they are shown
+                                setShowExtraTests(false);
+                            }}
+                        >
+                            Yes
+                        </Button>
+                        <Button onClick={onClose}>
+                            No
+                        </Button>
+                    </ModalFooter>
+
+                </ModalContent>
+            </Modal>
         </>
     );
 }

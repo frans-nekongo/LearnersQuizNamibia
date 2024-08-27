@@ -38,12 +38,65 @@
         background-color: var(--btn-background-hover);
     }
 
-  button:active {
-    outline: none;
-    box-shadow: none;
-  }
-  button:focus {
-    outline: none;
-    box-shadow: none;
-  }
+    button:active {
+        outline: none;
+        box-shadow: none;
+    }
+
+    button:focus {
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+.centered-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.submit-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    border-color: #0072F5;
+    transition: all 0.3s ease-in-out;
+}
+
+.submit-button:disabled {
+    color: #aaa;
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+.submit-button:not(:disabled):hover {
+    background-color: #0072F5;
+    color: white;
+    cursor: pointer;
+}
+.score-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    background-color: #f4c542;
+    border: 5px solid #333;
+    border-radius: 8px;
+    padding: 10px;
+    width: fit-content;
+    margin: auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.score-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.score-highlight {
+    color: #e60000;
 }

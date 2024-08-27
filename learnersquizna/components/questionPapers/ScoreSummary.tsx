@@ -15,18 +15,18 @@ interface ScoreSummaryProps {
         sectionD?: number;
         sectionE?: number;
     };
-    selectedCode: string|null;
+    selectedCode: string | null;
     getWeakestSectionMessage: () => string;
 }
 
 const ScoreSummary: React.FC<ScoreSummaryProps> = ({
-    totalScore,
-    percentage,
-    sectionScores,
-    sectionTotals,
-    selectedCode,
-    getWeakestSectionMessage,
-}) => (
+                                                       totalScore,
+                                                       percentage,
+                                                       sectionScores,
+                                                       sectionTotals,
+                                                       selectedCode,
+                                                       getWeakestSectionMessage,
+                                                   }) => (
     <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-lg">
         {/* Total Score Section */}
         <div className="text-center mb-4">

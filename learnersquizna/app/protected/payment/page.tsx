@@ -1,14 +1,14 @@
 // app/protected/payment/page.tsx
 import AuthButton from "@/components/AuthButton";
 import BackButton from "@/components/Payments/BackButton"; // Import the BackButton component
-import { createClient } from "@/utils/supabase/server";
-import { Footer } from "@/components/Footer";
+import {createClient} from "@/utils/supabase/server";
+import {Footer} from "@/components/Footer";
 import {redirect} from "next/navigation";
 
 export default async function ProtectedPage() {
     const supabase = createClient();
     const {
-        data: { user },
+        data: {user},
     } = await supabase.auth.getUser();
 
     if (!user) {
@@ -18,7 +18,7 @@ export default async function ProtectedPage() {
     return (
         <div className="flex-1 w-full flex flex-col gap-0 md:gap-2 items-center relative">
             {/* Floating Back Button */}
-            <BackButton destination="/protected/user" />
+            <BackButton destination="/protected/user"/>
 
             <div className="w-full">
                 <nav className="w-full flex justify-center border-b border-b-foreground/10 h-10 md:h-14">
@@ -27,7 +27,7 @@ export default async function ProtectedPage() {
                     </div>
                     <div className="w-full max-w-4xl flex justify-between p-3 items-center text-sm">
                         <a></a>
-                        <AuthButton />
+                        <AuthButton/>
                     </div>
                 </nav>
             </div>
@@ -85,7 +85,7 @@ export default async function ProtectedPage() {
             </div>
 
             <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
-                <Footer />
+                <Footer/>
             </footer>
         </div>
     );
