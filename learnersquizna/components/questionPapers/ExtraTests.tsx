@@ -22,7 +22,7 @@ export function ExtraTests() {
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const cacheKey = `extraTestsData`;
+            const cacheKey = 'extraTestsData';
             const cachedData = localStorage.getItem(cacheKey);
 
             if (cachedData) {
@@ -38,7 +38,7 @@ export function ExtraTests() {
                 .from('question')
                 .select('*')
                 .order('q_number', {ascending: true})
-                .eq('section_text', 'SECTION B – SIGNS – ALL CODES'); // Fetch all questions with this section_text
+                .eq('section_text', 'SECTION B – SIGNS – ALL CODES');
 
             if (error) {
                 console.error('Error fetching data:', error);
@@ -46,10 +46,9 @@ export function ExtraTests() {
                 return;
             }
 
-            const nonNullData = table_name ?? []; // Provide an empty array if data is null
+            const nonNullData = table_name ?? [];
             setPosts(nonNullData);
 
-            // Map each option to its designated position
             const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
             nonNullData.forEach((post) => {
                 const options: AnswerOption[] = [
@@ -58,22 +57,19 @@ export function ExtraTests() {
                     {value: "c", description: post.option_2}
                 ];
 
-                // Assign options to A, B, C based on their values
                 newShuffledOptionsMap[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
                     const option = options[index];
                     if (option.description === label) {
-                        return option; // Keep A, B, C in their places
+                        return option;
                     } else if (option.description.match(/^[ABC]$/)) {
-                        // If description matches A, B, or C, assign accordingly
                         return options.find(o => o.description === label) || option;
                     } else {
-                        return option; // Keep non-A/B/C descriptions in their original place
+                        return option;
                     }
                 });
             });
             setShuffledOptionsMap(newShuffledOptionsMap);
 
-            // Save data to local storage
             const dataToCache = {posts: nonNullData, shuffledOptionsMap: newShuffledOptionsMap};
             localStorage.setItem(cacheKey, JSON.stringify(dataToCache));
 
@@ -84,7 +80,6 @@ export function ExtraTests() {
     }, []);
 
     useEffect(() => {
-        // Start the timer for 30 minutes (1800 seconds)
         const endTime = Date.now() + 90 * 60 * 1000;
         setTimeLeft(Math.max(Math.ceil((endTime - Date.now()) / 1000), 0));
 
@@ -95,13 +90,13 @@ export function ExtraTests() {
 
             if (timeRemaining <= 0) {
                 clearInterval(id);
-                handleSubmit(); // Auto-submit when time is up
+                handleSubmit();
             }
         }, 1000);
 
         setIntervalId(id);
 
-        return () => clearInterval(id); // Clean up on component unmount
+        return () => clearInterval(id);
     }, []);
 
     const handleAnswerChange = (questionNumber: string, value: string): string => {
@@ -121,7 +116,7 @@ export function ExtraTests() {
             return updatedAnswers;
         });
 
-        return value; // Return the value to satisfy the onAnswerChange type
+        return value;
     };
 
     const handleSubmit = () => {
@@ -135,12 +130,10 @@ export function ExtraTests() {
         setSubmitted(true);
         setIsButtonDisabled(true);
 
-        // Clear the timer if it exists
         if (intervalId) {
             clearInterval(intervalId);
         }
 
-        // Set the timer to zero
         setTimeLeft(0);
     };
 
@@ -169,12 +162,12 @@ export function ExtraTests() {
                             imageSrc={post.picture_link}
                             radioOptions={shuffledOptionsMap[post.q_number].map((option, index) => ({
                                 ...option,
-                                label: ['A', 'B', 'C'][index] // Keep labels in A, B, C order
+                                label: ['A', 'B', 'C'][index]
                             }))}
                             onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
-                            correctAnswer={post.answer} // Pass correct answer
-                            submitted={submitted} // Pass submitted state
-                            selectedAnswer={answers[post.q_number]} // Pass selected answer
+                            correctAnswer={post.answer}
+                            submitted={submitted}
+                            selectedAnswer={answers[post.q_number]}
                         />
                     ))
                 )}

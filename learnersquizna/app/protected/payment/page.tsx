@@ -4,6 +4,7 @@ import {createClient} from "@/utils/supabase/server";
 import {Footer} from "@/components/Footer";
 import {redirect} from "next/navigation";
 import PaymentCard from "@/components/questionPapers/PaymentCard";
+import PricingCard from "@/components/Payments/PricingCard";
 
 export default async function ProtectedPage() {
     const supabase = createClient();
@@ -35,6 +36,23 @@ export default async function ProtectedPage() {
             <div className="flex-1 flex flex-col gap-2 max-w-4xl px-3">
                 <main className="flex-1 flex flex-col gap-6">
                     <h2 className="font-bold text-4xl mb-4 text-center">How To Buy More Tests</h2>
+
+                    {/* Pricing Section */}
+                    <div className="flex flex-wrap gap-6 justify-center">
+                        <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                            <PricingCard
+                                title="6 Tests"
+                                price="N$50"
+                                description="Get 6 tests for N$50. Ideal for comprehensive practice."
+                            />
+                            <PricingCard
+                                title="3 Tests"
+                                price="N$25"
+                                description="Get 3 tests for N$25. Perfect for quick practice sessions."
+                            />
+                        </div>
+                    </div>
+
 
                     {/* Payment Instructions */}
                     <PaymentCard
