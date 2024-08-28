@@ -4,19 +4,18 @@ export function Footer() {
     return (
         <div className="container mx-auto flex flex-col items-center">
 
+            {/*<p className="mt-2 text-xs md:text-sm text-gray-400">*/}
+            {/*    Powered by Microsoft Word 2000 | © {new Date().getFullYear()}  All rights reserved.*/}
+            {/*</p>*/}
+
+            <p className="text-sm md:text-base">
+                Developed and deployed by <span
+                className="font-bold text-red-800 hover:text-red-800 hover:underline transition duration-200">RXD</span>
+            </p>
             <p className="mt-2 text-xs md:text-sm text-gray-400">
-                Powered by Microsoft Word 2000 | © {new Date().getFullYear()}  All rights reserved.
+                Powered by Microsoft Word 2000 on Nokia 3320 | © {new Date().getFullYear()} RXD. All rights reserved.
             </p>
 
-            {/*<p className="text-sm md:text-base">*/}
-            {/*    Developed and deployed at <span*/}
-            {/*    className="font-bold text-red-800 hover:text-red-800 hover:underline transition duration-200">RXD</span>*/}
-            {/*</p>*/}
-            {/*<p className="mt-2 text-xs md:text-sm text-gray-400">*/}
-            {/*    Powered by Brilliant Minds | © {new Date().getFullYear()} RXD. All rights reserved.*/}
-            {/*</p>*/}
-
-            {/* Social Media Icons */}
             {/*<div className="mt-3 flex space-x-4">*/}
             {/*    <a href="https://www.linkedin.com/in/frans-nekongo/" target="_blank" rel="noreferrer"*/}
             {/*       className="hover:opacity-75 transition duration-200">*/}
@@ -32,8 +31,7 @@ export function Footer() {
             {/*    </a>*/}
             {/*</div>*/}
 
-            {/* Additional Sections */}
-            {/* Affiliate Program */}
+
             {/*<div className="flex-1">*/}
             {/*    <h3 className="font-bold text-lg text-yellow-400">Affiliate Program</h3>*/}
             {/*    <p className="mt-2">*/}

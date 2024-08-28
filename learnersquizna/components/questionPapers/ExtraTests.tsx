@@ -85,7 +85,7 @@ export function ExtraTests() {
 
     useEffect(() => {
         // Start the timer for 30 minutes (1800 seconds)
-        const endTime = Date.now() + 30 * 60 * 1000;
+        const endTime = Date.now() + 90 * 60 * 1000;
         setTimeLeft(Math.max(Math.ceil((endTime - Date.now()) / 1000), 0));
 
         const id = setInterval(() => {
