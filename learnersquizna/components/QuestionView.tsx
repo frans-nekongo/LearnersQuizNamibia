@@ -151,8 +151,7 @@ export function QuestionView() {
 
     return (
         <>
-            <div key="number of tests left"
-                 className="absolute z-1000 top-[30px] md:top-[55px] left-[0px] m-4 text-black dark:text-white p-2 rounded-md shadow-lg bg-[#E6E9EA] dark:bg-btn-background">
+            <div key="number of tests left" className="absolute z-1000 top-[30px] md:top-[55px] left-[0px] m-4 text-black dark:text-white p-2 rounded-md shadow-lg bg-[#E6E9EA] dark:bg-btn-background">
                 <div className="flex flex-col items-center justify-center h-full w-full">
                     <div className="flex flex-row justify-center items-center w-full">
                         <div className="flex-grow text-center text-sm">
