@@ -1,3 +1,4 @@
+import {Tooltip} from "@nextui-org/react";
 import {FaGithub, FaLinkedin, FaTwitter} from "react-icons/fa";
 
 export function Footer() {
@@ -9,12 +10,28 @@ export function Footer() {
             {/*</p>*/}
 
             <p className="text-sm md:text-base">
-                Developed and deployed by <span
-                className="font-bold text-red-800 hover:text-red-800 hover:underline transition duration-200">RXD</span>
+                Developed and deployed by .
+                <a
+                    href="https://www.frans-nekongo.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-red-800 hover:text-red-800 hover:underline transition duration-200"
+                >
+                    RXD
+                </a>
             </p>
+
             <p className="mt-2 text-xs md:text-sm text-gray-400">
-                Powered by Microsoft Word 2000 on Nokia 3320 | © {new Date().getFullYear()} RXD. All rights reserved.
+                Inspiré par{' '}
+                <Tooltip
+                    content="A great friend, we were supposed to get our learners, inspired me to make this because I struggle with reading and taking tests">
+            <span className="font-bold text-blue-600 hover:text-blue-800 transition duration-200">
+                NINO
+            </span>
+                </Tooltip>{' '}
+                | Powered by Microsoft Word 2000 on Nokia 3320 | © {new Date().getFullYear()} RXD. All rights reserved.
             </p>
+
 
             {/*<div className="mt-3 flex space-x-4">*/}
             {/*    <a href="https://www.linkedin.com/in/frans-nekongo/" target="_blank" rel="noreferrer"*/}
