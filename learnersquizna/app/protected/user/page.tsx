@@ -38,7 +38,7 @@ export default async function ProtectedPage() {
                 </nav>
             </div>
 
-            <div className="flex-1 flex flex-col gap-2 max-w-4xl px-3">
+            <div className="flex-1 mb-5 flex flex-col gap-2 max-w-4xl px-3">
                 <Header/>
                 <main className="flex-1 flex flex-col gap-6">
 
@@ -47,7 +47,7 @@ export default async function ProtectedPage() {
                 </main>
             </div>
 
-            <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
+            <footer className="w-full border-t border-t-foreground/10 p-3 flex justify-center text-center text-xs">
                 <Footer/>
             </footer>
         </div>

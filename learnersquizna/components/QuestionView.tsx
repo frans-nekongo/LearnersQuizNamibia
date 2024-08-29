@@ -41,7 +41,7 @@ export function QuestionView() {
         }));
     };
 
-    const {testsLeft, decrementTestsLeftLocally} = useTestsLeft();
+    const {testsLeft, decrementTestsLeftLocally,refreshTestsLeft} = useTestsLeft();
 
     const handleSubmit = async () => {
         const finalScore = Object.values(sectionScores).reduce((acc, curr) => acc + curr, 0);
@@ -136,6 +136,10 @@ export function QuestionView() {
     // JavaScript logic outside JSX
     const text = `${testsLeft} test${testsLeft === 1 ? '' : 's'} left`;
     // console.log(text); // Logs the result, useful for debugging
+
+    const showBuyMoreTestsMessage = testsLeft !== null && testsLeft < 1 && !selectedCode && !showExtraTests;
+
+
     const sectionTotals = {
         sectionB: 43, // Total questions in Section B
         sectionC: 24, // Total questions in Section C
@@ -149,9 +153,16 @@ export function QuestionView() {
 
     const percentage = totalScore > 0 ? ((totalScore / totalQuestions) * 100).toFixed(2) : '0';
 
+    const handleExitButtonClick = async () => {
+        // add here to refresh tests left
+        await refreshTestsLeft();
+        onOpen(); // Show confirmation dialog
+    };
+
     return (
         <>
-            <div key="number of tests left" className="absolute z-1000 top-[30px] md:top-[55px] left-[0px] m-4 text-black dark:text-white p-2 rounded-md shadow-lg bg-[#E6E9EA] dark:bg-btn-background">
+            <div key="number of tests left"
+                 className="absolute z-1000 top-[30px] md:top-[55px] left-[0px] m-4 text-black dark:text-white p-2 rounded-md shadow-lg bg-[#E6E9EA] dark:bg-btn-background">
                 <div className="flex flex-col items-center justify-center h-full w-full">
                     <div className="flex flex-row justify-center items-center w-full">
                         <div className="flex-grow text-center text-sm">
@@ -163,6 +174,15 @@ export function QuestionView() {
                 </div>
 
             </div>
+            {showBuyMoreTestsMessage && (
+                <div
+                    className="text-center bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-md shadow-md">
+                    <span className="font-semibold text-lg">You ran out of tests!</span>
+                    <p className="mt-2">Please purchase more to continue.</p>
+                </div>
+
+            )}
+
             {!selectedCode && !showExtraTests && ( // Hide options if `showExtraTests` is true
                 <div className="grid grid-flow-row-dense gap-5">
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Learners Licence Code</h2>
@@ -188,11 +208,13 @@ export function QuestionView() {
                         <Button
                             color="danger"
                             variant="bordered"
-                            onClick={() => setShowExtraTests(true)} // Update this line
+                            onClick={() => setShowExtraTests(true)}
                             startContent={<FaSign/>}
+                            disabled={testsLeft === null || testsLeft < 1} // Disable button if testsLeft is less than 1
                         >
                             SIGNS – ALL CODES
                         </Button>
+
                     </div>
                 </div>
             )}
@@ -200,12 +222,13 @@ export function QuestionView() {
             {showExtraTests && (
                 <>
                     <Button
-                        className="fixed z-40 bottom-[20px] right-2 p-2 text-black dark:text-white"
+                        className="fixed z-40 bottom-5 right-5 p-3 text-white bg-green-600 border border-white rounded-lg shadow-lg flex items-center space-x-2 transform rotate-[-5deg] hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-300 ease-in-out"
                         color="default"
-                        variant="faded"
-                        onClick={onOpen} // Show confirmation dialog
+                        variant="bordered"
+                        onClick={handleExitButtonClick} // Show confirmation dialog
                     >
-                        Back to Code Selection/exit
+                        <span className="font-bold text-xl">⬅️</span>
+                        <span className="text-sm font-medium">Go Back</span>
                     </Button>
 
                     <ExtraTests/>

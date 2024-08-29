@@ -7,7 +7,7 @@ export function Footer() {
     return (
         <div className="container mx-auto flex flex-col items-center">
             <p className="text-sm md:text-base">
-                Developed and deployed by{' '}
+                Designed and powered by{' '}
                 <a
                     href="https://www.frans-nekongo.com"
                     target="_blank"
@@ -17,6 +17,7 @@ export function Footer() {
                     RXD
                 </a>
             </p>
+
 
             <p className="mt-2 text-xs md:text-sm text-gray-400">
                 Inspiré par{' '}

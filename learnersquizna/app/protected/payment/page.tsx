@@ -67,7 +67,7 @@ export default async function ProtectedPage() {
                         title="Ewallet"
                         steps={[
                             "Send the payment to the number: +081 7173244.",
-                            "After sending, send an SMS to the same number notifying me of your payment.",
+                            "After payment, text the same number with your confirmation and email address.",
                         ]}
                     />
 
@@ -76,7 +76,7 @@ export default async function ProtectedPage() {
                         steps={[
                             "Log in to your BlueWallet app.",
                             "Send the payment to the provided address or number.",
-                            "After sending, send an SMS to +081 7173244 notifying me of your payment.",
+                            "After payment, text the same number with your confirmation and email address.",
                         ]}
                     />
 
@@ -85,7 +85,7 @@ export default async function ProtectedPage() {
                         steps={[
                             "Log in to your EasyWallet app.",
                             "Send the payment to the provided address or number.",
-                            "After sending, send an SMS to +081 7173244 notifying me of your payment.",
+                            "After payment, text the same number with your confirmation and email address.",
                         ]}
                     />
                 </main>

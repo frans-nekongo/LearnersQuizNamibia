@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {createClient} from '@/utils/supabase/client';
 import {Questioncard} from "@/components/Questioncard";
 import {Button} from '@nextui-org/react';
+import {useTestsLeft} from "@/components/useTestsLeft";
 
 interface AnswerOption {
     value: string;
@@ -119,13 +120,18 @@ export function ExtraTests() {
         return value;
     };
 
-    const handleSubmit = () => {
+    const {testsLeft, decrementTestsLeftLocally} = useTestsLeft();
+
+    const handleSubmit = async () => {
         let score = 0;
         posts.forEach((post) => {
             if (answers[post.q_number] === "1") {
                 score += 1;
             }
         });
+
+        await decrementTestsLeftLocally();
+
         setTotalScore(score);
         setSubmitted(true);
         setIsButtonDisabled(true);

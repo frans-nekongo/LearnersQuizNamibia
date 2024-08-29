@@ -1,47 +1,47 @@
-
 import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import {decrementTestsLeft} from "@/components/DecrementTests"; // Adjust the path as needed
+import { decrementTestsLeft } from "@/components/DecrementTests"; // Adjust the path as needed
 
 const supabase = createClient();
 
 export function useTestsLeft() {
     const [testsLeft, setTestsLeft] = useState<number | null>(null);
 
-    useEffect(() => {
-        const fetchTestsLeft = async () => {
-            // Get the current user's email
-            const { data: userData, error: userError } = await supabase.auth.getUser();
+    // Function to fetch the Tests_Left value
+    const fetchTestsLeft = useCallback(async () => {
+        // Get the current user's email
+        const { data: userData, error: userError } = await supabase.auth.getUser();
 
-            if (userError || !userData) {
-                console.error("Error fetching user:", userError);
-                return;
-            }
+        if (userError || !userData) {
+            console.error("Error fetching user:", userError);
+            return;
+        }
 
-            const email = userData.user?.email;
+        const email = userData.user?.email;
 
-            if (!email) {
-                console.error("No email found for the current user.");
-                return;
-            }
+        if (!email) {
+            console.error("No email found for the current user.");
+            return;
+        }
 
-            // Fetch the Tests_Left value for the current user
-            const { data, error } = await supabase
-                .from('user')
-                .select('Tests_Left')
-                .eq('email_user', email)
-                .single();
+        // Fetch the Tests_Left value for the current user
+        const { data, error } = await supabase
+            .from('user')
+            .select('Tests_Left')
+            .eq('email_user', email)
+            .single();
 
-            if (error) {
-                console.error("Error fetching tests left:", error);
-                return;
-            }
+        if (error) {
+            console.error("Error fetching tests left:", error);
+            return;
+        }
 
-            setTestsLeft(data?.Tests_Left ?? null);
-        };
-
-        fetchTestsLeft();
+        setTestsLeft(data?.Tests_Left ?? null);
     }, []);
+
+    useEffect(() => {
+        fetchTestsLeft();
+    }, [fetchTestsLeft]);
 
     const decrementTestsLeftLocally = useCallback(async () => {
         setTestsLeft(prev => {
@@ -53,5 +53,10 @@ export function useTestsLeft() {
         await decrementTestsLeft();
     }, []);
 
-    return { testsLeft, decrementTestsLeftLocally };
+    // Function to refresh the testsLeft value
+    const refreshTestsLeft = useCallback(async () => {
+        await fetchTestsLeft();
+    }, [fetchTestsLeft]);
+
+    return { testsLeft, decrementTestsLeftLocally, refreshTestsLeft };
 }
