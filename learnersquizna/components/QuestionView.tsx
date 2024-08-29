@@ -6,7 +6,7 @@ import SectionC from '@/components/questionPapers/SectionC';
 import SectionD from '@/components/questionPapers/SectionD';
 import SectionE from '@/components/questionPapers/SectionE';
 import {Button, Switch, Modal, useDisclosure} from '@nextui-org/react';
-import {FaMotorcycle, FaCar, FaTruck, FaSign} from 'react-icons/fa';
+import {FaMotorcycle, FaCar, FaTruck, FaSign, FaArrowLeft, FaChevronCircleLeft} from 'react-icons/fa';
 import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal";
 import {useTestsLeft} from '@/components/useTestsLeft';
 import ScoreSummary from "@/components/questionPapers/ScoreSummary";
@@ -41,7 +41,7 @@ export function QuestionView() {
         }));
     };
 
-    const {testsLeft, decrementTestsLeftLocally,refreshTestsLeft} = useTestsLeft();
+    const {testsLeft, decrementTestsLeftLocally, refreshTestsLeft} = useTestsLeft();
 
     const handleSubmit = async () => {
         const finalScore = Object.values(sectionScores).reduce((acc, curr) => acc + curr, 0);
@@ -289,9 +289,14 @@ export function QuestionView() {
                                 onChange={() => setTimerEnabled(prev => !prev)}
                             />
                         </label>
-                        <Button key="BackToSelectLearnersCode" size={"sm"} className=" border-black dark:border-white"
-                                variant="bordered"
-                                onClick={() => setSelectedCode(null)}>
+                        <Button
+                            key="BackToSelectLearnersCode"
+                            size="sm"
+                            className="border-2 border-black dark:border-white flex items-center gap-2 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-all duration-300 ease-in-out"
+                            variant="bordered"
+                            onClick={() => setSelectedCode(null)}
+                        >
+                            <FaArrowLeft className="text-lg"/>
                             Back
                         </Button>
                     </div>
@@ -302,14 +307,15 @@ export function QuestionView() {
                 <>
 
                     <Button
-                        key="BackToSelectQuestionPaper"
-                        className="fixed z-40 bottom-[20px] right-2 p-2 text-black dark:text-white"
-                        color="default"
-                        variant="faded"
-                        onClick={onOpen} // Show confirmation dialog
-                    >
-                        Back/exit test
-                    </Button>
+  key="BackToSelectQuestionPaper"
+  className="fixed z-40 bottom-4 right-4 p-3 text-white bg-red-600 border-2 border-yellow-400 rounded-full flex items-center gap-2 shadow-lg hover:bg-red-700 transition-all duration-300 ease-in-out"
+  color="default"
+  variant="faded"
+  onClick={onOpen} // Show confirmation dialog
+>
+  <FaChevronCircleLeft className="text-2xl" />
+  <span className="hidden md:inline">Back/Exit Test</span>
+</Button>
 
                     <h3 className="text-2xl font-semibold text-center">
                         SECTION B – SIGNS – ALL CODES
