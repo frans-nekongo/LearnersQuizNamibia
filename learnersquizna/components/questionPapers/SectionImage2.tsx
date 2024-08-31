@@ -1,14 +1,14 @@
 // components/SectionImage2.tsx
 
-import {useEffect, useState} from 'react';
-import {createClient} from '@/utils/supabase/client';
-import {Image} from "@nextui-org/react";
+import { useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { Image } from "@nextui-org/react";
 
 interface SectionImageProps {
     selectedSet: string;
 }
 
-const SectionImage2: React.FC<SectionImageProps> = ({selectedSet}) => {
+const SectionImage2: React.FC<SectionImageProps> = ({ selectedSet }) => {
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const supabase = createClient();
@@ -20,15 +20,8 @@ const SectionImage2: React.FC<SectionImageProps> = ({selectedSet}) => {
             const localStorageKey = `section-image-${selectedSet}`;
             const cachedImageUrl = localStorage.getItem(localStorageKey);
 
-            if (cachedImageUrl) {
-                // Use cached image URL if available
-                setImageUrl(cachedImageUrl);
-                setIsLoading(false);
-                return;
-            }
-
             // Fetch image URL from the server
-            let {data: sectionPictures, error} = await supabase
+            let { data: sectionPictures, error } = await supabase
                 .schema("public")
                 .from('sectionpictures')
                 .select('setApic, setBpic, setCpic')
@@ -54,10 +47,13 @@ const SectionImage2: React.FC<SectionImageProps> = ({selectedSet}) => {
                 console.log('Fetched image URL:', fetchedImageUrl); // Log the URL
             }
 
-            if (fetchedImageUrl) {
-                // Save image URL to local storage
+            if (fetchedImageUrl && fetchedImageUrl !== cachedImageUrl) {
+                // Update local storage and state if the fetched URL is different
                 localStorage.setItem(localStorageKey, fetchedImageUrl);
                 setImageUrl(fetchedImageUrl);
+            } else if (cachedImageUrl) {
+                // Use cached image URL if available and the same
+                setImageUrl(cachedImageUrl);
             }
 
             setIsLoading(false);

@@ -20,13 +20,6 @@ const SectionImage: React.FC<SectionImageProps> = ({selectedSet}) => {
             const localStorageKey = `section-image2-${selectedSet}`;
             const cachedImageUrl = localStorage.getItem(localStorageKey);
 
-            if (cachedImageUrl) {
-                // Use cached image URL if available
-                setImageUrl(cachedImageUrl);
-                setIsLoading(false);
-                return;
-            }
-
             // Fetch image URL from the server
             let {data: sectionPictures, error} = await supabase
                 .schema("public")
@@ -54,10 +47,13 @@ const SectionImage: React.FC<SectionImageProps> = ({selectedSet}) => {
                 console.log('Fetched image URL:', fetchedImageUrl); // Log the URL
             }
 
-            if (fetchedImageUrl) {
-                // Save image URL to local storage
+            if (fetchedImageUrl && fetchedImageUrl !== cachedImageUrl) {
+                // Update local storage and state if the fetched URL is different
                 localStorage.setItem(localStorageKey, fetchedImageUrl);
                 setImageUrl(fetchedImageUrl);
+            } else if (cachedImageUrl) {
+                // Use cached image URL if available and the same
+                setImageUrl(cachedImageUrl);
             }
 
             setIsLoading(false);
@@ -71,7 +67,7 @@ const SectionImage: React.FC<SectionImageProps> = ({selectedSet}) => {
             {isLoading ? (
                 <p>Loading image...</p>
             ) : imageUrl ? (
-                <Image src={imageUrl} alt="Section Image" className="w-full" />
+                <Image src={imageUrl} alt="Section Image" className="w-full"/>
             ) : (
                 <p>No image available</p>
             )}
