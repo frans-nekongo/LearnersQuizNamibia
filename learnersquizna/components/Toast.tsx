@@ -7,8 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 export function Toast() {
 
     useEffect(() => {
-        toast(<p>
-            this is v1.0 theres a lot to be updated,full questions loaded soon!,
+        toast.info(<p>
+            full questions loaded soon!,
             <br/>
             loading 270 questions into a database is not fun lol
         </p>);
