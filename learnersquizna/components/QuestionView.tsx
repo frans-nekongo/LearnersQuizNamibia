@@ -187,33 +187,61 @@ export function QuestionView() {
                 <div className="grid grid-flow-row-dense gap-5">
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Learners Licence Code</h2>
                     <div className="grid grid-flow-row-dense grid-cols-3 gap-4">
-                        <Button className="border-[#01A093]" variant="bordered"
-                                onClick={() => setSelectedCode('Code 1')}
-                                startContent={<FaMotorcycle/>}>
+                        <Button
+                            className="border-[#01A093]"
+                            variant="bordered"
+                            onClick={() => {
+                                setTimeout(() => {
+                                    setSelectedCode('Code 1');
+                                }, 500);
+                            }}
+                            startContent={<FaMotorcycle/>}>
                             Code 1
                         </Button>
-                        <Button className="border-[#F4AB30]" variant="bordered"
-                                onClick={() => setSelectedCode('Code 2')}
-                                startContent={<FaCar/>}>
+
+                        <Button
+                            className="border-[#F4AB30]"
+                            variant="bordered"
+                            onClick={() => {
+                                setTimeout(() => {
+                                    setSelectedCode('Code 2');
+                                }, 500);
+                            }}
+                            startContent={<FaCar/>}>
                             Code 2
                         </Button>
-                        <Button className="border-[#CB011F]" variant="bordered"
-                                onClick={() => setSelectedCode('Code 3')}
-                                startContent={<FaTruck/>}>
+
+                        <Button
+                            className="border-[#CB011F]"
+                            variant="bordered"
+                            onClick={() => {
+                                // Add a delay of 500 milisc
+                                setTimeout(() => {
+                                    setSelectedCode('Code 3');
+                                }, 500);
+                            }}
+                            startContent={<FaTruck/>}>
                             Code 3
                         </Button>
+
                     </div>
                     {/*if road sign is pressed*/}
                     <div className="flex justify-center items-center h-full">
                         <Button
                             color="danger"
                             variant="bordered"
-                            onClick={() => setShowExtraTests(true)}
+                            onClick={() => {
+                                // Add a delay of 2 seconds (2000 milliseconds)
+                                setTimeout(() => {
+                                    setShowExtraTests(true);
+                                }, 400);
+                            }}
                             startContent={<FaSign/>}
                             disabled={testsLeft === null || testsLeft < 1} // Disable button if testsLeft is less than 1
                         >
                             SIGNS – ALL CODES
                         </Button>
+
 
                     </div>
                 </div>
@@ -307,15 +335,15 @@ export function QuestionView() {
                 <>
 
                     <Button
-  key="BackToSelectQuestionPaper"
-  className="fixed z-40 bottom-4 right-4 p-3 text-white bg-red-600 border-2 border-yellow-400 rounded-full flex items-center gap-2 shadow-lg hover:bg-red-700 transition-all duration-300 ease-in-out"
-  color="default"
-  variant="faded"
-  onClick={onOpen} // Show confirmation dialog
->
-  <FaChevronCircleLeft className="text-2xl" />
-  <span className="hidden md:inline">Back/Exit Test</span>
-</Button>
+                        key="BackToSelectQuestionPaper"
+                        className="fixed z-40 bottom-4 right-4 p-3 text-white bg-red-600 border-2 border-yellow-400 rounded-full flex items-center gap-2 shadow-lg hover:bg-red-700 transition-all duration-300 ease-in-out"
+                        color="default"
+                        variant="faded"
+                        onClick={onOpen} // Show confirmation dialog
+                    >
+                        <FaChevronCircleLeft className="text-2xl"/>
+                        <span className="hidden md:inline">Back/Exit Test</span>
+                    </Button>
 
                     <h3 className="text-2xl font-semibold text-center">
                         SECTION B – SIGNS – ALL CODES
