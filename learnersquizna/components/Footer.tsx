@@ -7,14 +7,14 @@ export function Footer() {
     return (
         <div className="container mx-auto flex flex-col items-center">
             <p className="text-sm md:text-base">
-                Designed and powered by{' '}
+                Designed and hosted by{' '}
                 <a
                     href="https://www.frans-nekongo.com"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-bold text-red-800 hover:text-red-800 hover:underline transition duration-200"
                 >
-                    RXD
+                    frans nekongo
                 </a>
             </p>
 
