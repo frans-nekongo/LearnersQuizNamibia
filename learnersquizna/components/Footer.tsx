@@ -6,7 +6,7 @@ export function Footer() {
 
     return (
         <div className="container mx-auto flex flex-col items-center">
-            <p className="text-sm md:text-base">
+            <p className="text-xs md:text-sm ">
                 Designed and hosted by{' '}
                 <a
                     href="https://www.frans-nekongo.com"
@@ -33,11 +33,11 @@ export function Footer() {
                             onMouseEnter={() => setTooltipVisible(true)}
                             onMouseLeave={() => setTooltipVisible(false)}
                         >
-                            RIP A great friend, we were supposed to get our learners, inspired me to make this because I struggle with reading and taking tests
+                            RIP A great friend, we were supposed to get our learners, inspired me to make this because I hated physical tests
                         </div>
                     )}
                 </span>{' '}
-                | Powered by Nokia 3320 | © {new Date().getFullYear()} RXD. All rights reserved.
+                | Powered by Nokia 3320 | © {new Date().getFullYear()} Frans Nekongo. All rights reserved.
             </p>
         </div>
     );

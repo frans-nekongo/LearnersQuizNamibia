@@ -7,7 +7,7 @@ export default function SignUpUserSteps() {
         <ol className="flex flex-col gap-6">
             <Step title="🚪 Login/Create Account">
                 <p>
-                    🚀 Head over to the{" "}
+                    Head over to the{" "}
                     <Link
                         href="/login"
                         className="font-bold hover:underline text-primary"
@@ -26,9 +26,10 @@ export default function SignUpUserSteps() {
                 {/*</div>*/}
             </Step>
             <Step title="🛞 Start Your Test">
-                <p>
-                    🛣️ Choose your vehicle code, select Test A, B, or C, and hit the road with your test!
+                <p >
+                    Choose your vehicle code 🚗 , select Test A, B, or C, and start your journey with confidence!
                 </p>
+
             </Step>
         </ol>
     );
