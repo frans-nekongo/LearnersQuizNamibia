@@ -7,7 +7,7 @@ export function Footer() {
     return (
         <div className="container mx-auto flex flex-col items-center">
             <p className="text-xs md:text-sm ">
-                Designed and hosted by{' '}
+                Developed and hosted by{' '}
                 <a
                     href="https://www.frans-nekongo.com"
                     target="_blank"
