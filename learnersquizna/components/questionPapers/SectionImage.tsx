@@ -69,7 +69,9 @@ const SectionImage: React.FC<SectionImageProps> = ({selectedSet}) => {
             ) : imageUrl ? (
                 <Image src={imageUrl} alt="Section Image" className="w-full"/>
             ) : (
-                <p>No image available</p>
+                // <p>No image available</p>
+                <>
+                </>
             )}
         </div>
     );
