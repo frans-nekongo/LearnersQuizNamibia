@@ -33,7 +33,7 @@ export function Footer() {
                             onMouseEnter={() => setTooltipVisible(true)}
                             onMouseLeave={() => setTooltipVisible(false)}
                         >
-                            RIP A great friend, we were supposed to get our learners, inspired me to make this because I hated physical tests
+                            RIP A great friend, we were supposed to get our learners.
                         </div>
                     )}
                 </span>{' '}
