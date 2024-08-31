@@ -14,16 +14,16 @@ export default function SignUpUserSteps() {
                     >
                         Login
                     </Link>{" "}
-                    page and sign up. No login details? No worries! Use the demo credentials below:
+                    page and sign up.:
                 </p>
-                <div className="flex flex-wrap gap-2 mt-2">
-                    <Snippet symbol="👤" color="primary" size="sm">
-                        demo@gmail.com
-                    </Snippet>
-                    <Snippet symbol="🔒" color="primary" size="sm">
-                        demo
-                    </Snippet>
-                </div>
+                {/*<div className="flex flex-wrap gap-2 mt-2">*/}
+                {/*    <Snippet symbol="👤" color="primary" size="sm">*/}
+                {/*        demo@gmail.com*/}
+                {/*    </Snippet>*/}
+                {/*    <Snippet symbol="🔒" color="primary" size="sm">*/}
+                {/*        demo*/}
+                {/*    </Snippet>*/}
+                {/*</div>*/}
             </Step>
             <Step title="🛞 Start Your Test">
                 <p>
