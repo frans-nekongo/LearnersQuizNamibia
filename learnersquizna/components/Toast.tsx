@@ -8,7 +8,7 @@ export function Toast() {
 
     useEffect(() => {
         toast.info(<p>
-            full questions loaded soon!,
+            Loading questions in progress
             <br/>
             loading 270 questions into a database is not fun lol
         </p>);

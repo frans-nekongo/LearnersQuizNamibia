@@ -1,18 +1,18 @@
 import AuthButton from "@/components/AuthButton";
-import {createClient} from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server";
 import Header from "@/components/Header";
-import {redirect} from "next/navigation";
-import {Footer} from "@/components/Footer";
-import {QuestionView} from "@/components/QuestionView";
+import { redirect } from "next/navigation";
+import { Footer } from "@/components/Footer";
+import { QuestionView } from "@/components/QuestionView";
 import SyncDecrement from "@/components/SyncDecrement";
-
+import RotateButton from "@/components/RotateButton";
 
 export default async function ProtectedPage() {
 
     const supabase = createClient();
 
     const {
-        data: {user},
+        data: { user },
     } = await supabase.auth.getUser();
 
     if (!user) {
@@ -32,24 +32,26 @@ export default async function ProtectedPage() {
                     <div className="w-full max-w-4xl flex justify-between p-3 items-center text-sm">
                         <div className="flex-grow"></div>
                         {/* This div will push the AuthButton to the right */}
-                        <AuthButton/>
+                        <AuthButton />
                     </div>
 
                 </nav>
             </div>
 
             <div className="flex-1 mb-5 flex flex-col gap-2 max-w-4xl px-3">
-                <Header/>
+                <Header />
                 <main className="flex-1 flex flex-col gap-6">
 
-                    <QuestionView/>
+                    <QuestionView />
 
                 </main>
             </div>
 
             <footer className="w-full border-t border-t-foreground/10 p-3 flex justify-center text-center text-xs">
-                <Footer/>
+                <Footer />
             </footer>
+
+            {/* Rotate button for mobile */}
         </div>
     );
 }

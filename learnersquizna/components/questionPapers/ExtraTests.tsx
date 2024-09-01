@@ -81,7 +81,7 @@ export function ExtraTests() {
     }, []);
 
     useEffect(() => {
-        const endTime = Date.now() + 90 * 60 * 1000;
+        const endTime = Date.now() + 80 * 60 * 1000;
         setTimeLeft(Math.max(Math.ceil((endTime - Date.now()) / 1000), 0));
 
         const id = setInterval(() => {
