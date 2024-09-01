@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
-import {createClient} from '@/utils/supabase/client';
-import {Questioncard} from "@/components/Questioncard";
-import {Image} from "@nextui-org/react";
+import { useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { Questioncard } from "@/components/Questioncard";
+import { Image } from "@nextui-org/react";
 import SectionImage from "@/components/questionPapers/SectionImage";
 
 interface SectionCProps {
@@ -16,7 +16,7 @@ interface AnswerOption {
     description: string;
 }
 
-export default function SectionC({selectedSet, onScoreChange, submitted, onSubmit}: SectionCProps) {
+export default function SectionC({ selectedSet, onScoreChange, submitted, onSubmit }: SectionCProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState<any[]>([]);
     const [shuffledOptionsMap, setShuffledOptionsMap] = useState<{ [key: string]: AnswerOption[] }>({});
@@ -36,11 +36,10 @@ export default function SectionC({selectedSet, onScoreChange, submitted, onSubmi
                 return;
             }
 
-            let {data: table_name, error} = await supabase
-                .schema("public")
+            const { data: table_name, error } = await supabase
                 .from('question')
                 .select('*')
-                .order('q_number', {ascending: true})
+                .order('q_number', { ascending: true })
                 .eq('section_text', 'SECTION C – RULES – ALL CODES')
                 .eq('q_set', selectedSet);
 
@@ -57,9 +56,9 @@ export default function SectionC({selectedSet, onScoreChange, submitted, onSubmi
             const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
             nonNullData.forEach((post) => {
                 const options: AnswerOption[] = [
-                    {value: "1", description: post.answer},
-                    {value: "b", description: post.option_1},
-                    {value: "c", description: post.option_2}
+                    { value: "1", description: post.answer },
+                    { value: "b", description: post.option_1 },
+                    { value: "c", description: post.option_2 }
                 ];
 
                 // Assign options to A, B, C based on their values, unless it's not "A", "B", or "C"
@@ -78,7 +77,7 @@ export default function SectionC({selectedSet, onScoreChange, submitted, onSubmi
             setShuffledOptionsMap(newShuffledOptionsMap);
 
             // Save data to local storage
-            const dataToCache = {posts: nonNullData, shuffledOptionsMap: newShuffledOptionsMap};
+            const dataToCache = { posts: nonNullData, shuffledOptionsMap: newShuffledOptionsMap };
             localStorage.setItem(cacheKey, JSON.stringify(dataToCache));
 
             setIsLoading(false);
@@ -113,11 +112,7 @@ export default function SectionC({selectedSet, onScoreChange, submitted, onSubmi
         <p>Loading</p>
     ) : (
         <div>
-            {/*<div className="flex flex-col p-4 items-center justify-center">*/}
-            {/*    Section Picture Here*/}
-            {/*    <SectionImage selectedSet={selectedSet ?? 'A'}/>*/}
-            {/*</div>*/}
-
+            {/* Section Picture Here */}
             <div className="grid grid-flow-row-dense grid-cols-2 gap-4">
                 {posts.length === 0 ? (
                     <p>No data available</p>

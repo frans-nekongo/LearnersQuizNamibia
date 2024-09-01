@@ -1,8 +1,6 @@
 import {useEffect, useState} from 'react';
 import {createClient} from '@/utils/supabase/client';
 import {Questioncard} from "@/components/Questioncard";
-import {Image} from "@nextui-org/react";
-import SectionImage from "@/components/questionPapers/SectionImage";
 
 interface SectionBProps {
     selectedSet?: string,
@@ -28,16 +26,38 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
             const cacheKey = `sectionBData_${selectedSet}`;
             const cachedData = localStorage.getItem(cacheKey);
 
+            let isDataNew = true;
+            let latestDataVersion;
+
             if (cachedData) {
                 const parsedData = JSON.parse(cachedData);
-                setPosts(parsedData.posts);
-                setShuffledOptionsMap(parsedData.shuffledOptionsMap);
-                setIsLoading(false);
-                return;
+
+                // Fetch the latest updated_at timestamp from the database
+                latestDataVersion = await supabase
+                    .from('question')
+                    .select('updated_at')
+                    .eq('section_text', 'SECTION B – SIGNS – ALL CODES')
+                    .eq('q_set', selectedSet)
+                    .order('updated_at', {ascending: false})
+                    .limit(1)
+                    .single();
+
+                // Check if the data in local storage is outdated
+                if (latestDataVersion.data && parsedData.updated_at === latestDataVersion.data.updated_at) {
+                    isDataNew = false;
+                }
+
+                if (!isDataNew) {
+                    // Use cached data
+                    setPosts(parsedData.posts);
+                    setShuffledOptionsMap(parsedData.shuffledOptionsMap);
+                    setIsLoading(false);
+                    return;
+                }
             }
 
-            let {data: table_name, error} = await supabase
-                .schema("public")
+            // Fetch new data from Supabase if the data is new or cache is missing
+            const {data: table_name, error} = await supabase
                 .from('question')
                 .select('*')
                 .order('q_number', {ascending: true})
@@ -50,10 +70,10 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
                 return;
             }
 
-            const nonNullData = table_name ?? []; // Provide an empty array if data is null
+            const nonNullData = table_name ?? [];
             setPosts(nonNullData);
 
-            // Map each option to its designated position
+            // Process and shuffle options
             const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
             nonNullData.forEach((post) => {
                 const options: AnswerOption[] = [
@@ -62,23 +82,25 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
                     {value: "c", description: post.option_2}
                 ];
 
-                // Assign options to A, B, C based on their values, unless it's not "A", "B", or "C"
                 newShuffledOptionsMap[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
                     const option = options[index];
                     if (option.description === label) {
-                        return option; // Keep A, B, C in their places
+                        return option;
                     } else if (option.description.match(/^[ABC]$/)) {
-                        // If description matches A, B, or C, assign accordingly
                         return options.find(o => o.description === label) || option;
                     } else {
-                        return option; // Keep non-A/B/C descriptions in their original place
+                        return option;
                     }
                 });
             });
             setShuffledOptionsMap(newShuffledOptionsMap);
 
-            // Save data to local storage
-            const dataToCache = {posts: nonNullData, shuffledOptionsMap: newShuffledOptionsMap};
+            // Save the newly fetched data to local storage
+            const dataToCache = {
+                posts: nonNullData,
+                shuffledOptionsMap: newShuffledOptionsMap,
+                updated_at: latestDataVersion?.data?.updated_at || new Date().toISOString() // Store the latest updated_at timestamp
+            };
             localStorage.setItem(cacheKey, JSON.stringify(dataToCache));
 
             setIsLoading(false);
@@ -106,18 +128,13 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
             return updatedAnswers;
         });
 
-        return value; // Return the value to satisfy the onAnswerChange type
+        return value;
     };
 
     return isLoading ? (
         <p>Loading</p>
     ) : (
         <div>
-            {/*<div className="flex flex-col p-4 items-center justify-center">*/}
-            {/*    Section Picture Here*/}
-            {/*    <SectionImage selectedSet={selectedSet ?? 'A'}/>*/}
-            {/*</div>*/}
-
             <div className="grid grid-flow-row-dense grid-cols-2 gap-4">
                 {posts.length === 0 ? (
                     <p>No data available</p>
@@ -130,12 +147,12 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
                             imageSrc={post.picture_link}
                             radioOptions={shuffledOptionsMap[post.q_number].map((option, index) => ({
                                 ...option,
-                                label: ['A', 'B', 'C'][index] // Keep labels in A, B, C order
+                                label: ['A', 'B', 'C'][index]
                             }))}
                             onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
-                            correctAnswer={post.answer} // Pass correct answer
-                            submitted={submitted} // Pass submitted state
-                            selectedAnswer={answers[post.q_number]} // Pass selected answer
+                            correctAnswer={post.answer}
+                            submitted={submitted}
+                            selectedAnswer={answers[post.q_number]}
                         />
                     ))
                 )}
