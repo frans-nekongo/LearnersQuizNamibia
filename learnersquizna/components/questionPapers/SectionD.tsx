@@ -1,9 +1,8 @@
 import {useEffect, useState} from 'react';
 import {createClient} from '@/utils/supabase/client';
 import {Questioncard} from "@/components/Questioncard";
-import {Image} from "@nextui-org/react";
 import SectionImage2 from "@/components/questionPapers/SectionImage2";
-// change this when section copy
+
 interface SectionDProps {
     selectedSet?: string,
     onScoreChange: (score: number) => void,
@@ -15,7 +14,7 @@ interface AnswerOption {
     value: string;
     description: string;
 }
-// change this when section copy
+
 export default function SectionD({selectedSet, onScoreChange, submitted, onSubmit}: SectionDProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState<any[]>([]);
@@ -25,24 +24,44 @@ export default function SectionD({selectedSet, onScoreChange, submitted, onSubmi
 
     useEffect(() => {
         const fetchPosts = async () => {
-            // change this when section copy
             const cacheKey = `sectionDData_${selectedSet}`;
             const cachedData = localStorage.getItem(cacheKey);
 
+            let isDataNew = true;
+            let latestDataVersion;
+
             if (cachedData) {
                 const parsedData = JSON.parse(cachedData);
-                setPosts(parsedData.posts);
-                setShuffledOptionsMap(parsedData.shuffledOptionsMap);
-                setIsLoading(false);
-                return;
+
+                // Fetch the latest updated_at timestamp from the database
+                latestDataVersion = await supabase
+                    .from('question')
+                    .select('updated_at')
+                    .eq('section_text', 'SECTION E – LIGHT AND HEAVY VEHICLES ONLY')
+                    .eq('q_set', selectedSet)
+                    .order('updated_at', {ascending: false})
+                    .limit(1)
+                    .single();
+
+                // Check if the data in local storage is outdated
+                if (latestDataVersion.data && parsedData.updated_at === latestDataVersion.data.updated_at) {
+                    isDataNew = false;
+                }
+
+                if (!isDataNew) {
+                    // Use cached data
+                    setPosts(parsedData.posts);
+                    setShuffledOptionsMap(parsedData.shuffledOptionsMap);
+                    setIsLoading(false);
+                    return;
+                }
             }
 
-            let {data: table_name, error} = await supabase
-                .schema("public")
+            // Fetch new data from Supabase if the data is new or cache is missing
+            const {data: table_name, error} = await supabase
                 .from('question')
                 .select('*')
                 .order('q_number', {ascending: true})
-                // change this when section copy
                 .eq('section_text', 'SECTION E – LIGHT AND HEAVY VEHICLES ONLY')
                 .eq('q_set', selectedSet);
 
@@ -79,8 +98,12 @@ export default function SectionD({selectedSet, onScoreChange, submitted, onSubmi
             });
             setShuffledOptionsMap(newShuffledOptionsMap);
 
-            // Save data to local storage
-            const dataToCache = {posts: nonNullData, shuffledOptionsMap: newShuffledOptionsMap};
+            // Save the newly fetched data to local storage
+            const dataToCache = {
+                posts: nonNullData,
+                shuffledOptionsMap: newShuffledOptionsMap,
+                updated_at: latestDataVersion?.data?.updated_at || new Date().toISOString() // Store the latest updated_at timestamp
+            };
             localStorage.setItem(cacheKey, JSON.stringify(dataToCache));
 
             setIsLoading(false);
