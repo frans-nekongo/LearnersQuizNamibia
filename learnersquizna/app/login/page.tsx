@@ -68,52 +68,60 @@ export default function Login({searchParams}: { searchParams: { message: string 
                 Back
             </Link>
 
-            <form className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
-                <div className="flex flex-wrap gap-4">
-                    <Snippet symbol="user" color="success" size="sm">demo@gmail.com</Snippet>
-                    <Snippet symbol="password" color="success" size="sm">demo</Snippet>
+            <form className="flex-1 flex flex-col w-full justify-center gap-4 text-foreground">
+                {/*<div className="flex flex-wrap gap-4">*/}
+                {/*    <Snippet symbol="user" color="success" size="sm">demo@gmail.com</Snippet>*/}
+                {/*    <Snippet symbol="password" color="success" size="sm">demo</Snippet>*/}
+                {/*</div>*/}
+
+                <div className="flex flex-col gap-2">
+                    <label className="text-md font-medium text-gray-700" htmlFor="email">
+                        📧 Email
+                    </label>
+                    <input
+                        className="rounded-md px-4 py-2 bg-white border border-gray-300 focus:border-green-600 focus:ring-2 focus:ring-green-200 transition-all duration-300 mb-6"
+                        name="email"
+                        placeholder="you@example.com"
+                        required
+                    />
                 </div>
 
-                <label className="text-md" htmlFor="email">
-                    Email
-                </label>
-                <input
-                    className="rounded-md px-4 py-2 bg-inherit border mb-6"
-                    name="email"
-                    placeholder="you@example.com"
-                    required
-                />
-                <label className="text-md" htmlFor="password">
-                    Password
-                </label>
-                <input
-                    className="rounded-md px-4 py-2 bg-inherit border mb-6"
-                    type="password"
-                    name="password"
-                    placeholder="••••••••"
-                    required
-                />
+                <div className="flex flex-col gap-2">
+                    <label className="text-md font-medium text-gray-700" htmlFor="password">
+                        🔒 Password
+                    </label>
+                    <input
+                        className="rounded-md px-4 py-2 bg-white border border-gray-300 focus:border-green-600 focus:ring-2 focus:ring-green-200 transition-all duration-300 mb-6"
+                        type="password"
+                        name="password"
+                        placeholder="••••••••"
+                        required
+                    />
+                </div>
+
                 <SubmitButton
                     formAction={signIn}
-                    className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
+                    className="bg-green-600 hover:bg-green-700 rounded-md px-4 py-2 text-white font-semibold transition-all duration-300 mb-2"
                     pendingText="Signing In..."
                 >
                     Sign In
                 </SubmitButton>
+
                 <SubmitButton
                     formAction={handleNameSubmit}
-                    className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+                    className="border border-gray-300 hover:border-green-600 rounded-md px-4 py-2 text-gray-700 hover:text-green-600 font-semibold transition-all duration-300 mb-2"
                     pendingText="Signing Up..."
                 >
                     Sign Up
                 </SubmitButton>
+
                 {showNameInput && (
-                    <div>
-                        <label className="text-md" htmlFor="name">
-                            Name
+                    <div className="flex flex-col gap-2">
+                        <label className="text-md font-medium text-gray-700" htmlFor="name">
+                            👤 Name
                         </label>
                         <input
-                            className="rounded-md px-4 py-2 bg-inherit border mb-6"
+                            className="rounded-md px-4 py-2 bg-white border border-gray-300 focus:border-green-600 focus:ring-2 focus:ring-green-200 transition-all duration-300 mb-6"
                             name="name"
                             placeholder="Your Name"
                             value={userName}
@@ -121,20 +129,22 @@ export default function Login({searchParams}: { searchParams: { message: string 
                             required
                         />
                         <SubmitButton
-                            formAction={handleNameSubmit} // Now correctly typed
-                            className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
+                            formAction={handleNameSubmit}
+                            className="bg-green-600 hover:bg-green-700 rounded-md px-4 py-2 text-white font-semibold transition-all duration-300 mb-2"
                             pendingText="Submitting..."
                         >
                             Submit
                         </SubmitButton>
                     </div>
                 )}
+
                 {searchParams?.message && (
-                    <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
+                    <p className="mt-4 p-4 bg-gray-100 text-gray-800 text-center rounded-md">
                         {searchParams.message}
                     </p>
                 )}
             </form>
+
         </div>
     );
 }

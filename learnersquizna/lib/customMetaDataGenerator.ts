@@ -13,7 +13,7 @@ interface PageSEOProps {
 
 export function customMetaDataGenerator({
                                             title,
-                                            description = "Easily pass your Namibian Learners Licence test online! and improve your chances of passing on the first attempt.",
+                                            description = "Your Namibian Learners Licence test online! to improve your chances of passing on the first attempt.",
                                             canonicalUrl = 'https://namibianlearnerstest.frans-nekongo.com/',
                                             ogType = 'website',
                                             keywords = [
@@ -51,7 +51,7 @@ export function customMetaDataGenerator({
     return {
         generator: 'Next.js',
         applicationName: 'Namibian Learners Licence Test App',
-        authors: [{name: 'Frans Nekongo', url: 'https://frans-nekongo.com/'}],
+        // authors: [{name: 'Frans Nekongo', url: 'https://frans-nekongo.com/'}],
         metadataBase: new URL(defaultUrl),
         title: fullTitle,
         description,
