@@ -58,7 +58,7 @@ export function customMetaDataGenerator({
 
     return {
         generator: 'Next.js',
-        applicationName: 'Namibian Learners Licence Test App',
+        applicationName: 'Namibian Learners Licence Test',
         // authors: [{name: 'Frans Nekongo', url: 'https://frans-nekongo.com/'}],
         metadataBase: new URL(defaultUrl),
         title: fullTitle,
