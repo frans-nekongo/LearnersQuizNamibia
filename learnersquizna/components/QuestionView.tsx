@@ -11,6 +11,7 @@ import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/mod
 import {useTestsLeft} from '@/components/useTestsLeft';
 import ScoreSummary from "@/components/questionPapers/ScoreSummary";
 import {ExtraTests} from "@/components/questionPapers/ExtraTests";
+import SectionA from "@/components/questionPapers/SectionA";
 
 type SectionKey = 'sectionB' | 'sectionC' | 'sectionD' | 'sectionE';
 
@@ -19,7 +20,7 @@ export function QuestionView() {
     const [selectedSet, setSelectedSet] = useState<string | null>(null);
     const [totalScore, setTotalScore] = useState(0);
     const [submitted, setSubmitted] = useState(false);
-    const [sectionScores, setSectionScores] = useState({sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0});
+    const [sectionScores, setSectionScores] = useState({sectionA:0,sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0});
     const [timerEnabled, setTimerEnabled] = useState(true); // State to manage timer toggle
     const [timeLeft, setTimeLeft] = useState<number | null>(null); // State for timer
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // State to store interval ID
@@ -141,6 +142,7 @@ export function QuestionView() {
 
 
     const sectionTotals = {
+        sectionA:3,
         sectionB: 43, // Total questions in Section B
         sectionC: 24, // Total questions in Section C
         sectionD: 8,  // Total questions in Section D (if applicable)
@@ -346,6 +348,20 @@ export function QuestionView() {
                     </Button>
 
                     <h3 className="text-2xl font-semibold text-center">
+                        SECTION A: PRACTICE QUESTIONS
+                    </h3>
+                    <div className="z-0">
+                        <SectionA
+                            selectedSet={selectedSet}
+                            onScoreChange={(score) => handleSectionScore('sectionA', score)}
+                            onSubmit={() => {
+                                handleSubmit();
+                            }}
+                            submitted={submitted}
+                        />
+                    </div>
+
+                    <h3 className="text-2xl font-semibold text-center">
                         SECTION B – SIGNS – ALL CODES
                     </h3>
                     <div className="z-0">
@@ -358,6 +374,7 @@ export function QuestionView() {
                             submitted={submitted}
                         />
                     </div>
+
 
                     <h3 className="text-2xl font-semibold text-center">
                         SECTION C – RULES – ALL CODES
@@ -449,7 +466,7 @@ export function QuestionView() {
                                 <Button color="warning" variant="light" onClick={() => {
                                     setSelectedSet(null);
                                     setSubmitted(false);
-                                    setSectionScores({sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0}); // Reset section scores
+                                    setSectionScores({sectionA: 0,sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0}); // Reset section scores
                                     setTotalScore(0); // Reset total score to zero
                                     setIsButtonDisabled(false); // Re-enable the submit button
                                     onClose();
@@ -483,7 +500,7 @@ export function QuestionView() {
                                 // Reset states
                                 setSelectedSet(null); // Go back to code selection
                                 setSubmitted(false); // Reset submission status
-                                setSectionScores({sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0}); // Reset section scores
+                                setSectionScores({sectionA:0, sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0}); // Reset section scores
                                 setTotalScore(0); // Reset total score to zero
                                 setIsButtonDisabled(false); // Re-enable the submit button
 

@@ -13,7 +13,7 @@ const defaultUrl = "https://namibianlearnerstest.frans-nekongo.com/"
 const url = "https://isqkzbwoiunnqsltbfpa.supabase.co/storage/v1/object/public/WebsiteLogo/logo.ico?t=2024-07-25T21%3A32%3A36.405Z";
 
 export const metadata: Metadata = customMetaDataGenerator({
-    title: 'Namibian Learners licence Test',
+    title: 'Your Namibian Learners licence Test',
 });
 
 export default function RootLayout({

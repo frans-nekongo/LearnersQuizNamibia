@@ -4,12 +4,14 @@ interface ScoreSummaryProps {
     totalScore: number;
     percentage: string;
     sectionScores: {
+        sectionA: number;
         sectionB: number;
         sectionC: number;
         sectionD?: number;
         sectionE?: number;
     };
     sectionTotals: {
+        sectionA: number;
         sectionB: number;
         sectionC: number;
         sectionD?: number;
@@ -38,6 +40,10 @@ const ScoreSummary: React.FC<ScoreSummaryProps> = ({
 
         {/* Section Scores */}
         <div className="space-y-2">
+            <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                <span>SECTION A: PRACTICE QUESTIONS:</span>
+                <span>{sectionScores.sectionA}/{sectionTotals.sectionA}</span>
+            </div>
             <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                 <span>SECTION B – SIGNS – ALL CODES:</span>
                 <span>{sectionScores.sectionB}/{sectionTotals.sectionB}</span>

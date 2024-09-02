@@ -1,12 +1,12 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useMemo, useCallback} from 'react';
 import {createClient} from '@/utils/supabase/client';
 import {Questioncard} from "@/components/Questioncard";
 
 interface SectionBProps {
-    selectedSet?: string,
-    onScoreChange: (score: number) => void,
-    submitted: boolean,
-    onSubmit?: () => void
+    selectedSet?: string;
+    onScoreChange: (score: number) => void;
+    submitted: boolean;
+    onSubmit?: () => void;
 }
 
 interface AnswerOption {
@@ -14,9 +14,43 @@ interface AnswerOption {
     description: string;
 }
 
-export default function SectionB({selectedSet, onScoreChange, submitted, onSubmit}: SectionBProps) {
+interface Post {
+    q_number: string;
+    question_text: string;
+    picture_link: string;
+    answer: string;
+    option_1: string;
+    option_2: string;
+}
+
+const fetchCachedData = async (cacheKey: string, supabase: any, selectedSet?: string) => {
+    const cachedData = localStorage.getItem(cacheKey);
+    let isDataNew = true;
+    let latestDataVersion;
+
+    if (cachedData) {
+        const parsedData = JSON.parse(cachedData);
+        latestDataVersion = await supabase
+            .from('question')
+            .select('updated_at')
+            .eq('section_text', 'SECTION B – SIGNS – ALL CODES')
+            .eq('q_set', selectedSet)
+            .order('updated_at', {ascending: false})
+            .limit(1)
+            .single();
+
+        if (latestDataVersion.data && parsedData.updated_at === latestDataVersion.data.updated_at) {
+            isDataNew = false;
+            return {isDataNew, data: parsedData};
+        }
+    }
+
+    return {isDataNew, data: null};
+};
+
+const SectionB = ({selectedSet, onScoreChange, submitted, onSubmit}: SectionBProps) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [posts, setPosts] = useState<any[]>([]);
+    const [posts, setPosts] = useState<Post[]>([]);
     const [shuffledOptionsMap, setShuffledOptionsMap] = useState<{ [key: string]: AnswerOption[] }>({});
     const [answers, setAnswers] = useState<{ [key: string]: string }>({});
     const supabase = createClient();
@@ -24,40 +58,16 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
     useEffect(() => {
         const fetchPosts = async () => {
             const cacheKey = `sectionBData_${selectedSet}`;
-            const cachedData = localStorage.getItem(cacheKey);
+            const {isDataNew, data: cachedData} = await fetchCachedData(cacheKey, supabase, selectedSet);
 
-            let isDataNew = true;
-            let latestDataVersion;
-
-            if (cachedData) {
-                const parsedData = JSON.parse(cachedData);
-
-                // Fetch the latest updated_at timestamp from the database
-                latestDataVersion = await supabase
-                    .from('question')
-                    .select('updated_at')
-                    .eq('section_text', 'SECTION B – SIGNS – ALL CODES')
-                    .eq('q_set', selectedSet)
-                    .order('updated_at', {ascending: false})
-                    .limit(1)
-                    .single();
-
-                // Check if the data in local storage is outdated
-                if (latestDataVersion.data && parsedData.updated_at === latestDataVersion.data.updated_at) {
-                    isDataNew = false;
-                }
-
-                if (!isDataNew) {
-                    // Use cached data
-                    setPosts(parsedData.posts);
-                    setShuffledOptionsMap(parsedData.shuffledOptionsMap);
-                    setIsLoading(false);
-                    return;
-                }
+            if (!isDataNew && cachedData) {
+                setPosts(cachedData.posts);
+                setShuffledOptionsMap(cachedData.shuffledOptionsMap);
+                setIsLoading(false);
+                return;
             }
 
-            // Fetch new data from Supabase if the data is new or cache is missing
-            const {data: table_name, error} = await supabase
+            const {data: tableName, error} = await supabase
                 .from('question')
                 .select('*')
                 .order('q_number', {ascending: true})
@@ -70,10 +80,9 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
                 return;
             }
 
-            const nonNullData = table_name ?? [];
+            const nonNullData = tableName ?? [];
             setPosts(nonNullData);
 
-            // Process and shuffle options
             const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
             nonNullData.forEach((post) => {
                 const options: AnswerOption[] = [
@@ -95,11 +104,10 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
             });
             setShuffledOptionsMap(newShuffledOptionsMap);
 
-            // Save the newly fetched data to local storage
             const dataToCache = {
                 posts: nonNullData,
                 shuffledOptionsMap: newShuffledOptionsMap,
-                updated_at: latestDataVersion?.data?.updated_at || new Date().toISOString() // Store the latest updated_at timestamp
+                updated_at: new Date().toISOString()
             };
             localStorage.setItem(cacheKey, JSON.stringify(dataToCache));
 
@@ -107,9 +115,9 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
         };
 
         fetchPosts();
-    }, [selectedSet]);
+    }, [selectedSet, supabase]);
 
-    const handleAnswerChange = (questionNumber: string, value: string): string => {
+    const handleAnswerChange = useCallback((questionNumber: string, value: string): string => {
         setAnswers((prevAnswers) => {
             const updatedAnswers = {
                 ...prevAnswers,
@@ -129,34 +137,40 @@ export default function SectionB({selectedSet, onScoreChange, submitted, onSubmi
         });
 
         return value;
-    };
+    }, [posts, onScoreChange]);
+
+    const renderedPosts = useMemo(() => (
+        posts.length === 0 ? (
+            <p>No data available</p>
+        ) : (
+            posts.map((post) => (
+                <Questioncard
+                    key={post.q_number}
+                    questionNumber={post.q_number}
+                    questionText={post.question_text}
+                    imageSrc={post.picture_link}
+                    radioOptions={shuffledOptionsMap[post.q_number].map((option, index) => ({
+                        ...option,
+                        label: ['A', 'B', 'C'][index]
+                    }))}
+                    onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
+                    correctAnswer={post.answer}
+                    submitted={submitted}
+                    selectedAnswer={answers[post.q_number]}
+                />
+            ))
+        )
+    ), [posts, shuffledOptionsMap, answers, handleAnswerChange, submitted]);
 
     return isLoading ? (
         <p>Loading</p>
     ) : (
         <div>
             <div className="grid grid-flow-row-dense grid-cols-2 gap-4">
-                {posts.length === 0 ? (
-                    <p>No data available</p>
-                ) : (
-                    posts.map((post) => (
-                        <Questioncard
-                            key={post.q_number}
-                            questionNumber={post.q_number}
-                            questionText={post.question_text}
-                            imageSrc={post.picture_link}
-                            radioOptions={shuffledOptionsMap[post.q_number].map((option, index) => ({
-                                ...option,
-                                label: ['A', 'B', 'C'][index]
-                            }))}
-                            onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
-                            correctAnswer={post.answer}
-                            submitted={submitted}
-                            selectedAnswer={answers[post.q_number]}
-                        />
-                    ))
-                )}
+                {renderedPosts}
             </div>
         </div>
     );
-}
+};
+
+export default SectionB;

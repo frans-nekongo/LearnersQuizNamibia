@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
-import { Questioncard } from "@/components/Questioncard";
-import { Image } from "@nextui-org/react";
+import {useEffect, useState, useMemo, useCallback} from 'react';
+import {createClient} from '@/utils/supabase/client';
+import {Questioncard} from "@/components/Questioncard";
+import {Image} from "@nextui-org/react";
 import SectionImage from "@/components/questionPapers/SectionImage";
 
 interface SectionCProps {
@@ -16,114 +16,103 @@ interface AnswerOption {
     description: string;
 }
 
-export default function SectionC({ selectedSet, onScoreChange, submitted, onSubmit }: SectionCProps) {
+export default function SectionC({selectedSet, onScoreChange, submitted, onSubmit}: SectionCProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState<any[]>([]);
     const [shuffledOptionsMap, setShuffledOptionsMap] = useState<{ [key: string]: AnswerOption[] }>({});
     const [answers, setAnswers] = useState<{ [key: string]: string }>({});
     const supabase = createClient();
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            const cacheKey = `sectionCData_${selectedSet}`;
-            const cachedData = localStorage.getItem(cacheKey);
+    // Fetch posts and handle caching
+    const fetchPosts = useCallback(async () => {
+        const cacheKey = `sectionCData_${selectedSet}`;
+        const cachedData = localStorage.getItem(cacheKey);
 
-            let isDataNew = true;
-            let latestDataVersion;
+        let isDataNew = true;
+        let latestDataVersion;
 
-            if (cachedData) {
-                const parsedData = JSON.parse(cachedData);
+        if (cachedData) {
+            const parsedData = JSON.parse(cachedData);
 
-                // Fetch the latest updated_at timestamp from the database
-                latestDataVersion = await supabase
-                    .from('question')
-                    .select('updated_at')
-                    .eq('section_text', 'SECTION C – RULES – ALL CODES')
-                    .eq('q_set', selectedSet)
-                    .order('updated_at', { ascending: false })
-                    .limit(1)
-                    .single();
+            // Fetch the latest updated_at timestamp from the database
+            latestDataVersion = await supabase
+                .from('question')
+                .select('updated_at')
+                .eq('section_text', 'SECTION C – RULES – ALL CODES')
+                .eq('q_set', selectedSet)
+                .order('updated_at', {ascending: false})
+                .limit(1)
+                .single();
 
-                // Check if the data in local storage is outdated
-                if (latestDataVersion.data && parsedData.updated_at === latestDataVersion.data.updated_at) {
-                    isDataNew = false;
-                }
-
-                if (!isDataNew) {
-                    // Use cached data
-                    setPosts(parsedData.posts);
-                    setShuffledOptionsMap(parsedData.shuffledOptionsMap);
-                    setIsLoading(false);
-                    return;
-                }
+            if (latestDataVersion.data && parsedData.updated_at === latestDataVersion.data.updated_at) {
+                isDataNew = false;
             }
 
-            // Fetch new data from Supabase if the data is new or cache is missing
-            let { data: table_name, error } = await supabase
-                .from('question')
-                .select('*')
-                .order('q_number', { ascending: true })
-                .eq('section_text', 'SECTION C – RULES – ALL CODES')
-                .eq('q_set', selectedSet);
-
-            if (error) {
-                console.error('Error fetching data:', error);
+            if (!isDataNew) {
+                setPosts(parsedData.posts);
+                setShuffledOptionsMap(parsedData.shuffledOptionsMap);
                 setIsLoading(false);
                 return;
             }
+        }
 
-            const nonNullData = table_name ?? [];
-            setPosts(nonNullData);
+        // Fetch new data from Supabase if the data is new or cache is missing
+        const {data: newData, error} = await supabase
+            .from('question')
+            .select('*')
+            .order('q_number', {ascending: true})
+            .eq('section_text', 'SECTION C – RULES – ALL CODES')
+            .eq('q_set', selectedSet);
 
-            // Process and shuffle options
-            const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
-            nonNullData.forEach((post) => {
-                const options: AnswerOption[] = [
-                    { value: "1", description: post.answer },
-                    { value: "b", description: post.option_1 },
-                    { value: "c", description: post.option_2 }
-                ];
-
-                newShuffledOptionsMap[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
-                    const option = options[index];
-                    if (option.description === label) {
-                        return option;
-                    } else if (option.description.match(/^[ABC]$/)) {
-                        return options.find(o => o.description === label) || option;
-                    } else {
-                        return option;
-                    }
-                });
-            });
-            setShuffledOptionsMap(newShuffledOptionsMap);
-
-            // Save the newly fetched data to local storage
-            const dataToCache = {
-                posts: nonNullData,
-                shuffledOptionsMap: newShuffledOptionsMap,
-                updated_at: latestDataVersion?.data?.updated_at || new Date().toISOString()
-            };
-            localStorage.setItem(cacheKey, JSON.stringify(dataToCache));
-
+        if (error) {
+            console.error('Error fetching data:', error);
             setIsLoading(false);
+            return;
+        }
+
+        const nonNullData = newData ?? [];
+        setPosts(nonNullData);
+
+        // Process and shuffle options
+        const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
+        nonNullData.forEach((post) => {
+            const options: AnswerOption[] = [
+                {value: "1", description: post.answer},
+                {value: "b", description: post.option_1},
+                {value: "c", description: post.option_2}
+            ];
+
+            newShuffledOptionsMap[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
+                const option = options[index];
+                return option.description === label ? option : options.find(o => o.description === label) || option;
+            });
+        });
+        setShuffledOptionsMap(newShuffledOptionsMap);
+
+        // Save the newly fetched data to local storage
+        const dataToCache = {
+            posts: nonNullData,
+            shuffledOptionsMap: newShuffledOptionsMap,
+            updated_at: latestDataVersion?.data?.updated_at || new Date().toISOString()
         };
+        localStorage.setItem(cacheKey, JSON.stringify(dataToCache));
 
+        setIsLoading(false);
+    }, [selectedSet, supabase]);
+
+    useEffect(() => {
         fetchPosts();
-    }, [selectedSet]);
+    }, [fetchPosts]);
 
-    const handleAnswerChange = (questionNumber: string, value: string): string => {
+    // Handle answer change and score update
+    const handleAnswerChange = useCallback((questionNumber: string, value: string): string => {
         setAnswers((prevAnswers) => {
             const updatedAnswers = {
                 ...prevAnswers,
                 [questionNumber]: value
             };
 
-            let score = 0;
-            posts.forEach((post) => {
-                if (updatedAnswers[post.q_number] === "1") {
-                    score += 1;
-                }
-            });
+            const score = posts.reduce((acc, post) => acc + (updatedAnswers[post.q_number] === "1" ? 1 : 0), 0);
 
             onScoreChange(score);
 
@@ -131,7 +120,7 @@ export default function SectionC({ selectedSet, onScoreChange, submitted, onSubm
         });
 
         return value;
-    };
+    }, [posts, onScoreChange]);
 
     return isLoading ? (
         <p>Loading</p>
@@ -147,7 +136,7 @@ export default function SectionC({ selectedSet, onScoreChange, submitted, onSubm
                             questionNumber={post.q_number}
                             questionText={post.question_text}
                             imageSrc={post.picture_link}
-                            radioOptions={shuffledOptionsMap[post.q_number].map((option, index) => ({
+                            radioOptions={shuffledOptionsMap[post.q_number]?.map((option, index) => ({
                                 ...option,
                                 label: ['A', 'B', 'C'][index]
                             }))}

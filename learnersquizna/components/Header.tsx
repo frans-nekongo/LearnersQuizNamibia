@@ -1,20 +1,47 @@
-import NextLogo from "./NextLogo";
-import SupabaseLogo from "./SupabaseLogo";
-import React from "react";
-import {Image} from "@nextui-org/react";
-import NextImage from "next/image";
+"use client"
+import React, { useEffect, useState } from "react";
+import { Image } from "@nextui-org/react";
+
+const imageUrl = "https://isqkzbwoiunnqsltbfpa.supabase.co/storage/v1/object/public/WebsiteLogo/logo_learnersquiz.png";
+const localStorageKey = "headerLogo";
+
+async function fetchImage(url: string): Promise<string> {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(blob);
+    });
+}
 
 export default function Header() {
+    const [imageSrc, setImageSrc] = useState<string>("");
 
-    const url = "https://isqkzbwoiunnqsltbfpa.supabase.co/storage/v1/object/public/WebsiteLogo/logo_learnersquiz.png";
+    useEffect(() => {
+        const checkImage = async () => {
+            const localImage = localStorage.getItem(localStorageKey);
+            if (localImage) {
+                setImageSrc(localImage);
+                return;
+            }
+
+            const newImage = await fetchImage(imageUrl);
+            setImageSrc(newImage);
+            localStorage.setItem(localStorageKey, newImage);
+        };
+
+        checkImage();
+    }, []);
 
     return (
         <div className="z-50 flex flex-col gap-5 items-center">
             <Image
                 className=""
                 height={"350px"}
-                src={url}
-                alt={url}/>
+                src={imageSrc}
+                alt="Namibian Learners Test Logo"
+            />
 
             <h1 className="sr-only">Namibian Learners licence Test</h1>
 
