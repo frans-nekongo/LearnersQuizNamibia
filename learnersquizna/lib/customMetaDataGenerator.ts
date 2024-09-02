@@ -13,10 +13,13 @@ interface PageSEOProps {
 
 export function customMetaDataGenerator({
                                             title,
-                                            description = "Your Namibian Learners Licence test online! to improve your chances of passing on the first attempt.",
+                                            description = "Free Namibian Learners Licence test online! to improve your chances of passing on the first attempt.",
+
                                             canonicalUrl = 'https://namibianlearnerstest.frans-nekongo.com/',
                                             ogType = 'website',
                                             keywords = [
+                                                " learners licence test",
+                                                "Free Namibian learners licence questions and answers",
                                                 "Namibian learners licence test",
                                                 "NaTIS Questions and Answers",
                                                 "Namibia NaTIS test preparation",
