@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react';
-import {createClient} from '@/utils/supabase/client';
-import {Questioncard} from "@/components/Questioncard";
-import {Button} from '@nextui-org/react';
-import {useTestsLeft} from "@/components/useTestsLeft";
+import { useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { Questioncard } from "@/components/Questioncard";
+import { Button } from '@nextui-org/react';
+import { useTestsLeft } from "@/components/useTestsLeft";
 
 interface AnswerOption {
     value: string;
@@ -13,7 +13,7 @@ export function ExtraTests() {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState<any[]>([]);
     const [shuffledOptionsMap, setShuffledOptionsMap] = useState<{ [key: string]: AnswerOption[] }>({});
-    const [answers, setAnswers] = useState<{ [key: string]: string }>({});
+    const [answers, setAnswers] = useState<{ [key: number]: string }>({});
     const [submitted, setSubmitted] = useState(false);
     const [totalScore, setTotalScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState<number | null>(null);
@@ -34,11 +34,11 @@ export function ExtraTests() {
                 return;
             }
 
-            let {data: table_name, error} = await supabase
+            let { data: table_name, error } = await supabase
                 .schema("public")
                 .from('question')
                 .select('*')
-                .order('q_number', {ascending: true})
+                .order('q_number', { ascending: true })
                 .eq('section_text', 'SECTION B – SIGNS – ALL CODES');
 
             if (error) {
@@ -53,9 +53,9 @@ export function ExtraTests() {
             const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
             nonNullData.forEach((post) => {
                 const options: AnswerOption[] = [
-                    {value: "1", description: post.answer},
-                    {value: "b", description: post.option_1},
-                    {value: "c", description: post.option_2}
+                    { value: "1", description: post.answer },
+                    { value: "b", description: post.option_1 },
+                    { value: "c", description: post.option_2 }
                 ];
 
                 newShuffledOptionsMap[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
@@ -71,7 +71,7 @@ export function ExtraTests() {
             });
             setShuffledOptionsMap(newShuffledOptionsMap);
 
-            const dataToCache = {posts: nonNullData, shuffledOptionsMap: newShuffledOptionsMap};
+            const dataToCache = { posts: nonNullData, shuffledOptionsMap: newShuffledOptionsMap };
             localStorage.setItem(cacheKey, JSON.stringify(dataToCache));
 
             setIsLoading(false);
@@ -100,16 +100,16 @@ export function ExtraTests() {
         return () => clearInterval(id);
     }, []);
 
-    const handleAnswerChange = (questionNumber: string, value: string): string => {
+    const handleAnswerChange = (index: number, value: string): string => {
         setAnswers((prevAnswers) => {
             const updatedAnswers = {
                 ...prevAnswers,
-                [questionNumber]: value
+                [index]: value
             };
 
             let score = 0;
-            posts.forEach((post) => {
-                if (updatedAnswers[post.q_number] === "1") {
+            posts.forEach((post, i) => {
+                if (updatedAnswers[i] === "1") {
                     score += 1;
                 }
             });
@@ -120,12 +120,12 @@ export function ExtraTests() {
         return value;
     };
 
-    const {testsLeft, decrementTestsLeftLocally} = useTestsLeft();
+    const { testsLeft, decrementTestsLeftLocally } = useTestsLeft();
 
     const handleSubmit = async () => {
         let score = 0;
-        posts.forEach((post) => {
-            if (answers[post.q_number] === "1") {
+        posts.forEach((post, i) => {
+            if (answers[i] === "1") {
                 score += 1;
             }
         });
@@ -160,20 +160,20 @@ export function ExtraTests() {
                 {posts.length === 0 ? (
                     <p>No data available</p>
                 ) : (
-                    posts.map((post) => (
+                    posts.map((post, index) => (
                         <Questioncard
-                            key={post.q_number}
-                            questionNumber={post.q_number}
+                            key={index} // Use index for key
+                            questionNumber={(index + 1).toString()} // Auto-increment starting from 1, converted to string
                             questionText={post.question_text}
                             imageSrc={post.picture_link}
-                            radioOptions={shuffledOptionsMap[post.q_number].map((option, index) => ({
+                            radioOptions={shuffledOptionsMap[post.q_number]?.map((option, optIndex) => ({
                                 ...option,
-                                label: ['A', 'B', 'C'][index]
-                            }))}
-                            onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
+                                label: ['A', 'B', 'C'][optIndex]
+                            })) || []}
+                            onAnswerChange={(value) => handleAnswerChange(index, value)}
                             correctAnswer={post.answer}
                             submitted={submitted}
-                            selectedAnswer={answers[post.q_number]}
+                            selectedAnswer={answers[index]}
                         />
                     ))
                 )}
