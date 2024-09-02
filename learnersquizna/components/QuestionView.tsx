@@ -5,65 +5,94 @@ import SectionB from '@/components/questionPapers/SectionB';
 import SectionC from '@/components/questionPapers/SectionC';
 import SectionD from '@/components/questionPapers/SectionD';
 import SectionE from '@/components/questionPapers/SectionE';
+import SectionA from '@/components/questionPapers/SectionA';
 import {Button, Switch, Modal, useDisclosure} from '@nextui-org/react';
 import {FaMotorcycle, FaCar, FaTruck, FaSign, FaArrowLeft, FaChevronCircleLeft} from 'react-icons/fa';
-import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal";
+import {ModalBody, ModalContent, ModalFooter, ModalHeader} from '@nextui-org/modal';
 import {useTestsLeft} from '@/components/useTestsLeft';
-import ScoreSummary from "@/components/questionPapers/ScoreSummary";
-import {ExtraTests} from "@/components/questionPapers/ExtraTests";
-import SectionA from "@/components/questionPapers/SectionA";
+import ScoreSummary from '@/components/questionPapers/ScoreSummary';
+import {ExtraTests} from '@/components/questionPapers/ExtraTests';
 
-type SectionKey = 'sectionB' | 'sectionC' | 'sectionD' | 'sectionE';
+type SectionKey = 'sectionA' | 'sectionB' | 'sectionC' | 'sectionD' | 'sectionE';
 
 export function QuestionView() {
     const [selectedCode, setSelectedCode] = useState<string | null>(null);
     const [selectedSet, setSelectedSet] = useState<string | null>(null);
     const [totalScore, setTotalScore] = useState(0);
     const [submitted, setSubmitted] = useState(false);
-    const [sectionScores, setSectionScores] = useState({sectionA:0,sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0});
-    const [timerEnabled, setTimerEnabled] = useState(true); // State to manage timer toggle
-    const [timeLeft, setTimeLeft] = useState<number | null>(null); // State for timer
-    const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // State to store interval ID
-
-    const [clickCount, setClickCount] = useState(0); // Track number of clicks on disabled buttons
-    const [showPurchaseModal, setShowPurchaseModal] = useState(false); // Track modal visibility
-
-    const {isOpen, onOpen, onClose} = useDisclosure(); // UseDisclosure for modal control
-    const timerSwitchRef = useRef<HTMLDivElement | null>(null); // Ref for timer switch container
-    const [isInitialRender, setIsInitialRender] = useState(true); // State to track initial render
-
+    const [sectionScores, setSectionScores] = useState({
+        sectionA: 0,
+        sectionB: 0,
+        sectionC: 0,
+        sectionD: 0,
+        sectionE: 0
+    });
+    const [timerEnabled, setTimerEnabled] = useState(true);
+    const [timeLeft, setTimeLeft] = useState<number | null>(null);
+    const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+    const [clickCount, setClickCount] = useState(0);
+    const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+    const [showExtraTests, setShowExtraTests] = useState(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const {isOpen, onOpen, onClose} = useDisclosure();
+    const timerSwitchRef = useRef<HTMLDivElement | null>(null);
+    const [isInitialRender, setIsInitialRender] = useState(true);
 
+    const {testsLeft, decrementTestsLeftLocally, refreshTestsLeft} = useTestsLeft();
 
-    const handleSectionScore = (section: string, score: number) => {
+    useEffect(() => {
+        if (timerEnabled && selectedSet) {
+            const endTime = Date.now() + 90 * 60 * 1000;
+            setTimeLeft(Math.max(Math.ceil((endTime - Date.now()) / 1000), 0));
+
+            const id = setInterval(() => {
+                const currentTime = Date.now();
+                const timeRemaining = Math.max(Math.ceil((endTime - currentTime) / 1000), 0);
+                setTimeLeft(timeRemaining);
+
+                if (timeRemaining <= 0) {
+                    clearInterval(id);
+                    handleSubmit(); // Auto-submit when time is up
+                }
+            }, 1000);
+
+            setIntervalId(id);
+
+            return () => clearInterval(id);
+        }
+    }, [timerEnabled, selectedSet]);
+
+    useEffect(() => {
+        if (isInitialRender && timerSwitchRef.current && window.innerWidth <= 768) {
+            timerSwitchRef.current.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+            setIsInitialRender(false);
+        }
+    }, [isInitialRender, timerEnabled, selectedSet]);
+
+    const handleSectionScore = (section: SectionKey, score: number) => {
         setSectionScores(prevScores => ({
             ...prevScores,
             [section]: score,
         }));
     };
 
-    const {testsLeft, decrementTestsLeftLocally, refreshTestsLeft} = useTestsLeft();
-
     const handleSubmit = async () => {
         const finalScore = Object.values(sectionScores).reduce((acc, curr) => acc + curr, 0);
         setTotalScore(finalScore);
         setSubmitted(true);
-        setIsButtonDisabled(true); // Disable the button
+        setIsButtonDisabled(true);
         await decrementTestsLeftLocally();
         console.log("Total Score:", finalScore);
 
-        // Clear the timer if it exists
         if (intervalId) {
             clearInterval(intervalId);
         }
 
-        // Set the timer to zero
         setTimeLeft(0);
     };
 
     const getWeakestSectionMessage = (): string => {
-        let relevantSections: SectionKey[] = ['sectionB', 'sectionC'];
-
+        const relevantSections: SectionKey[] = ['sectionB', 'sectionC'];
         if (selectedCode === 'Code 1') {
             relevantSections.push('sectionD');
         } else if (selectedCode === 'Code 2' || selectedCode === 'Code 3') {
@@ -71,7 +100,6 @@ export function QuestionView() {
         }
 
         let weakestSection: SectionKey = relevantSections[0];
-
         relevantSections.forEach(section => {
             if (sectionScores[section] < sectionScores[weakestSection]) {
                 weakestSection = section;
@@ -102,51 +130,20 @@ export function QuestionView() {
         });
     };
 
-    const [showExtraTests, setShowExtraTests] = useState(false);
+    const handleExitButtonClick = async () => {
+        await refreshTestsLeft();
+        onOpen();
+    };
 
-    useEffect(() => {
-        if (timerEnabled && selectedSet) {
-            // Start the timer for 90 minutes (5400 seconds)
-            const endTime = Date.now() + 90 * 60 * 1000;
-            setTimeLeft(Math.max(Math.ceil((endTime - Date.now()) / 1000), 0));
-
-            const id = setInterval(() => {
-                const currentTime = Date.now();
-                const timeRemaining = Math.max(Math.ceil((endTime - currentTime) / 1000), 0);
-                setTimeLeft(timeRemaining);
-
-                if (timeRemaining <= 0) {
-                    clearInterval(id);
-                    handleSubmit(); // Auto-submit when time is up
-                }
-            }, 1000);
-
-            setIntervalId(id);
-
-            return () => clearInterval(id); // Clean up on component unmount
-        }
-    }, [timerEnabled, selectedSet]);
-
-    useEffect(() => {
-        if (isInitialRender && timerSwitchRef.current && window.innerWidth <= 768) {
-            timerSwitchRef.current.scrollIntoView({behavior: 'smooth', block: 'nearest'});
-            setIsInitialRender(false); // Update state to prevent further scroll into view actions
-        }
-    }, [isInitialRender, timerEnabled, selectedSet]);
-
-    // JavaScript logic outside JSX
     const text = `${testsLeft} test${testsLeft === 1 ? '' : 's'} left`;
-    // console.log(text); // Logs the result, useful for debugging
-
     const showBuyMoreTestsMessage = testsLeft !== null && testsLeft < 1 && !selectedCode && !showExtraTests;
 
-
     const sectionTotals = {
-        sectionA:3,
-        sectionB: 43, // Total questions in Section B
-        sectionC: 24, // Total questions in Section C
-        sectionD: 8,  // Total questions in Section D (if applicable)
-        sectionE: 12  // Total questions in Section E (if applicable)
+        sectionA: 3,
+        sectionB: 43,
+        sectionC: 24,
+        sectionD: 8,
+        sectionE: 12
     };
 
     const totalQuestions = sectionTotals.sectionB + sectionTotals.sectionC +
@@ -154,12 +151,6 @@ export function QuestionView() {
         ((selectedCode === 'Code 2' || selectedCode === 'Code 3') ? sectionTotals.sectionE : 0);
 
     const percentage = totalScore > 0 ? ((totalScore / totalQuestions) * 100).toFixed(2) : '0';
-
-    const handleExitButtonClick = async () => {
-        // add here to refresh tests left
-        await refreshTestsLeft();
-        onOpen(); // Show confirmation dialog
-    };
 
     return (
         <>
@@ -466,7 +457,7 @@ export function QuestionView() {
                                 <Button color="warning" variant="light" onClick={() => {
                                     setSelectedSet(null);
                                     setSubmitted(false);
-                                    setSectionScores({sectionA: 0,sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0}); // Reset section scores
+                                    setSectionScores({sectionA: 0, sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0}); // Reset section scores
                                     setTotalScore(0); // Reset total score to zero
                                     setIsButtonDisabled(false); // Re-enable the submit button
                                     onClose();
@@ -500,7 +491,7 @@ export function QuestionView() {
                                 // Reset states
                                 setSelectedSet(null); // Go back to code selection
                                 setSubmitted(false); // Reset submission status
-                                setSectionScores({sectionA:0, sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0}); // Reset section scores
+                                setSectionScores({sectionA: 0, sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0}); // Reset section scores
                                 setTotalScore(0); // Reset total score to zero
                                 setIsButtonDisabled(false); // Re-enable the submit button
 
