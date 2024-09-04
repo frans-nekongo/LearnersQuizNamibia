@@ -79,19 +79,25 @@ export default function SectionE({ selectedSet, onScoreChange, submitted, onSubm
             const nonNullData = data ?? [];
             setPosts(nonNullData);
 
-            const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = nonNullData.reduce((acc, post) => {
+            const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = nonNullData.reduce((acc, post, index) => {
+                // Create the options array with the correct answer always having value "1"
                 const options: AnswerOption[] = [
-                    { value: "1", description: post.answer },
-                    { value: "b", description: post.option_1 },
-                    { value: "c", description: post.option_2 }
+                    { value: "1", description: post.answer },   // Correct answer
+                    { value: "b", description: post.option_1 }, // Option 1
+                    { value: "c", description: post.option_2 }  // Option 2
                 ];
 
-                acc[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
-                    const option = options[index];
-                    return option.description === label
-                        ? option
-                        : options.find(o => o.description === label) || option;
-                });
+                // Shuffle options randomly (optional)
+                const shuffledOptions = options.sort(() => Math.random() - 0.5);
+
+                // Use the new question number starting from 71
+                const newQuestionNumber = (71 + index).toString();
+
+                // Ensure each question has its shuffled options correctly labeled
+                acc[newQuestionNumber] = shuffledOptions.map((option, index) => ({
+                    ...option,
+                    label: ['A', 'B', 'C'][index]  // Assign labels A, B, C in order after shuffling
+                }));
 
                 return acc;
             }, {} as { [key: string]: AnswerOption[] });
@@ -115,7 +121,10 @@ export default function SectionE({ selectedSet, onScoreChange, submitted, onSubm
     const handleAnswerChange = (questionNumber: string, value: string): string => {
         setAnswers(prevAnswers => {
             const updatedAnswers = { ...prevAnswers, [questionNumber]: value };
-            const score = posts.reduce((acc, post) => acc + (updatedAnswers[post.q_number] === "1" ? 1 : 0), 0);
+            const score = posts.reduce((acc, post, index) => {
+                const newQuestionNumber = (71 + index).toString();
+                return acc + (updatedAnswers[newQuestionNumber] === "1" ? 1 : 0);
+            }, 0);
             onScoreChange(score);
             return updatedAnswers;
         });
@@ -135,22 +144,25 @@ export default function SectionE({ selectedSet, onScoreChange, submitted, onSubm
                 {posts.length === 0 ? (
                     <p>No data available</p>
                 ) : (
-                    posts.map(post => (
-                        <Questioncard
-                            key={post.q_number}
-                            questionNumber={post.q_number}
-                            questionText={post.question_text}
-                            imageSrc={post.picture_link}
-                            radioOptions={shuffledOptionsMap[post.q_number].map((option, index) => ({
-                                ...option,
-                                label: ['A', 'B', 'C'][index]
-                            }))}
-                            onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
-                            correctAnswer={post.answer}
-                            submitted={submitted}
-                            selectedAnswer={answers[post.q_number]}
-                        />
-                    ))
+                    posts.map((post, index) => {
+                        const newQuestionNumber = (71 + index).toString(); // Calculate new question number
+                        return (
+                            <Questioncard
+                                key={newQuestionNumber}
+                                questionNumber={newQuestionNumber} // Use new question number
+                                questionText={post.question_text}
+                                imageSrc={post.picture_link}
+                                radioOptions={shuffledOptionsMap[newQuestionNumber].map((option, idx) => ({
+                                    ...option,
+                                    label: ['A', 'B', 'C'][idx]
+                                }))}
+                                onAnswerChange={(value) => handleAnswerChange(newQuestionNumber, value)}
+                                correctAnswer={post.answer}
+                                submitted={submitted}
+                                selectedAnswer={answers[newQuestionNumber]}
+                            />
+                        );
+                    })
                 )}
             </div>
         </div>
