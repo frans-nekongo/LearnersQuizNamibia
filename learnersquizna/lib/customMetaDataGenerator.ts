@@ -18,7 +18,8 @@ export function customMetaDataGenerator({
                                             canonicalUrl = 'https://namibianlearnerstest.frans-nekongo.com/',
                                             ogType = 'website',
                                             keywords = [
-                                                " learners licence test",
+                                                "learners licence test",
+                                                "online learners licence test",
                                                 "Free Namibian learners licence questions and answers",
                                                 "Namibian learners licence test",
                                                 "NaTIS Questions and Answers",
