@@ -143,15 +143,15 @@ const SectionB = ({selectedSet, onScoreChange, submitted, onSubmit}: SectionBPro
         posts.length === 0 ? (
             <p>No data available</p>
         ) : (
-            posts.map((post) => (
+            posts.map((post, index) => (
                 <Questioncard
                     key={post.q_number}
-                    questionNumber={post.q_number}
+                    questionNumber={(index + 4).toString()}  // Convert the number to a string
                     questionText={post.question_text}
                     imageSrc={post.picture_link}
-                    radioOptions={shuffledOptionsMap[post.q_number].map((option, index) => ({
+                    radioOptions={shuffledOptionsMap[post.q_number].map((option, idx) => ({
                         ...option,
-                        label: ['A', 'B', 'C'][index]
+                        label: ['A', 'B', 'C'][idx]
                     }))}
                     onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
                     correctAnswer={post.answer}
@@ -161,6 +161,7 @@ const SectionB = ({selectedSet, onScoreChange, submitted, onSubmit}: SectionBPro
             ))
         )
     ), [posts, shuffledOptionsMap, answers, handleAnswerChange, submitted]);
+
 
     return isLoading ? (
         <p>Loading</p>
