@@ -22,18 +22,23 @@ export function ExtraTests() {
     const supabase = createClient();
 
     useEffect(() => {
-        const fetchPosts = async () => {
-            const cacheKey = 'extraTestsData';
-            const cachedData = localStorage.getItem(cacheKey);
+    const fetchPosts = async () => {
+        const cacheKey = 'extraTestsData';
+        const cacheExpiryKey = 'extraTestsDataExpiry';
+        const cacheDuration = 1000 * 60 * 60; // 1 hour cache duration
 
-            if (cachedData) {
-                const parsedData = JSON.parse(cachedData);
-                setPosts(parsedData.posts);
-                setShuffledOptionsMap(parsedData.shuffledOptionsMap);
-                setIsLoading(false);
-                return;
-            }
+        const cachedData = localStorage.getItem(cacheKey);
+        const cachedExpiry = localStorage.getItem(cacheExpiryKey);
 
+        // Check if cache has expired or does not exist
+        const isCacheExpired = !cachedExpiry || (Date.now() - parseInt(cachedExpiry, 10)) > cacheDuration;
+
+        if (cachedData && !isCacheExpired) {
+            const parsedData = JSON.parse(cachedData);
+            setPosts(parsedData.posts);
+            setShuffledOptionsMap(parsedData.shuffledOptionsMap);
+            setIsLoading(false);
+        } else {
             let { data: table_name, error } = await supabase
                 .schema("public")
                 .from('question')
@@ -71,14 +76,18 @@ export function ExtraTests() {
             });
             setShuffledOptionsMap(newShuffledOptionsMap);
 
+            // Cache the new data along with a timestamp to track cache duration
             const dataToCache = { posts: nonNullData, shuffledOptionsMap: newShuffledOptionsMap };
             localStorage.setItem(cacheKey, JSON.stringify(dataToCache));
+            localStorage.setItem(cacheExpiryKey, Date.now().toString());
 
             setIsLoading(false);
-        };
+        }
+    };
 
-        fetchPosts();
-    }, []);
+    fetchPosts();
+}, []);
+
 
     useEffect(() => {
         const endTime = Date.now() + 80 * 60 * 1000;

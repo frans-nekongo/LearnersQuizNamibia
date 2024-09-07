@@ -19,6 +19,7 @@ export function customMetaDataGenerator({
                                             ogType = 'website',
                                             keywords = [
                                                 "learners licence test",
+                                                "online learners licence",
                                                 "online learners licence test",
                                                 "Free Namibian learners licence questions and answers",
                                                 "Namibian learners licence test",
