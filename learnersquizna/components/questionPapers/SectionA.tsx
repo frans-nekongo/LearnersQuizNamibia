@@ -53,8 +53,8 @@ async function fetchDataFromSupabase(supabase: any, selectedSet?: string) {
 export default function SectionA({ selectedSet, onScoreChange, submitted, onSubmit }: SectionAProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState<any[]>([]);
-    const [shuffledOptionsMap, setShuffledOptionsMap] = useState<{ [key: string]: AnswerOption[] }>({});
-    const [answers, setAnswers] = useState<{ [key: string]: string }>({});
+    const [shuffledOptionsMap, setShuffledOptionsMap] = useState<{ [key: number]: AnswerOption[] }>({});
+    const [answers, setAnswers] = useState<{ [key: number]: string }>({});
     const supabase = createClient();
 
     useEffect(() => {
@@ -83,16 +83,16 @@ export default function SectionA({ selectedSet, onScoreChange, submitted, onSubm
             const nonNullData = await fetchDataFromSupabase(supabase, selectedSet);
             setPosts(nonNullData);
 
-            const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
-            nonNullData.forEach((post: { answer: any; option_1: any; option_2: any; q_number: string | number; }) => {
+            const newShuffledOptionsMap: { [key: number]: AnswerOption[] } = {};
+            nonNullData.forEach((post: { answer: any; option_1: any; option_2: any; q_number: string | number; }, index: number) => {
                 const options: AnswerOption[] = [
                     { value: "1", description: post.answer },
                     { value: "b", description: post.option_1 },
                     { value: "c", description: post.option_2 }
                 ];
 
-                newShuffledOptionsMap[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
-                    const option = options[index];
+                newShuffledOptionsMap[index + 1] = ['A', 'B', 'C'].map((label, optionIndex) => {
+                    const option = options[optionIndex];
                     return option.description === label ? option : options.find(o => o.description === label) || option;
                 });
             });
@@ -112,12 +112,12 @@ export default function SectionA({ selectedSet, onScoreChange, submitted, onSubm
         fetchPosts();
     }, [selectedSet, supabase]);
 
-    const handleAnswerChange = useCallback((questionNumber: string, value: string) => {
+    const handleAnswerChange = useCallback((questionNumber: number, value: string) => {
         setAnswers(prevAnswers => {
             const updatedAnswers = { ...prevAnswers, [questionNumber]: value };
 
             const score = posts.reduce((acc, post) => (
-                updatedAnswers[post.q_number] === "1" ? acc + 1 : acc
+                updatedAnswers[posts.indexOf(post) + 1] === "1" ? acc + 1 : acc
             ), 0);
 
             onScoreChange(score);
@@ -133,20 +133,20 @@ export default function SectionA({ selectedSet, onScoreChange, submitted, onSubm
                 {posts.length === 0 ? (
                     <p>No data available</p>
                 ) : (
-                    posts.map((post) => (
+                    posts.map((post, index) => (
                         <Questioncard
-                            key={post.q_number}
-                            questionNumber={post.q_number}
+                            key={index + 1}
+                            questionNumber={(index + 1).toString()}
                             questionText={post.question_text}
                             imageSrc={post.picture_link}
-                            radioOptions={shuffledOptionsMap[post.q_number]?.map((option, index) => ({
+                            radioOptions={shuffledOptionsMap[index + 1]?.map((option, optionIndex) => ({
                                 ...option,
-                                label: ['A', 'B', 'C'][index]
+                                label: ['A', 'B', 'C'][optionIndex]
                             })) || []}
-                            onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
+                            onAnswerChange={(value) => handleAnswerChange(index + 1, value)}
                             correctAnswer={post.answer}
                             submitted={submitted}
-                            selectedAnswer={answers[post.q_number]}
+                            selectedAnswer={answers[index + 1]}
                         />
                     ))
                 )}
