@@ -123,31 +123,32 @@ export default function SectionC({selectedSet, onScoreChange, submitted, onSubmi
     }, [posts, onScoreChange]);
 
     return isLoading ? (
-        <p>Loading</p>
-    ) : (
-        <div>
-            <div className="grid grid-flow-row-dense grid-cols-2 gap-4">
-                {posts.length === 0 ? (
-                    <p>No data available</p>
-                ) : (
-                    posts.map((post) => (
-                        <Questioncard
-                            key={post.q_number}
-                            questionNumber={post.q_number}
-                            questionText={post.question_text}
-                            imageSrc={post.picture_link}
-                            radioOptions={shuffledOptionsMap[post.q_number]?.map((option, index) => ({
-                                ...option,
-                                label: ['A', 'B', 'C'][index]
-                            }))}
-                            onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
-                            correctAnswer={post.answer}
-                            submitted={submitted}
-                            selectedAnswer={answers[post.q_number]}
-                        />
-                    ))
-                )}
-            </div>
+    <p>Loading</p>
+) : (
+    <div>
+        <div className="grid grid-flow-row-dense grid-cols-2 gap-4">
+            {posts.length === 0 ? (
+                <p>No data available</p>
+            ) : (
+                posts.map((post, index) => (
+                    <Questioncard
+                        key={post.q_number}
+                        questionNumber={(index + 47).toString()}  // Start numbering from 47 and convert to string
+                        questionText={post.question_text}
+                        imageSrc={post.picture_link}
+                        radioOptions={shuffledOptionsMap[post.q_number]?.map((option, idx) => ({
+                            ...option,
+                            label: ['A', 'B', 'C'][idx]
+                        }))}
+                        onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
+                        correctAnswer={post.answer}
+                        submitted={submitted}
+                        selectedAnswer={answers[post.q_number]}
+                    />
+                ))
+            )}
         </div>
-    );
+    </div>
+);
+
 }
