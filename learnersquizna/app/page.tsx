@@ -35,13 +35,14 @@ export default async function Index() {
 
     return (
         <div className="flex-1 w-full flex flex-col gap-2 items-center">
-            <Toast/>
-            <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
+            {/*<Toast/>*/}
+            <nav className="w-full flex justify-content- border-b border-b-foreground/10 h-12 md:h-14">
+                <div className="w-full max-w-4xl flex justify-between p-3 items-center text-sm">
                     <p>v1.0</p>
                 </div>
-                <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-                    <a></a>
+                <div className="w-full max-w-4xl flex justify-between p-3 items-center text-sm">
+                    <div className="flex-grow"></div>
+                    {/* This div will push the AuthButton to the right */}
                     {isSupabaseConnected && <AuthButton/>}
                 </div>
             </nav>

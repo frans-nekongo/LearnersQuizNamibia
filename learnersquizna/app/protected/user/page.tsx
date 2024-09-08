@@ -24,7 +24,6 @@ export default async function ProtectedPage() {
         <div className="flex-1 w-full flex flex-col gap-0 md:gap-2 items-center">
             <Toast/>
             <SyncDecrement />
-
             <div className="w-full">
                 <nav className="w-full flex justify-content- border-b border-b-foreground/10 h-12 md:h-14">
                     <div className="w-full max-w-4xl flex justify-between p-3 items-center text-sm">
@@ -35,7 +34,6 @@ export default async function ProtectedPage() {
                         {/* This div will push the AuthButton to the right */}
                         <AuthButton />
                     </div>
-
                 </nav>
             </div>
 
