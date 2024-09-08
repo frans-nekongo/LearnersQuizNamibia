@@ -418,7 +418,7 @@ export function QuestionView() {
                                     handleSubmit();
                                 }}
                                 submitted={submitted}
-                            />
+                             isGridLayout={isGridLayout}/>
                         </>
                     )}
 

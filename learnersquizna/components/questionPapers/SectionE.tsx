@@ -8,6 +8,7 @@ interface SectionEProps {
     onScoreChange: (score: number) => void;
     submitted: boolean;
     onSubmit?: () => void;
+    isGridLayout: boolean; // New prop for layout
 }
 
 interface AnswerOption {
@@ -24,7 +25,7 @@ interface Question {
     option_2: string;
 }
 
-export default function SectionE({ selectedSet, onScoreChange, submitted, onSubmit }: SectionEProps) {
+export default function SectionE({ selectedSet, onScoreChange, submitted, onSubmit, isGridLayout }: SectionEProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState<Question[]>([]);
     const [shuffledOptionsMap, setShuffledOptionsMap] = useState<{ [key: string]: AnswerOption[] }>({});
@@ -140,7 +141,7 @@ export default function SectionE({ selectedSet, onScoreChange, submitted, onSubm
                 <SectionImage selectedSet={selectedSet ?? 'A'} />
             </div>
 
-            <div className="grid grid-flow-row-dense grid-cols-2 gap-4">
+            <div className={`grid ${isGridLayout ? 'grid-cols-2 gap-4' : 'grid-cols-1 gap-4'}`}>
                 {posts.length === 0 ? (
                     <p>No data available</p>
                 ) : (
@@ -152,7 +153,7 @@ export default function SectionE({ selectedSet, onScoreChange, submitted, onSubm
                                 questionNumber={newQuestionNumber} // Use new question number
                                 questionText={post.question_text}
                                 imageSrc={post.picture_link}
-                                radioOptions={shuffledOptionsMap[newQuestionNumber].map((option, idx) => ({
+                                radioOptions={shuffledOptionsMap[newQuestionNumber]?.map((option, idx) => ({
                                     ...option,
                                     label: ['A', 'B', 'C'][idx]
                                 }))}
