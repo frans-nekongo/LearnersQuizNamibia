@@ -157,7 +157,7 @@ export function ExtraTests() {
     ) : (
         <div className="flex flex-col items-center space-y-6">
             <div
-                className="flex justify-center items-center mt-5 bg-gray-800 border-4 border-yellow-400 rounded-lg p-4 shadow-lg text-yellow-400">
+                className="z-50 sticky top-0 flex justify-center items-center mt-5 bg-gray-800 border-4 border-yellow-400 rounded-lg p-4 shadow-lg text-yellow-400">
                 {timeLeft !== null && (
                     <p className="text-2xl font-bold tracking-wide m-0">
                         Time Left: {`${Math.floor(timeLeft / 60)}:${timeLeft % 60 < 10 ? '0' : ''}${timeLeft % 60}`}
