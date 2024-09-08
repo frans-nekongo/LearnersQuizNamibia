@@ -34,9 +34,9 @@ export function Questioncard({
     const showCorrectAnswer = submitted && selectedAnswer !== correctAnswer;
 
     return (
-        <Card className="py-4 bg-white/5">
+        <Card className="py-4 bg-white/5 text-wrap">
             <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                <p className="text-tiny font-semibold">{questionNumber}. {questionText}</p>
+                <p className="text-tiny font-semibold text-wrap">{questionNumber}. {questionText}</p>
             </CardHeader>
             <div className="h-fit">
                 <CardBody className="py-2">
@@ -47,7 +47,7 @@ export function Questioncard({
                         width={270}
                     />
                 </CardBody>
-                <CardFooter className="flex flex-col items-start">
+                <CardFooter className="flex flex-col items-start text-wrap">
                     <RadioGroup
                         color="warning"
                         name={`question-${questionNumber}`}
@@ -60,6 +60,7 @@ export function Questioncard({
                                 key={option.value}
                                 value={option.value}
                                 description={option.description}
+                                className="text-wrap break-words"
                                 // disabled={submitted} // Disable the radio button if submitted is true
                             >
                                 {option.label}
