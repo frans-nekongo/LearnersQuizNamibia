@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { QuestionView } from "@/components/QuestionView";
 import SyncDecrement from "@/components/SyncDecrement";
 import RotateButton from "@/components/RotateButton";
+import {Toast} from "@/components/Toast";
 
 export default async function ProtectedPage() {
 
@@ -21,7 +22,7 @@ export default async function ProtectedPage() {
 
     return (
         <div className="flex-1 w-full flex flex-col gap-0 md:gap-2 items-center">
-            {/*<Toast/>*/}
+            <Toast/>
             <SyncDecrement />
 
             <div className="w-full">
