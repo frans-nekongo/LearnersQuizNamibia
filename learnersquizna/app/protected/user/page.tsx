@@ -41,9 +41,7 @@ export default async function ProtectedPage() {
             <div className="flex-1 mb-5 flex flex-col gap-2 max-w-4xl px-3">
                 <Header />
                 <main className="flex-1 flex flex-col gap-6">
-
                     <QuestionView />
-
                 </main>
             </div>
 

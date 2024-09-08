@@ -12,6 +12,7 @@ import {ModalBody, ModalContent, ModalFooter, ModalHeader} from '@nextui-org/mod
 import {useTestsLeft} from '@/components/useTestsLeft';
 import ScoreSummary from '@/components/questionPapers/ScoreSummary';
 import {ExtraTests} from '@/components/questionPapers/ExtraTests';
+import LayoutToggle from "@/components/questionPapers/LayoutToggle";
 
 type SectionKey = 'sectionA' | 'sectionB' | 'sectionC' | 'sectionD' | 'sectionE';
 
@@ -39,6 +40,11 @@ export function QuestionView() {
     const [isInitialRender, setIsInitialRender] = useState(true);
 
     const {testsLeft, decrementTestsLeftLocally, refreshTestsLeft} = useTestsLeft();
+
+    const [isGridLayout, setIsGridLayout] = useState(true);
+    const handleLayoutChange = (newLayout: boolean) => {
+        setIsGridLayout(newLayout);
+    };
 
     useEffect(() => {
         if (timerEnabled && selectedSet) {
@@ -337,10 +343,17 @@ export function QuestionView() {
                         <FaChevronCircleLeft className="text-2xl"/>
                         <span className="hidden md:inline">Back/Exit Test</span>
                     </Button>
+                    <div className="flex justify-center mb-4 md:mb-8 lg:mb-8">
+                        <div className="flex justify-center items-center">
+                            <h3 className="text-xl font-bold text-center">SECTION A: PRACTICE QUESTIONS</h3>
+                        </div>
 
-                    <h3 className="text-2xl font-semibold text-center">
-                        SECTION A: PRACTICE QUESTIONS
-                    </h3>
+                        <div className="ml-8 md:ml-8 lg:ml-8">
+                            <LayoutToggle onLayoutChange={handleLayoutChange}/>
+                        </div>
+                    </div>
+
+
                     <div className="z-0">
                         <SectionA
                             selectedSet={selectedSet}
@@ -349,7 +362,7 @@ export function QuestionView() {
                                 handleSubmit();
                             }}
                             submitted={submitted}
-                        />
+                            isGridLayout={isGridLayout}/>
                     </div>
 
                     <h3 className="text-2xl font-semibold text-center">

@@ -7,6 +7,7 @@ interface SectionAProps {
     onScoreChange: (score: number) => void;
     submitted: boolean;
     onSubmit?: () => void;
+    isGridLayout: boolean; // New prop to toggle layout
 }
 
 interface AnswerOption {
@@ -50,7 +51,7 @@ async function fetchDataFromSupabase(supabase: any, selectedSet?: string) {
     return data || [];
 }
 
-export default function SectionA({ selectedSet, onScoreChange, submitted, onSubmit }: SectionAProps) {
+export default function SectionA({ selectedSet, onScoreChange, submitted, onSubmit, isGridLayout }: SectionAProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState<any[]>([]);
     const [shuffledOptionsMap, setShuffledOptionsMap] = useState<{ [key: number]: AnswerOption[] }>({});
@@ -129,7 +130,8 @@ export default function SectionA({ selectedSet, onScoreChange, submitted, onSubm
         <p>Loading</p>
     ) : (
         <div>
-            <div className="grid grid-flow-row-dense grid-cols-2 gap-4">
+            {/* Conditional layout rendering based on the isGridLayout prop */}
+            <div className={`grid ${isGridLayout ? 'grid-cols-2 gap-4' : 'grid-cols-1 gap-4'}`}>
                 {posts.length === 0 ? (
                     <p>No data available</p>
                 ) : (
