@@ -6,7 +6,7 @@ export default function SignUpUserSteps() {
     return (
         <ol className="flex flex-col gap-6">
             <Step title="🚪 Login/Create Account">
-                <p>
+                <p className="transform-gpu transition-transform hover:scale-105">
                     Head over to the{" "}
                     <Link
                         href="/login"
@@ -25,11 +25,15 @@ export default function SignUpUserSteps() {
                 {/*    </Snippet>*/}
                 {/*</div>*/}
             </Step>
-            <Step title="🛞 Start Your Test">
-                <p >
-                    Choose your vehicle code 🚗 , select Test A, B, or C, and start your journey with confidence!
+            <Step title="🛞 Test Your Skills">
+                <p className="transform-gpu transition-transform hover:scale-105">
+                    Choose your vehicle code 🚗, select Test A, B, or C, and practice like no one is watching!
                 </p>
-
+            </Step>
+            <Step title="💡 Get Feedback">
+                <p className="transform-gpu transition-transform hover:scale-105">
+                    📊 Get live feedback on your mistakes ❌, your score 🏆, and areas for improvement 🔍.
+                </p>
             </Step>
         </ol>
     );
