@@ -134,7 +134,8 @@ export default function SectionA({ selectedSet, onScoreChange, submitted, onSubm
             <div className={`grid ${isGridLayout ? 'grid-cols-2 gap-4' : 'grid-cols-1 gap-4'}`}>
                 {posts.length === 0 ? (
                     <p>No data available</p>
-                ) : (
+                ) :
+                    (
                     posts.map((post, index) => (
                         <Questioncard
                             key={index + 1}

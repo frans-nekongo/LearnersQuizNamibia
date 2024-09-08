@@ -1,12 +1,13 @@
-import {useEffect, useState, useMemo, useCallback} from 'react';
-import {createClient} from '@/utils/supabase/client';
-import {Questioncard} from "@/components/Questioncard";
+import { useEffect, useState, useMemo, useCallback } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { Questioncard } from "@/components/Questioncard";
 
 interface SectionBProps {
     selectedSet?: string;
     onScoreChange: (score: number) => void;
     submitted: boolean;
     onSubmit?: () => void;
+    isGridLayout: boolean; // New prop for layout
 }
 
 interface AnswerOption {
@@ -35,20 +36,20 @@ const fetchCachedData = async (cacheKey: string, supabase: any, selectedSet?: st
             .select('updated_at')
             .eq('section_text', 'SECTION B – SIGNS – ALL CODES')
             .eq('q_set', selectedSet)
-            .order('updated_at', {ascending: false})
+            .order('updated_at', { ascending: false })
             .limit(1)
             .single();
 
         if (latestDataVersion.data && parsedData.updated_at === latestDataVersion.data.updated_at) {
             isDataNew = false;
-            return {isDataNew, data: parsedData};
+            return { isDataNew, data: parsedData };
         }
     }
 
-    return {isDataNew, data: null};
+    return { isDataNew, data: null };
 };
 
-const SectionB = ({selectedSet, onScoreChange, submitted, onSubmit}: SectionBProps) => {
+const SectionB = ({ selectedSet, onScoreChange, submitted, onSubmit, isGridLayout }: SectionBProps) => {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState<Post[]>([]);
     const [shuffledOptionsMap, setShuffledOptionsMap] = useState<{ [key: string]: AnswerOption[] }>({});
@@ -58,7 +59,7 @@ const SectionB = ({selectedSet, onScoreChange, submitted, onSubmit}: SectionBPro
     useEffect(() => {
         const fetchPosts = async () => {
             const cacheKey = `sectionBData_${selectedSet}`;
-            const {isDataNew, data: cachedData} = await fetchCachedData(cacheKey, supabase, selectedSet);
+            const { isDataNew, data: cachedData } = await fetchCachedData(cacheKey, supabase, selectedSet);
 
             if (!isDataNew && cachedData) {
                 setPosts(cachedData.posts);
@@ -67,10 +68,10 @@ const SectionB = ({selectedSet, onScoreChange, submitted, onSubmit}: SectionBPro
                 return;
             }
 
-            const {data: tableName, error} = await supabase
+            const { data: tableName, error } = await supabase
                 .from('question')
                 .select('*')
-                .order('q_number', {ascending: true})
+                .order('q_number', { ascending: true })
                 .eq('section_text', 'SECTION B – SIGNS – ALL CODES')
                 .eq('q_set', selectedSet);
 
@@ -86,9 +87,9 @@ const SectionB = ({selectedSet, onScoreChange, submitted, onSubmit}: SectionBPro
             const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
             nonNullData.forEach((post) => {
                 const options: AnswerOption[] = [
-                    {value: "1", description: post.answer},
-                    {value: "b", description: post.option_1},
-                    {value: "c", description: post.option_2}
+                    { value: "1", description: post.answer },
+                    { value: "b", description: post.option_1 },
+                    { value: "c", description: post.option_2 }
                 ];
 
                 newShuffledOptionsMap[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
@@ -162,12 +163,11 @@ const SectionB = ({selectedSet, onScoreChange, submitted, onSubmit}: SectionBPro
         )
     ), [posts, shuffledOptionsMap, answers, handleAnswerChange, submitted]);
 
-
     return isLoading ? (
         <p>Loading</p>
     ) : (
         <div>
-            <div className="grid grid-flow-row-dense grid-cols-2 gap-4">
+            <div className={`grid ${isGridLayout ? 'grid-cols-2 gap-4' : 'grid-cols-1 gap-4'}`}>
                 {renderedPosts}
             </div>
         </div>

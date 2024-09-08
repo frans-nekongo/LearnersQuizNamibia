@@ -376,7 +376,7 @@ export function QuestionView() {
                                 handleSubmit();
                             }}
                             submitted={submitted}
-                        />
+                         isGridLayout={isGridLayout}/>
                     </div>
 
 
@@ -389,7 +389,7 @@ export function QuestionView() {
                         onSubmit={() => {
                             handleSubmit();
                         }}
-                        submitted={submitted}/>
+                        submitted={submitted} isGridLayout={isGridLayout}/>
 
                     {selectedCode === 'Code 1' && (
                         <>

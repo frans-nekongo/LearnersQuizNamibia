@@ -1,7 +1,7 @@
-import {useEffect, useState, useMemo, useCallback} from 'react';
-import {createClient} from '@/utils/supabase/client';
-import {Questioncard} from "@/components/Questioncard";
-import {Image} from "@nextui-org/react";
+import { useEffect, useState, useMemo, useCallback } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { Questioncard } from "@/components/Questioncard";
+import { Image } from "@nextui-org/react";
 import SectionImage from "@/components/questionPapers/SectionImage";
 
 interface SectionCProps {
@@ -9,6 +9,7 @@ interface SectionCProps {
     onScoreChange: (score: number) => void;
     submitted: boolean;
     onSubmit?: () => void;
+    isGridLayout: boolean; // New prop for layout
 }
 
 interface AnswerOption {
@@ -16,7 +17,7 @@ interface AnswerOption {
     description: string;
 }
 
-export default function SectionC({selectedSet, onScoreChange, submitted, onSubmit}: SectionCProps) {
+export default function SectionC({ selectedSet, onScoreChange, submitted, onSubmit, isGridLayout }: SectionCProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState<any[]>([]);
     const [shuffledOptionsMap, setShuffledOptionsMap] = useState<{ [key: string]: AnswerOption[] }>({});
@@ -40,7 +41,7 @@ export default function SectionC({selectedSet, onScoreChange, submitted, onSubmi
                 .select('updated_at')
                 .eq('section_text', 'SECTION C – RULES – ALL CODES')
                 .eq('q_set', selectedSet)
-                .order('updated_at', {ascending: false})
+                .order('updated_at', { ascending: false })
                 .limit(1)
                 .single();
 
@@ -57,10 +58,10 @@ export default function SectionC({selectedSet, onScoreChange, submitted, onSubmi
         }
 
         // Fetch new data from Supabase if the data is new or cache is missing
-        const {data: newData, error} = await supabase
+        const { data: newData, error } = await supabase
             .from('question')
             .select('*')
-            .order('q_number', {ascending: true})
+            .order('q_number', { ascending: true })
             .eq('section_text', 'SECTION C – RULES – ALL CODES')
             .eq('q_set', selectedSet);
 
@@ -77,9 +78,9 @@ export default function SectionC({selectedSet, onScoreChange, submitted, onSubmi
         const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = {};
         nonNullData.forEach((post) => {
             const options: AnswerOption[] = [
-                {value: "1", description: post.answer},
-                {value: "b", description: post.option_1},
-                {value: "c", description: post.option_2}
+                { value: "1", description: post.answer },
+                { value: "b", description: post.option_1 },
+                { value: "c", description: post.option_2 }
             ];
 
             newShuffledOptionsMap[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
@@ -123,32 +124,31 @@ export default function SectionC({selectedSet, onScoreChange, submitted, onSubmi
     }, [posts, onScoreChange]);
 
     return isLoading ? (
-    <p>Loading</p>
-) : (
-    <div>
-        <div className="grid grid-flow-row-dense grid-cols-2 gap-4">
-            {posts.length === 0 ? (
-                <p>No data available</p>
-            ) : (
-                posts.map((post, index) => (
-                    <Questioncard
-                        key={post.q_number}
-                        questionNumber={(index + 47).toString()}  // Start numbering from 47 and convert to string
-                        questionText={post.question_text}
-                        imageSrc={post.picture_link}
-                        radioOptions={shuffledOptionsMap[post.q_number]?.map((option, idx) => ({
-                            ...option,
-                            label: ['A', 'B', 'C'][idx]
-                        }))}
-                        onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
-                        correctAnswer={post.answer}
-                        submitted={submitted}
-                        selectedAnswer={answers[post.q_number]}
-                    />
-                ))
-            )}
+        <p>Loading</p>
+    ) : (
+        <div>
+            <div className={`grid ${isGridLayout ? 'grid-cols-2 gap-4' : 'grid-cols-1 gap-4'}`}>
+                {posts.length === 0 ? (
+                    <p>No data available</p>
+                ) : (
+                    posts.map((post, index) => (
+                        <Questioncard
+                            key={post.q_number}
+                            questionNumber={(index + 47).toString()}  // Start numbering from 47 and convert to string
+                            questionText={post.question_text}
+                            imageSrc={post.picture_link}
+                            radioOptions={shuffledOptionsMap[post.q_number]?.map((option, idx) => ({
+                                ...option,
+                                label: ['A', 'B', 'C'][idx]
+                            }))}
+                            onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
+                            correctAnswer={post.answer}
+                            submitted={submitted}
+                            selectedAnswer={answers[post.q_number]}
+                        />
+                    ))
+                )}
+            </div>
         </div>
-    </div>
-);
-
+    );
 }
