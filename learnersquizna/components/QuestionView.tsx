@@ -41,10 +41,36 @@ export function QuestionView() {
 
     const {testsLeft, decrementTestsLeftLocally, refreshTestsLeft} = useTestsLeft();
 
-    const [isGridLayout, setIsGridLayout] = useState(true);
+    const determineInitialLayout = () => {
+        // Adjust the threshold value as needed (e.g., 768px for tablets and above)
+        return window.innerWidth >= 768;
+    };
+
+    // Initialize state with a function to check screen width
+    const [isGridLayout, setIsGridLayout] = useState(determineInitialLayout);
+
     const handleLayoutChange = (newLayout: boolean) => {
         setIsGridLayout(newLayout);
     };
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsGridLayout(determineInitialLayout());
+        };
+
+        // Set the initial layout
+        handleResize();
+
+        // Add event listener for window resize
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup event listener on component unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    // Your component logic here
 
     useEffect(() => {
         if (timerEnabled && selectedSet) {
@@ -349,7 +375,7 @@ export function QuestionView() {
                         </div>
 
                         <div className="ml-8 md:ml-8 lg:ml-8">
-                            <LayoutToggle onLayoutChange={handleLayoutChange}/>
+                            <LayoutToggle onLayoutChange={handleLayoutChange} isGridLayout={isGridLayout}/>
                         </div>
                     </div>
 
@@ -376,7 +402,7 @@ export function QuestionView() {
                                 handleSubmit();
                             }}
                             submitted={submitted}
-                         isGridLayout={isGridLayout}/>
+                            isGridLayout={isGridLayout}/>
                     </div>
 
 
@@ -418,7 +444,7 @@ export function QuestionView() {
                                     handleSubmit();
                                 }}
                                 submitted={submitted}
-                             isGridLayout={isGridLayout}/>
+                                isGridLayout={isGridLayout}/>
                         </>
                     )}
 
