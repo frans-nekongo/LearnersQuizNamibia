@@ -87,7 +87,7 @@ const ScoreSummary: React.FC<ScoreSummaryProps> = ({
             {/* Weakest Section Advice */}
             <div className="mt-4 text-center">
                 <p className="text-lg font-semibold text-red-600 dark:text-red-400">
-                    You need to {getWeakestSectionMessage()}.
+                     🚦 You need to {getWeakestSectionMessage()}.
                 </p>
             </div>
         </div>
