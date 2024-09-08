@@ -121,7 +121,7 @@ export default function SectionD({ selectedSet, onScoreChange, submitted, onSubm
     }
 
     return (
-        <div>
+        <div className="z-0">
             <div className="z-0 flex flex-col p-4 items-center justify-center">
                 <SectionImage2 selectedSet={selectedSet ?? 'A'} />
             </div>

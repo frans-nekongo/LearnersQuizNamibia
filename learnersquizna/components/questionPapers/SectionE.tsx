@@ -136,7 +136,7 @@ export default function SectionE({ selectedSet, onScoreChange, submitted, onSubm
     return isLoading ? (
         <p>Loading...</p>
     ) : (
-        <div>
+        <div className="z-0">
             <div className="z-0 flex flex-col p-4 items-center justify-center">
                 <SectionImage selectedSet={selectedSet ?? 'A'} />
             </div>

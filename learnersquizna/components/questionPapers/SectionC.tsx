@@ -126,7 +126,7 @@ export default function SectionC({ selectedSet, onScoreChange, submitted, onSubm
     return isLoading ? (
         <p>Loading</p>
     ) : (
-        <div>
+        <div className="z-0">
             <div className={`grid ${isGridLayout ? 'grid-cols-2 gap-4' : 'grid-cols-1 gap-4'}`}>
                 {posts.length === 0 ? (
                     <p>No data available</p>
