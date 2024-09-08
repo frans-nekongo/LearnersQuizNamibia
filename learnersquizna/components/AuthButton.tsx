@@ -1,13 +1,13 @@
-import { createClient } from "@/utils/supabase/server";
+import {createClient} from "@/utils/supabase/server";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import {redirect} from "next/navigation";
 import ThemeSwitch from "@/components/NextUI/Themeswitcher";
 
 export default async function AuthButton() {
     const supabase = createClient();
 
     // Get the currently logged-in user
-    const { data: userData, error: authError } = await supabase.auth.getUser();
+    const {data: userData, error: authError} = await supabase.auth.getUser();
 
     if (authError || !userData.user) {
         console.error('Error fetching user data:', authError);
@@ -19,7 +19,7 @@ export default async function AuthButton() {
                 >
                     Login/Sign-Up
                 </Link>
-                <ThemeSwitch />
+                <ThemeSwitch/>
             </div>
         );
     }
@@ -27,7 +27,7 @@ export default async function AuthButton() {
     const userEmail = userData.user.email;
 
     // Fetch the user's name from the `user` table using the email
-    const { data: userInfo, error: userError } = await supabase
+    const {data: userInfo, error: userError} = await supabase
         .from('user')
         .select('Name_user')
         .eq('email_user', userEmail)
@@ -57,9 +57,10 @@ export default async function AuthButton() {
             <form action={handleSubmit}>
                 <button
                     type="submit"
-                    className="py-2 px-4 text-[#CB011F] dark:text-yellow-400 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover whitespace-nowrap">
+                    className="py-2 px-4 text-[#CB011F] dark:text-yellow-400 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover whitespace-nowrap throbbing-animation">
                     Buy More Tests!
                 </button>
+
             </form>
             <form action={signOut}>
                 <button
@@ -68,7 +69,7 @@ export default async function AuthButton() {
                     Logout
                 </button>
             </form>
-            <ThemeSwitch />
+            <ThemeSwitch/>
         </div>
     ) : (
         <div className="flex items-center gap-4">
@@ -78,7 +79,7 @@ export default async function AuthButton() {
             >
                 Login
             </Link>
-            <ThemeSwitch />
+            <ThemeSwitch/>
         </div>
     );
 }
