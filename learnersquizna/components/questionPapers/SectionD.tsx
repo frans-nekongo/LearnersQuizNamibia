@@ -8,6 +8,7 @@ interface SectionDProps {
     onScoreChange: (score: number) => void;
     submitted: boolean;
     onSubmit?: () => void;
+    isGridLayout: boolean; // New prop for layout
 }
 
 interface AnswerOption {
@@ -15,7 +16,7 @@ interface AnswerOption {
     description: string;
 }
 
-export default function SectionD({ selectedSet, onScoreChange, submitted, onSubmit }: SectionDProps) {
+export default function SectionD({ selectedSet, onScoreChange, submitted, onSubmit, isGridLayout }: SectionDProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState<any[]>([]);
     const [answers, setAnswers] = useState<{ [key: string]: string }>({});
@@ -120,34 +121,33 @@ export default function SectionD({ selectedSet, onScoreChange, submitted, onSubm
     }
 
     return (
-    <div>
-        <div className="z-0 flex flex-col p-4 items-center justify-center">
-            <SectionImage2 selectedSet={selectedSet ?? 'A'} />
-        </div>
+        <div>
+            <div className="z-0 flex flex-col p-4 items-center justify-center">
+                <SectionImage2 selectedSet={selectedSet ?? 'A'} />
+            </div>
 
-        <div className="grid grid-flow-row-dense grid-cols-2 gap-4">
-            {posts.length === 0 ? (
-                <p>No data available</p>
-            ) : (
-                posts.map((post, index) => (
-                    <Questioncard
-                        key={post.q_number}
-                        questionNumber={(index + 71).toString()}  // Start numbering from 71 and convert to string
-                        questionText={post.question_text}
-                        imageSrc={post.picture_link}
-                        radioOptions={shuffledOptionsMap[post.q_number].map((option, idx) => ({
-                            ...option,
-                            label: ['A', 'B', 'C'][idx] // Keep labels in A, B, C order
-                        }))}
-                        onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
-                        correctAnswer={post.answer} // Pass correct answer
-                        submitted={submitted} // Pass submitted state
-                        selectedAnswer={answers[post.q_number]} // Pass selected answer
-                    />
-                ))
-            )}
+            <div className={`grid ${isGridLayout ? 'grid-cols-2 gap-4' : 'grid-cols-1 gap-4'}`}>
+                {posts.length === 0 ? (
+                    <p>No data available</p>
+                ) : (
+                    posts.map((post, index) => (
+                        <Questioncard
+                            key={post.q_number}
+                            questionNumber={(index + 71).toString()}  // Start numbering from 71 and convert to string
+                            questionText={post.question_text}
+                            imageSrc={post.picture_link}
+                            radioOptions={shuffledOptionsMap[post.q_number]?.map((option, idx) => ({
+                                ...option,
+                                label: ['A', 'B', 'C'][idx] // Keep labels in A, B, C order
+                            }))}
+                            onAnswerChange={(value) => handleAnswerChange(post.q_number, value)}
+                            correctAnswer={post.answer} // Pass correct answer
+                            submitted={submitted} // Pass submitted state
+                            selectedAnswer={answers[post.q_number]} // Pass selected answer
+                        />
+                    ))
+                )}
+            </div>
         </div>
-    </div>
-);
-
+    );
 }
