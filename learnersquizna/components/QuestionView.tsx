@@ -41,34 +41,41 @@ export function QuestionView() {
 
     const {testsLeft, decrementTestsLeftLocally, refreshTestsLeft} = useTestsLeft();
 
-    const determineInitialLayout = () => {
-        // Adjust the threshold value as needed (e.g., 768px for tablets and above)
-        return window.innerWidth >= 768;
-    };
+   const determineInitialLayout = () => {
+    // Adjust the threshold value as needed (e.g., 768px for tablets and above)
+    return window.innerWidth >= 768;
+};
 
-    // Initialize state with a function to check screen width
-    const [isGridLayout, setIsGridLayout] = useState(determineInitialLayout);
+// Initialize state with a function to check screen width
+const [isGridLayout, setIsGridLayout] = useState(determineInitialLayout);
 
-    const handleLayoutChange = (newLayout: boolean) => {
-        setIsGridLayout(newLayout);
-    };
+const userHasToggled = useRef(false);  // <-- Add this here to initialize the ref
 
-    useEffect(() => {
-        const handleResize = () => {
+const handleLayoutChange = (newLayout: boolean) => {
+    setIsGridLayout(newLayout);
+};
+
+const handleUserToggle = (newLayout: boolean) => {
+    userHasToggled.current = true;  // <-- This line sets the ref when the user toggles manually
+    handleLayoutChange(newLayout);  // Proceed with normal layout change logic
+};
+
+useEffect(() => {
+    const handleResize = () => {
+        // Only set the layout based on screen size if the user has not toggled manually
+        if (!userHasToggled.current) {
             setIsGridLayout(determineInitialLayout());
-        };
+        }
+    };
 
-        // Set the initial layout
-        handleResize();
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
 
-        // Add event listener for window resize
-        window.addEventListener('resize', handleResize);
-
-        // Cleanup event listener on component unmount
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+    // Cleanup event listener on component unmount
+    return () => {
+        window.removeEventListener('resize', handleResize);
+    };
+}, []);
 
     // Your component logic here
 
@@ -375,7 +382,7 @@ export function QuestionView() {
                         </div>
 
                         <div className="ml-8 md:ml-8 lg:ml-8">
-                            <LayoutToggle onLayoutChange={handleLayoutChange} isGridLayout={isGridLayout}/>
+                            <LayoutToggle onLayoutChange={handleUserToggle} isGridLayout={isGridLayout}/>
                         </div>
                     </div>
 
