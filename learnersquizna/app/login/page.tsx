@@ -91,7 +91,7 @@ export default function Login({searchParams}: { searchParams: { message: string 
                         🔒 Password
                     </label>
                     <input
-                        className="rounded-md px-4 py-2 bg-white border border-gray-300 focus:border-green-600 focus:ring-2 focus:ring-green-200 transition-all duration-300 mb-6"
+                        className="rounded-md px-4 py-2 border border-gray-300 focus:border-green-600 focus:ring-2 focus:ring-green-200 transition-all duration-300 mb-6"
                         type="password"
                         name="password"
                         placeholder="••••••••"
@@ -121,10 +121,11 @@ export default function Login({searchParams}: { searchParams: { message: string 
                             👤 Name
                         </label>
                         <input
-                            className="rounded-md px-4 py-2 bg-white border border-gray-300 focus:border-green-600 focus:ring-2 focus:ring-green-200 transition-all duration-300 mb-6"
+                            className="rounded-md px-4 py-2 border border-gray-300 focus:border-green-600 focus:ring-2 focus:ring-green-200 transition-all duration-300 mb-6"
                             name="name"
                             placeholder="Your Name"
                             value={userName}
+                            maxLength={6}
                             onChange={(e) => setUserName(e.target.value)}
                             required
                         />

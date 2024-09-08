@@ -1,13 +1,13 @@
-import {createClient} from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
-import {redirect} from "next/navigation";
+import { redirect } from "next/navigation";
 import ThemeSwitch from "@/components/NextUI/Themeswitcher";
 
 export default async function AuthButton() {
     const supabase = createClient();
 
     // Get the currently logged-in user
-    const {data: userData, error: authError} = await supabase.auth.getUser();
+    const { data: userData, error: authError } = await supabase.auth.getUser();
 
     if (authError || !userData.user) {
         console.error('Error fetching user data:', authError);
@@ -19,7 +19,7 @@ export default async function AuthButton() {
                 >
                     Login/Sign-Up
                 </Link>
-                <ThemeSwitch/>
+                <ThemeSwitch />
             </div>
         );
     }
@@ -27,7 +27,7 @@ export default async function AuthButton() {
     const userEmail = userData.user.email;
 
     // Fetch the user's name from the `user` table using the email
-    const {data: userInfo, error: userError} = await supabase
+    const { data: userInfo, error: userError } = await supabase
         .from('user')
         .select('Name_user')
         .eq('email_user', userEmail)
@@ -51,9 +51,11 @@ export default async function AuthButton() {
 
     return userData.user ? (
         <div className="flex flex-row items-center gap-4 flex-nowrap">
-            <p className="whitespace-nowrap">
+            <div className="">
                 Hey, {userInfo?.Name_user || userEmail}!
-            </p>
+            </div>
+
+
             <form action={handleSubmit}>
                 <button
                     type="submit"
@@ -79,7 +81,7 @@ export default async function AuthButton() {
             >
                 Login
             </Link>
-            <ThemeSwitch/>
+            <ThemeSwitch />
         </div>
     );
 }
