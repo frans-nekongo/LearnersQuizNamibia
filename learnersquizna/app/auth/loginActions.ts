@@ -45,23 +45,27 @@ export async function handleSignIn(email: string, password: string) {
 }
 
 export async function handleSignUp(email: string, password: string) {
+    "use server";
+
+    const origin = headers().get("origin");
     const supabase = createClient();
 
-    // Sign up the user
-    const {error: signUpError} = await supabase.auth.signUp({
+    // Attempt to sign up the user
+    const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-            emailRedirectTo: `${headers().get("origin")}/auth/callback`,
+            emailRedirectTo: `${origin}/auth/callback`,
         },
     });
 
-    if (signUpError) {
-        return {error: "Could not sign up user"};
+    // Return result in a consistent format
+    if (error) {
+        return { error: "Could not sign up user" }; // Adjust error message if needed
     }
 
-    // Redirect to user dashboard if everything is fine
-    return redirect("/protected/user");
+    // If no error, indicate successful sign-up
+    return { success: true };
 }
 
 export async function handleAddUser(email: string, userName: string) {
