@@ -44,7 +44,7 @@ export default function Login({searchParams}: { searchParams: { message: string 
     }
 
     // Redirect to login with a success message if sign-up is successful
-    return redirect("/login?message=Check email to continue sign in process");
+    return redirect("/login?message=email verified Sign In");
 };
 
 
