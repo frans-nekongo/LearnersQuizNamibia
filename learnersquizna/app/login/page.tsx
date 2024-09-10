@@ -4,7 +4,7 @@ import Link from "next/link";
 import {useState} from "react";
 import {SubmitButton} from "./submit-button";
 import {Snippet} from "@nextui-org/react";
-import {handleSignIn, handleAddUser} from "../auth/loginActions";
+import {handleSignIn, handleAddUser,handleSignUp} from "../auth/loginActions";
 import {redirect} from "next/navigation";
 
 export default function Login({searchParams}: { searchParams: { message: string } }) {
@@ -29,6 +29,21 @@ export default function Login({searchParams}: { searchParams: { message: string 
             setShowNameInput(true); // Show name input if needed
         }
     };
+    const signUp = async (formData: FormData) => {
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    setUserEmail(email); // Store email
+
+    const result = await handleSignUp(email, password);
+
+    if (result?.error) {
+        // Handle error
+        return redirect(`/login?message=${result.error}`);
+    }
+
+};
+
 
     const handleNameSubmit = async (formData: FormData) => {
         const name = formData.get("name") as string;
@@ -108,7 +123,10 @@ export default function Login({searchParams}: { searchParams: { message: string 
                 </SubmitButton>
 
                 <SubmitButton
-                    formAction={handleNameSubmit}
+                    formAction={
+                    // handleNameSubmit
+                        signUp
+                }
                     className="border border-gray-300 hover:border-green-600 rounded-md px-4 py-2 text-gray-700 hover:text-green-600 font-semibold transition-all duration-300 mb-2"
                     pendingText="Signing Up..."
                 >

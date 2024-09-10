@@ -3,6 +3,7 @@
 
 import {createClient} from "@/utils/supabase/server";
 import {redirect} from "next/navigation";
+import {headers} from "next/headers";
 
 export async function handleSignIn(email: string, password: string) {
     const supabase = createClient();
@@ -37,6 +38,26 @@ export async function handleSignIn(email: string, password: string) {
     // If the user doesn't exist, indicate that we need to collect the user's name
     if (userData.length === 0) {
         return {needsName: true};
+    }
+
+    // Redirect to user dashboard if everything is fine
+    return redirect("/protected/user");
+}
+
+export async function handleSignUp(email: string, password: string) {
+    const supabase = createClient();
+
+    // Sign up the user
+    const {error: signUpError} = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            emailRedirectTo: `${headers().get("origin")}/auth/callback`,
+        },
+    });
+
+    if (signUpError) {
+        return {error: "Could not sign up user"};
     }
 
     // Redirect to user dashboard if everything is fine
