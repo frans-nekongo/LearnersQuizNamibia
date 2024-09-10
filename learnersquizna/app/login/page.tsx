@@ -1,19 +1,18 @@
 "use client"; // Client component
 
 import Link from "next/link";
-import {useState} from "react";
-import {SubmitButton} from "./submit-button";
-import {Snippet} from "@nextui-org/react";
-import {handleSignIn, handleAddUser, handleSignUp} from "../auth/loginActions";
-import {redirect} from "next/navigation";
+import { useState } from "react";
+import { SubmitButton } from "./submit-button";
+import { handleSignIn, handleAddUser, handleSignUp } from "../auth/loginActions";
+import { redirect } from "next/navigation";
 
-export default function Login({searchParams}: { searchParams: { message: string } }) {
+export default function Login({ searchParams }: { searchParams: { message: string } }) {
     const [showNameInput, setShowNameInput] = useState(false); // State to show name input
     const [userName, setUserName] = useState(""); // State to store user name
     const [userEmail, setUserEmail] = useState(""); // Store email for later use
 
     const signIn = async (formData: FormData) => {
-        const email = formData.get("email") as string;
+        const email = (formData.get("email") as string).toLowerCase(); // Convert email to lowercase
         const password = formData.get("password") as string;
 
         setUserEmail(email); // Store email
@@ -29,25 +28,24 @@ export default function Login({searchParams}: { searchParams: { message: string 
             setShowNameInput(true); // Show name input if needed
         }
     };
+
     const signUp = async (formData: FormData) => {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+        const email = (formData.get("email") as string).toLowerCase(); // Convert email to lowercase
+        const password = formData.get("password") as string;
 
-    setUserEmail(email); // Store email
+        setUserEmail(email); // Store email
 
-    // Call handleSignUp with email and password
-    const result = await handleSignUp(email, password);
+        // Call handleSignUp with email and password
+        const result = await handleSignUp(email, password);
 
-    if (result?.error) {
-        // Handle error and redirect with error message
-        return redirect(`/login?message=${result.error}`);
-    }
+        if (result?.error) {
+            // Handle error and redirect with error message
+            return redirect(`/login?message=${result.error}`);
+        }
 
-    // Redirect to login with a success message if sign-up is successful
-    return redirect("/login?message=email verified Sign In");
-};
-
-
+        // Redirect to login with a success message if sign-up is successful
+        return redirect("/login?message=email verified Sign In");
+    };
 
     const handleNameSubmit = async (formData: FormData) => {
         const name = formData.get("name") as string;
@@ -88,56 +86,52 @@ export default function Login({searchParams}: { searchParams: { message: string 
             </Link>
 
             <form className="flex-1 flex flex-col w-full justify-center gap-4 text-foreground">
-                {/*<div className="flex flex-wrap gap-4">*/}
-                {/*    <Snippet symbol="user" color="success" size="sm">demo@gmail.com</Snippet>*/}
-                {/*    <Snippet symbol="password" color="success" size="sm">demo</Snippet>*/}
-                {/*</div>*/}
+                {!showNameInput && (
+                    <>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-md font-medium text-gray-700" htmlFor="email">
+                                📧 Email
+                            </label>
+                            <input
+                                className="rounded-md px-4 py-2 bg-white border border-gray-300 focus:border-green-600 focus:ring-2 focus:ring-green-200 transition-all duration-300 mb-6"
+                                name="email"
+                                placeholder="you@example.com"
+                                required
+                                onChange={(e) => e.target.value = e.target.value.toLowerCase()} // Convert input to lowercase
+                            />
+                        </div>
 
-                <div className="flex flex-col gap-2">
-                    <label className="text-md font-medium text-gray-700" htmlFor="email">
-                        📧 Email
-                    </label>
-                    <input
-                        className="rounded-md px-4 py-2 bg-white border border-gray-300 focus:border-green-600 focus:ring-2 focus:ring-green-200 transition-all duration-300 mb-6"
-                        name="email"
-                        placeholder="you@example.com"
-                        required
-                    />
-                </div>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-md font-medium text-gray-700" htmlFor="password">
+                                🔒 Password
+                            </label>
+                            <input
+                                className="rounded-md px-4 py-2 border border-gray-300 focus:border-green-600 focus:ring-2 focus:ring-green-200 transition-all duration-300 mb-6"
+                                type="password"
+                                name="password"
+                                placeholder="••••••••"
+                                required
+                                minLength={6} // Notice the use of a number here
+                            />
+                        </div>
 
-                <div className="flex flex-col gap-2">
-                    <label className="text-md font-medium text-gray-700" htmlFor="password">
-                        🔒 Password
-                    </label>
-                    <input
-                        className="rounded-md px-4 py-2 border border-gray-300 focus:border-green-600 focus:ring-2 focus:ring-green-200 transition-all duration-300 mb-6"
-                        type="password"
-                        name="password"
-                        placeholder="••••••••"
-                        required
-                        minLength={6} // Notice the use of a number here
-                    />
-                </div>
+                        <SubmitButton
+                            formAction={signIn}
+                            className="bg-green-600 hover:bg-green-700 rounded-md px-4 py-2 text-white font-semibold transition-all duration-300 mb-2"
+                            pendingText="Signing In..."
+                        >
+                            Sign In
+                        </SubmitButton>
 
-
-                <SubmitButton
-                    formAction={signIn}
-                    className="bg-green-600 hover:bg-green-700 rounded-md px-4 py-2 text-white font-semibold transition-all duration-300 mb-2"
-                    pendingText="Signing In..."
-                >
-                    Sign In
-                </SubmitButton>
-
-                <SubmitButton
-                    formAction={
-                        // handleNameSubmit
-                        signUp
-                    }
-                    className="border border-gray-300 hover:border-green-600 rounded-md px-4 py-2 text-gray-700 hover:text-green-600 font-semibold transition-all duration-300 mb-2"
-                    pendingText="Signing Up..."
-                >
-                    Sign Up
-                </SubmitButton>
+                        <SubmitButton
+                            formAction={signUp}
+                            className="border border-gray-300 hover:border-green-600 rounded-md px-4 py-2 text-gray-700 hover:text-green-600 font-semibold transition-all duration-300 mb-2"
+                            pendingText="Signing Up..."
+                        >
+                            Sign Up
+                        </SubmitButton>
+                    </>
+                )}
 
                 {showNameInput && (
                     <div className="flex flex-col gap-2">
@@ -169,7 +163,6 @@ export default function Login({searchParams}: { searchParams: { message: string 
                     </p>
                 )}
             </form>
-
         </div>
     );
 }
