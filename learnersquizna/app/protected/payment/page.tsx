@@ -34,29 +34,29 @@ export default async function ProtectedPage() {
             </div>
 
             <div className="flex-1 flex flex-col gap-2 max-w-4xl px-3">
-                <main className="flex-1 flex flex-col gap-6">
-                    <div className="flex flex-col items-center gap-6 p-6 bg-gray-100 rounded-lg max-w-4xl mx-auto">
-                        <h2 className="font-extrabold text-4xl mb-4 text-center text-blue-600">
+                <main className=" flex-1 flex flex-col gap-6">
+                    <div className="bg-btn-background flex flex-col items-center gap-6 p-6 rounded-lg max-w-4xl mx-auto">
+                        <h2 className="dark:text-yellow-400 font-extrabold text-4xl mb-4 text-center text-blue-600">
                             Support Me with a Coffee
                         </h2>
-                        <p className="text-center text-lg text-gray-700 mb-8">
+                        <p className="text-center text-lg dark:text-white text-gray-700 mb-8">
                             Love my work? Buy me a coffee and help me keep creating!
                         </p>
 
                         {/* Pricing Section */}
                         <div className="flex flex-row gap-8 justify-center">
                             <div
-                                className="flex flex-col p-6 bg-white rounded-lg shadow-md w-64 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
-                                <h3 className="text-xl font-bold mb-2">☕ Large Coffee</h3>
-                                <p className="text-gray-700 mb-4">N$40</p>
-                                <p className="text-gray-600 flex-grow">Support with a large coffee</p>
+                                className="dark:bg-black flex flex-col p-6 bg-white rounded-lg shadow-md w-64 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                                <h3 className="dark:text-white text-xl font-bold mb-2">☕ Large Coffee</h3>
+                                <p className="dark:text-white text-gray-700 mb-4">N$40</p>
+                                <p className="dark:text-white text-gray-600 flex-grow">Support with a large coffee</p>
                             </div>
 
                             <div
-                                className="flex flex-col p-6 bg-white rounded-lg shadow-md w-64 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
-                                <h3 className="text-xl font-bold mb-2">☕ Regular Coffee</h3>
-                                <p className="text-gray-700 mb-4">N$25</p>
-                                <p className="text-gray-600 flex-grow">Support with a regular coffee</p>
+                                className="dark:bg-black flex flex-col p-6 bg-white rounded-lg shadow-md w-64 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                                <h3 className="dark:text-white text-xl font-bold mb-2">☕ Regular Coffee</h3>
+                                <p className="dark:text-white text-gray-700 mb-4">N$25</p>
+                                <p className="dark:text-white text-gray-600 flex-grow">Support with a regular coffee</p>
                             </div>
                         </div>
 
