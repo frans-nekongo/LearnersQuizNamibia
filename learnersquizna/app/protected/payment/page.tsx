@@ -35,59 +35,44 @@ export default async function ProtectedPage() {
 
             <div className="flex-1 flex flex-col gap-2 max-w-4xl px-3">
                 <main className="flex-1 flex flex-col gap-6">
-                    <h2 className="font-bold text-4xl mb-4 text-center">How To Buy More Tests</h2>
+                    <div className="flex flex-col items-center gap-6 p-6 bg-gray-100 rounded-lg max-w-4xl mx-auto">
+                        <h2 className="font-extrabold text-4xl mb-4 text-center text-blue-600">
+                            Support Me with a Coffee
+                        </h2>
+                        <p className="text-center text-lg text-gray-700 mb-8">
+                            Love my work? Buy me a coffee and help me keep creating!
+                        </p>
 
-                    {/* Pricing Section */}
-                    <div className="flex flex-wrap gap-6 justify-center">
-                        <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                            <PricingCard
-                                title="6 Tests"
-                                price="N$50"
-                                description="Get 6 tests for N$50. Ideal for comprehensive practice."
-                            />
-                            <PricingCard
-                                title="3 Tests"
-                                price="N$25"
-                                description="Get 3 tests for N$25. Perfect for quick practice sessions."
-                            />
+                        {/* Pricing Section */}
+                        <div className="flex flex-row gap-8 justify-center">
+                            <div className="flex flex-col p-6 bg-white rounded-lg shadow-md w-64">
+                                <h3 className="text-xl font-bold mb-2">Large Coffee</h3>
+                                <p className="text-gray-700 mb-4">N$40</p>
+                                <p className="text-gray-600 flex-grow">Support with a large coffee</p>
+                            </div>
+
+                            <div className="flex flex-col p-6 bg-white rounded-lg shadow-md w-64">
+                                <h3 className="text-xl font-bold mb-2">Regular Coffee</h3>
+                                <p className="text-gray-700 mb-4">N$25</p>
+                                <p className="text-gray-600 flex-grow">Support with a regular coffee</p>
+                            </div>
                         </div>
+
+
+                        {/* Single Payment Instruction */}
+                        <div className="w-full flex flex-col items-center gap-6 mt-8 bg-white p-4 rounded-lg shadow-md">
+                            <h3 className="font-bold text-xl text-gray-800">How to Pay</h3>
+                            <p className="text-center text-gray-700">
+                                Send to <strong>+081 7173244</strong>. <br/>
+                            </p>
+                        </div>
+
+                        {/* Footer */}
+                        <footer className="text-center text-gray-500 mt-10">
+                            Thank you for your support! ❤️
+                        </footer>
                     </div>
 
-
-                    {/* Payment Instructions */}
-                    <PaymentCard
-                        title="FNB Pay2Cell"
-                        steps={[
-                            "Pay2Cell to +081 7173244.",
-                            "Enter the reference as your email address that you signed up with.",
-                        ]}
-                    />
-
-                    <PaymentCard
-                        title="Ewallet"
-                        steps={[
-                            "Send the payment to the number: +081 7173244.",
-                            "After payment, text the same number with your confirmation and email address.",
-                        ]}
-                    />
-
-                    <PaymentCard
-                        title="BlueWallet"
-                        steps={[
-                            "Log in to your BlueWallet app.",
-                            "Send the payment to the provided address or number.",
-                            "After payment, text the same number with your confirmation and email address.",
-                        ]}
-                    />
-
-                    <PaymentCard
-                        title="EasyWallet"
-                        steps={[
-                            "Log in to your EasyWallet app.",
-                            "Send the payment to the provided address or number.",
-                            "After payment, text the same number with your confirmation and email address.",
-                        ]}
-                    />
                 </main>
             </div>
 
