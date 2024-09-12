@@ -36,7 +36,7 @@ export default async function ProtectedPage() {
             <div className="flex-1 flex flex-col gap-2 w-full max-w-4xl px-3">
                 <main className="flex-1 flex flex-col gap-6">
                     <div
-                        className="bg-btn-background flex flex-col items-center gap-6 p-6 rounded-lg w-full max-w-4xl mx-auto">
+                        className="bg-btn-background flex flex-col items-center gap-6 p-6 rounded-lg md:w-2/3 w-full max-w-4xl mx-auto">
                         <h2 className="dark:text-yellow-400 font-extrabold text-3xl md:text-4xl mb-4 text-center text-blue-600">
                             Support Me with a Coffee
                         </h2>
@@ -62,7 +62,7 @@ export default async function ProtectedPage() {
                         </div>
 
                         {/* Single Payment Instruction */}
-                        <div className="w-full flex flex-col md:w-2/3 items-center gap-4 mt-8 bg-white p-4 rounded-lg shadow-md">
+                        <div className="w-full flex flex-col items-center gap-4 mt-8 bg-white p-4 rounded-lg shadow-md">
                             <p className="text-center text-gray-700">
                                 Send to <strong>+081 7173244</strong>.
                             </p>
