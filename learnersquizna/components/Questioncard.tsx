@@ -70,7 +70,7 @@ export function Questioncard({
 
                     {/* Answer Text (Shown if a wrong answer was selected and submitted) */}
                     {showCorrectAnswer && (
-                        <div className="text-sm text-green-600">
+                        <div className="text-wrap text-sm text-green-600">
                             Correct Answer: {correctAnswer}
                         </div>
                     )}

@@ -60,6 +60,10 @@ export function QuestionView() {
         handleLayoutChange(newLayout);  // Proceed with normal layout change logic
     };
 
+    // Specify the ref type as HTMLDivElement | null
+    const scoreSummaryRef = useRef<HTMLDivElement | null>(null);
+
+
     useEffect(() => {
         const handleResize = () => {
             // Only set the layout based on screen size if the user has not toggled manually
@@ -120,6 +124,7 @@ export function QuestionView() {
         setTotalScore(finalScore);
         setSubmitted(true);
         setIsButtonDisabled(true);
+
         await decrementTestsLeftLocally();
         console.log("Total Score:", finalScore);
 
@@ -128,6 +133,11 @@ export function QuestionView() {
         }
 
         setTimeLeft(0);
+
+        // Scroll into view after submission
+        if (scoreSummaryRef.current) {
+            scoreSummaryRef.current.scrollIntoView({behavior: 'smooth'});
+        }
     };
 
     const getWeakestSectionMessage = (): string => {
@@ -466,19 +476,24 @@ export function QuestionView() {
                         variant="bordered"
                         onClick={handleSubmit}
                         disabled={isButtonDisabled}
+                        className="transform transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-blue-600 hover:text-white"
                     >
                         Submit
                     </Button>
 
+
                     {submitted && (
-                        <ScoreSummary
-                            totalScore={totalScore}
-                            percentage={percentage}
-                            sectionScores={sectionScores}
-                            sectionTotals={sectionTotals}
-                            selectedCode={selectedCode}
-                            getWeakestSectionMessage={getWeakestSectionMessage}
-                        />
+                        <div ref={scoreSummaryRef}>
+                            <ScoreSummary
+                                totalScore={totalScore}
+                                percentage={percentage}
+                                sectionScores={sectionScores}
+                                sectionTotals={sectionTotals}
+                                selectedCode={selectedCode}
+                                getWeakestSectionMessage={getWeakestSectionMessage}
+                            />
+                        </div>
+
                     )}
 
                     {/* Timer overlay */}
