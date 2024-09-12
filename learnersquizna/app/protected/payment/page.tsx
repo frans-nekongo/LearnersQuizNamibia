@@ -62,7 +62,7 @@ export default async function ProtectedPage() {
                         </div>
 
                         {/* Single Payment Instruction */}
-                        <div className="w-full flex flex-col items-center gap-4 mt-8 bg-white p-4 rounded-lg shadow-md">
+                        <div className="w-full flex flex-col md:w-2/3 items-center gap-4 mt-8 bg-white p-4 rounded-lg shadow-md">
                             <p className="text-center text-gray-700">
                                 Send to <strong>+081 7173244</strong>.
                             </p>
