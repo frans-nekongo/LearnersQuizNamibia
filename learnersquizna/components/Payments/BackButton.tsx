@@ -13,11 +13,12 @@ const BackButton: React.FC<BackButtonProps> = ({ destination }) => {
     return (
         <button
             onClick={() => router.push(destination)}
-            className="fixed bottom-8 right-8 bg-[#CB011F] text-white p-4 rounded-full shadow-lg hover:bg-red-600 transition duration-300 ease-in-out z-50"
+            className="fixed bottom-[50px] right-8 bg-[#CB011F] text-white p-4 rounded-full shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-red-600 z-50"
             aria-label="Back"
         >
             ← Back
         </button>
+
     );
 };
 
