@@ -284,7 +284,7 @@ export function QuestionView() {
             {showExtraTests && (
                 <>
                     <Button
-                        className="fixed z-40 bottom-5 right-5 p-3 text-white bg-green-600 border border-white rounded-lg shadow-lg flex items-center space-x-2 transform rotate-[-5deg] hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-300 ease-in-out"
+                        className="fixed z-40 bottom-5 right-5 p-3 text-white bg-green-600 border border-white rounded-lg shadow-lg flex items-center space-x-2 transform rotate-[-5deg] transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400"
                         color="default"
                         variant="bordered"
                         onClick={handleExitButtonClick} // Show confirmation dialog
@@ -292,6 +292,7 @@ export function QuestionView() {
                         <span className="font-bold text-xl">⬅️</span>
                         <span className="text-sm font-medium">Go Back</span>
                     </Button>
+
 
                     <ExtraTests/>
                 </>
@@ -354,13 +355,14 @@ export function QuestionView() {
                         <Button
                             key="BackToSelectLearnersCode"
                             size="sm"
-                            className="border-2 border-black dark:border-white flex items-center gap-2 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-all duration-300 ease-in-out"
+                            className="border-2 border-black dark:border-white flex items-center gap-2 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-gray-300 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
                             variant="bordered"
                             onClick={() => setSelectedCode(null)}
                         >
                             <FaArrowLeft className="text-lg"/>
                             Back
                         </Button>
+
                     </div>
                 </div>
             )}
@@ -370,7 +372,7 @@ export function QuestionView() {
 
                     <Button
                         key="BackToSelectQuestionPaper"
-                        className="fixed z-40 bottom-4 right-4 p-3 text-white bg-red-600 border-2 border-yellow-400 rounded-full flex items-center gap-2 shadow-lg hover:bg-red-700 transition-all duration-300 ease-in-out"
+                        className="fixed z-40 bottom-4 right-4 p-3 text-white bg-red-600 border-2 border-yellow-400 rounded-full flex items-center gap-2 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-red-700 hover:border-yellow-500"
                         color="default"
                         variant="faded"
                         onClick={onOpen} // Show confirmation dialog
@@ -378,6 +380,7 @@ export function QuestionView() {
                         <FaChevronCircleLeft className="text-2xl"/>
                         <span className="hidden md:inline">Back/Exit Test</span>
                     </Button>
+
                     <div className="flex justify-center mb-4 md:mb-8 lg:mb-8">
                         <div className="flex justify-center items-center">
                             <h3 className="text-xl font-bold text-center">SECTION A: PRACTICE QUESTIONS</h3>
