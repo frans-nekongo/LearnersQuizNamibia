@@ -78,7 +78,7 @@ export async function handleAddUser(email: string, userName: string) {
             {
                 email_user: email,
                 Road_Sign_Attempts_Left: 0,
-                Tests_Left: 3,
+                Tests_Left: 50,
                 Traffic_Rules_Attempts_Left: 0,
                 Name_user: userName,
             },
