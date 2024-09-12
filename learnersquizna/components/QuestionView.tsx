@@ -301,7 +301,7 @@ export function QuestionView() {
 
             {selectedCode && !selectedSet && ( // Render set selection buttons if a code is selected but not a set
                 <div className="grid grid-flow-row-dense gap-5">
-                    <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Question Paper</h2>
+                    <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Test Paper</h2>
                     <div className="grid grid-flow-row-dense grid-cols-3 gap-4">
                         <Button
                             className="border-black dark:border-white transform transition-transform duration-300 hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
