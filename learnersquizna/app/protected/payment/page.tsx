@@ -45,14 +45,16 @@ export default async function ProtectedPage() {
 
                         {/* Pricing Section */}
                         <div className="flex flex-row gap-8 justify-center">
-                            <div className="flex flex-col p-6 bg-white rounded-lg shadow-md w-64">
-                                <h3 className="text-xl font-bold mb-2">Large Coffee</h3>
+                            <div
+                                className="flex flex-col p-6 bg-white rounded-lg shadow-md w-64 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                                <h3 className="text-xl font-bold mb-2">☕ Large Coffee</h3>
                                 <p className="text-gray-700 mb-4">N$40</p>
                                 <p className="text-gray-600 flex-grow">Support with a large coffee</p>
                             </div>
 
-                            <div className="flex flex-col p-6 bg-white rounded-lg shadow-md w-64">
-                                <h3 className="text-xl font-bold mb-2">Regular Coffee</h3>
+                            <div
+                                className="flex flex-col p-6 bg-white rounded-lg shadow-md w-64 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                                <h3 className="text-xl font-bold mb-2">☕ Regular Coffee</h3>
                                 <p className="text-gray-700 mb-4">N$25</p>
                                 <p className="text-gray-600 flex-grow">Support with a regular coffee</p>
                             </div>
@@ -61,7 +63,6 @@ export default async function ProtectedPage() {
 
                         {/* Single Payment Instruction */}
                         <div className="w-full flex flex-col items-center gap-6 mt-8 bg-white p-4 rounded-lg shadow-md">
-                            <h3 className="font-bold text-xl text-gray-800">How to Pay</h3>
                             <p className="text-center text-gray-700">
                                 Send to <strong>+081 7173244</strong>. <br/>
                             </p>
