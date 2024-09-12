@@ -41,41 +41,41 @@ export function QuestionView() {
 
     const {testsLeft, decrementTestsLeftLocally, refreshTestsLeft} = useTestsLeft();
 
-   const determineInitialLayout = () => {
-    // Adjust the threshold value as needed (e.g., 768px for tablets and above)
-    return window.innerWidth >= 768;
-};
+    const determineInitialLayout = () => {
+        // Adjust the threshold value as needed (e.g., 768px for tablets and above)
+        return window.innerWidth >= 768;
+    };
 
 // Initialize state with a function to check screen width
-const [isGridLayout, setIsGridLayout] = useState(determineInitialLayout);
+    const [isGridLayout, setIsGridLayout] = useState(determineInitialLayout);
 
-const userHasToggled = useRef(false);  // <-- Add this here to initialize the ref
+    const userHasToggled = useRef(false);  // <-- Add this here to initialize the ref
 
-const handleLayoutChange = (newLayout: boolean) => {
-    setIsGridLayout(newLayout);
-};
-
-const handleUserToggle = (newLayout: boolean) => {
-    userHasToggled.current = true;  // <-- This line sets the ref when the user toggles manually
-    handleLayoutChange(newLayout);  // Proceed with normal layout change logic
-};
-
-useEffect(() => {
-    const handleResize = () => {
-        // Only set the layout based on screen size if the user has not toggled manually
-        if (!userHasToggled.current) {
-            setIsGridLayout(determineInitialLayout());
-        }
+    const handleLayoutChange = (newLayout: boolean) => {
+        setIsGridLayout(newLayout);
     };
 
-    // Add event listener for window resize
-    window.addEventListener('resize', handleResize);
-
-    // Cleanup event listener on component unmount
-    return () => {
-        window.removeEventListener('resize', handleResize);
+    const handleUserToggle = (newLayout: boolean) => {
+        userHasToggled.current = true;  // <-- This line sets the ref when the user toggles manually
+        handleLayoutChange(newLayout);  // Proceed with normal layout change logic
     };
-}, []);
+
+    useEffect(() => {
+        const handleResize = () => {
+            // Only set the layout based on screen size if the user has not toggled manually
+            if (!userHasToggled.current) {
+                setIsGridLayout(determineInitialLayout());
+            }
+        };
+
+        // Add event listener for window resize
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup event listener on component unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     // Your component logic here
 
@@ -220,7 +220,7 @@ useEffect(() => {
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Learners Licence Code</h2>
                     <div className="grid grid-flow-row-dense grid-cols-3 gap-4">
                         <Button
-                            className="border-[#01A093]"
+                            className="border-[#01A093] transform transition-transform duration-300 hover:scale-105 hover:bg-[#01A093] hover:text-white"
                             variant="bordered"
                             onClick={() => {
                                 setTimeout(() => {
@@ -232,38 +232,40 @@ useEffect(() => {
                         </Button>
 
                         <Button
-                            className="border-[#F4AB30]"
+                            className="border-[#F4AB30] transform transition-transform duration-300 hover:scale-105 hover:bg-[#F4AB30] hover:text-white"
                             variant="bordered"
                             onClick={() => {
                                 setTimeout(() => {
                                     setSelectedCode('Code 2');
                                 }, 500);
                             }}
-                            startContent={<FaCar/>}>
+                            startContent={<FaCar/>}
+                        >
                             Code 2
                         </Button>
 
+
                         <Button
-                            className="border-[#CB011F]"
+                            className="border-[#CB011F] transform transition-transform duration-300 hover:scale-105 hover:bg-[#CB011F] hover:text-white"
                             variant="bordered"
                             onClick={() => {
-                                // Add a delay of 500 milisc
                                 setTimeout(() => {
                                     setSelectedCode('Code 3');
                                 }, 500);
                             }}
-                            startContent={<FaTruck/>}>
+                            startContent={<FaTruck/>}
+                        >
                             Code 3
                         </Button>
+
 
                     </div>
                     {/*if road sign is pressed*/}
                     <div className="flex justify-center items-center h-full">
                         <Button
-                            color="danger"
+                            className="border-red-600 text-red-600 transform transition-transform duration-300 hover:scale-105 hover:bg-red-600 hover:text-white"
                             variant="bordered"
                             onClick={() => {
-                                // Add a delay of 2 seconds (2000 milliseconds)
                                 setTimeout(() => {
                                     setShowExtraTests(true);
                                 }, 400);
@@ -301,7 +303,7 @@ useEffect(() => {
                     <h2 className="font-bold text-2xl md:text-4xl mb-4 text-center">Select Question Paper</h2>
                     <div className="grid grid-flow-row-dense grid-cols-3 gap-4">
                         <Button
-                            className="border-black dark:border-white"
+                            className="border-black dark:border-white transform transition-transform duration-300 hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
                             variant="bordered"
                             onClick={() => {
                                 if (testsLeft === null || testsLeft < 1) {
@@ -316,7 +318,7 @@ useEffect(() => {
                         </Button>
 
                         <Button
-                            className="border-black dark:border-white"
+                            className="border-black dark:border-white transform transition-transform duration-300 hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
                             variant="bordered"
                             onClick={() => setSelectedSet('B')}
                             disabled={testsLeft === null || testsLeft < 1} // Disable button if testsLeft is less than 1
@@ -325,7 +327,7 @@ useEffect(() => {
                         </Button>
 
                         <Button
-                            className="border-black dark:border-white"
+                            className="border-black dark:border-white transform transition-transform duration-300 hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
                             variant="bordered"
                             onClick={() => setSelectedSet('C')}
                             disabled={testsLeft === null || testsLeft < 1} // Disable button if testsLeft is less than 1
