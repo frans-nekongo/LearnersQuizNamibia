@@ -40,7 +40,7 @@ export default async function ProtectedPage() {
                             Support Me with a Coffee
                         </h2>
                         <p className="text-center text-lg dark:text-white text-gray-700 mb-8">
-                            Love my work? Buy me a coffee and help me keep creating!
+                            Enjoying my work? <br/>Treat this Uni Student to a coffee and keep the creativity flowing!
                         </p>
 
                         {/* Pricing Section */}
