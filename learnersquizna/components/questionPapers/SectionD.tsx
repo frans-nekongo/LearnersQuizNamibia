@@ -87,13 +87,20 @@ export default function SectionD({ selectedSet, onScoreChange, submitted, onSubm
                 { value: "c", description: post.option_2 }
             ];
 
-            map[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
-                const option = options[index];
-                if (option.description === label) {
-                    return option;
-                }
-                return options.find(o => o.description === label) || option;
+            // Create a label map
+            const labels = ['A', 'B', 'C'];
+
+            // Map options to labels, ensuring each label gets a unique option
+            const optionMap = new Map<string, AnswerOption>();
+            options.forEach((option, index) => {
+                const label = labels[index];
+                optionMap.set(label, option);
             });
+
+            // Ensure all labels are included
+            const finalOptions: AnswerOption[] = labels.map((label) => optionMap.get(label) || { value: '', description: '' });
+
+            map[post.q_number] = finalOptions;
         });
         return map;
     }, [posts]);

@@ -7,7 +7,7 @@ interface SectionAProps {
     onScoreChange: (score: number) => void;
     submitted: boolean;
     onSubmit?: () => void;
-    isGridLayout: boolean; // New prop to toggle layout
+    isGridLayout: boolean;
 }
 
 interface AnswerOption {
@@ -16,6 +16,15 @@ interface AnswerOption {
 }
 
 const cacheKeyPrefix = 'sectionAData_';
+
+// Function to shuffle array elements
+function shuffleArray(array: any[]) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
 async function fetchLatestDataVersion(supabase: any, selectedSet?: string) {
     const { data, error } = await supabase
@@ -88,14 +97,14 @@ export default function SectionA({ selectedSet, onScoreChange, submitted, onSubm
             nonNullData.forEach((post: { answer: any; option_1: any; option_2: any; q_number: string | number; }, index: number) => {
                 const options: AnswerOption[] = [
                     { value: "1", description: post.answer },
-                    { value: "b", description: post.option_1 },
-                    { value: "c", description: post.option_2 }
+                    { value: "2", description: post.option_1 },
+                    { value: "3", description: post.option_2 }
                 ];
 
-                newShuffledOptionsMap[index + 1] = ['A', 'B', 'C'].map((label, optionIndex) => {
-                    const option = options[optionIndex];
-                    return option.description === label ? option : options.find(o => o.description === label) || option;
-                });
+                // Shuffle the options array
+                const shuffledOptions = shuffleArray([...options]);
+
+                newShuffledOptionsMap[index + 1] = shuffledOptions;
             });
 
             setShuffledOptionsMap(newShuffledOptionsMap);

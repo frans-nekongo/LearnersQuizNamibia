@@ -92,17 +92,31 @@ const SectionB = ({ selectedSet, onScoreChange, submitted, onSubmit, isGridLayou
                     { value: "c", description: post.option_2 }
                 ];
 
-                newShuffledOptionsMap[post.q_number] = ['A', 'B', 'C'].map((label, index) => {
-                    const option = options[index];
-                    if (option.description === label) {
-                        return option;
-                    } else if (option.description.match(/^[ABC]$/)) {
-                        return options.find(o => o.description === label) || option;
+                // Separate options that match 'A', 'B', 'C' descriptions
+                const fixedOptions: AnswerOption[] = [];
+                const shuffleOptions: AnswerOption[] = [];
+
+                options.forEach(option => {
+                    if (['A', 'B', 'C'].includes(option.description)) {
+                        fixedOptions.push(option);  // Add matching options directly
                     } else {
-                        return option;
+                        shuffleOptions.push(option); // Add non-matching options for shuffling
                     }
                 });
+
+                // Shuffle the non-matching options
+                shuffleOptions.sort(() => Math.random() - 0.5);
+
+                // Create the final array by merging fixed and shuffled options
+                const finalOptions = ['A', 'B', 'C'].map((label, idx) => {
+                    // If there's a fixed option, place it directly; otherwise, place the shuffled option
+                    const fixedOption = fixedOptions.find(o => o.description === label);
+                    return fixedOption || shuffleOptions[idx - fixedOptions.length];
+                });
+
+                newShuffledOptionsMap[post.q_number] = finalOptions;
             });
+
             setShuffledOptionsMap(newShuffledOptionsMap);
 
             const dataToCache = {

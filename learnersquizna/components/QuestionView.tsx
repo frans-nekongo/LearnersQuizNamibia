@@ -199,7 +199,7 @@ export function QuestionView() {
         (selectedCode === 'Code 1' ? sectionTotals.sectionD : 0) +
         ((selectedCode === 'Code 2' || selectedCode === 'Code 3') ? sectionTotals.sectionE : 0);
 
-    const percentage = totalScore > 0 ? ((totalScore / totalQuestions) * 100).toFixed(2) : '0';
+    const percentage = totalScore > 0 ? ((Math.min(totalScore / totalQuestions, 1) * 100).toFixed(2)) : '0';
 
     return (
         <>

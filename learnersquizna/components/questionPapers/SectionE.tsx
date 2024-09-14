@@ -80,6 +80,7 @@ export default function SectionE({ selectedSet, onScoreChange, submitted, onSubm
             const nonNullData = data ?? [];
             setPosts(nonNullData);
 
+            // Map to hold the shuffled options
             const newShuffledOptionsMap: { [key: string]: AnswerOption[] } = nonNullData.reduce((acc, post, index) => {
                 // Create the options array with the correct answer always having value "1"
                 const options: AnswerOption[] = [
@@ -88,16 +89,26 @@ export default function SectionE({ selectedSet, onScoreChange, submitted, onSubm
                     { value: "c", description: post.option_2 }  // Option 2
                 ];
 
-                // Shuffle options randomly (optional)
-                const shuffledOptions = options.sort(() => Math.random() - 0.5);
+                // Create a label map for ensuring each label gets a unique option
+                const labels = ['A', 'B', 'C'];
+                const optionMap = new Map<string, AnswerOption>();
+                options.forEach((option, idx) => {
+                    const label = labels[idx];
+                    optionMap.set(label, option);
+                });
+
+                // Ensure all labels are included
+                const finalOptions: AnswerOption[] = labels.map((label) => optionMap.get(label) || { value: '', description: '' });
+
+                // Shuffle options (optional)
+                const shuffledOptions = finalOptions.sort(() => Math.random() - 0.5);
 
                 // Use the new question number starting from 71
                 const newQuestionNumber = (71 + index).toString();
 
-                // Ensure each question has its shuffled options correctly labeled
-                acc[newQuestionNumber] = shuffledOptions.map((option, index) => ({
+                acc[newQuestionNumber] = shuffledOptions.map((option, idx) => ({
                     ...option,
-                    label: ['A', 'B', 'C'][index]  // Assign labels A, B, C in order after shuffling
+                    label: labels[idx]  // Assign labels A, B, C in order after shuffling
                 }));
 
                 return acc;

@@ -3,8 +3,8 @@ import BackButton from "@/components/Payments/BackButton";
 import {createClient} from "@/utils/supabase/server";
 import {Footer} from "@/components/Footer";
 import {redirect} from "next/navigation";
-import PaymentCard from "@/components/questionPapers/PaymentCard";
-import PricingCard from "@/components/Payments/PricingCard";
+// import PaymentCard from "@/components/questionPapers/PaymentCard";
+// import PricingCard from "@/components/Payments/PricingCard";
 
 export default async function ProtectedPage() {
     const supabase = createClient();
