@@ -195,11 +195,26 @@ export function QuestionView() {
         sectionE: 12
     };
 
-    const totalQuestions = sectionTotals.sectionB + sectionTotals.sectionC +
+
+    // console.log("Section A:", sectionTotals.sectionA);
+    // console.log("Section B:", sectionTotals.sectionB);
+    // console.log("Section C:", sectionTotals.sectionC);
+    // console.log("Section D:", sectionTotals.sectionD);
+    // console.log("Section E:", sectionTotals.sectionE);
+
+    const totalQuestions = sectionTotals.sectionA + sectionTotals.sectionB + sectionTotals.sectionC +
         (selectedCode === 'Code 1' ? sectionTotals.sectionD : 0) +
         ((selectedCode === 'Code 2' || selectedCode === 'Code 3') ? sectionTotals.sectionE : 0);
 
-    const percentage = totalScore > 0 ? ((Math.min(totalScore / totalQuestions, 1) * 100).toFixed(2)) : '0';
+
+    // const percentage = totalScore > 0 ? ((Math.min(totalScore / totalQuestions, 1) * 100).toFixed(2)) : '0';
+    const percentage = totalQuestions > 0 ? ((totalScore / totalQuestions) * 100).toFixed(2) : '0.00';
+
+
+    // console.log("Total Score:", totalScore);
+    // console.log("Total Questions:", totalQuestions);
+    // console.log("Calculated Percentage:", percentage);
+
 
     return (
         <>
