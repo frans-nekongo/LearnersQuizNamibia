@@ -1,14 +1,14 @@
 "use client"; // Client component
 
 import Link from "next/link";
-import { useState } from "react";
-import { SubmitButton } from "./submit-button";
-import { handleSignIn, handleAddUser, handleSignUp } from "../auth/loginActions";
-import { redirect } from "next/navigation";
+import {useState} from "react";
+import {SubmitButton} from "./submit-button";
+import {handleSignIn, handleAddUser, handleSignUp} from "../auth/loginActions";
+import {redirect} from "next/navigation";
 
-export default function Login({ searchParams }: { searchParams: { message: string } }) {
+export default function Login({searchParams}: { searchParams: { message: string } }) {
     const [showNameInput, setShowNameInput] = useState(false); // State to show name input
-    const [userName, setUserName] = useState(""); // State to store user name
+    const [userName, setUserName] = useState(""); // State to store username
     const [userEmail, setUserEmail] = useState(""); // Store email for later use
 
     const signIn = async (formData: FormData) => {
@@ -30,10 +30,10 @@ export default function Login({ searchParams }: { searchParams: { message: strin
     };
 
     const signUp = async (formData: FormData) => {
-        const email = (formData.get("email") as string).toLowerCase(); // Convert email to lowercase
+        const email = (formData.get("email") as string).toLowerCase();
         const password = formData.get("password") as string;
 
-        setUserEmail(email); // Store email
+        setUserEmail(email); // Store email for later use
 
         // Call handleSignUp with email and password
         const result = await handleSignUp(email, password);
@@ -43,8 +43,18 @@ export default function Login({ searchParams }: { searchParams: { message: strin
             return redirect(`/login?message=${result.error}`);
         }
 
-        // Redirect to login with a success message if sign-up is successful
-        return redirect("/login?message=email verified Sign In");
+        // After successful sign-up, automatically sign in
+        const signInResult = await handleSignIn(email, password);
+
+        if (signInResult?.error) {
+            // If auto sign-in fails, redirect with an error message
+            return redirect(`/login?message=${signInResult.error}`);
+        }
+
+        if (signInResult?.needsName) {
+            // If sign-in requires name input, show the name input form
+            setShowNameInput(true);
+        }
     };
 
     const handleNameSubmit = async (formData: FormData) => {
@@ -88,6 +98,7 @@ export default function Login({ searchParams }: { searchParams: { message: strin
             <form className="flex-1 flex flex-col w-full justify-center gap-4 text-foreground">
                 {!showNameInput && (
                     <>
+                        {/* Email and Password Fields for Sign In / Sign Up */}
                         <div className="flex flex-col gap-2">
                             <label className="text-md font-medium text-gray-700" htmlFor="email">
                                 📧 Email
@@ -97,7 +108,7 @@ export default function Login({ searchParams }: { searchParams: { message: strin
                                 name="email"
                                 placeholder="you@example.com"
                                 required
-                                onChange={(e) => e.target.value = e.target.value.toLowerCase()} // Convert input to lowercase
+                                onChange={(e) => e.target.value = e.target.value.toLowerCase()}
                             />
                         </div>
 
@@ -111,7 +122,7 @@ export default function Login({ searchParams }: { searchParams: { message: strin
                                 name="password"
                                 placeholder="••••••••"
                                 required
-                                minLength={6} // Notice the use of a number here
+                                minLength={6}
                             />
                         </div>
 
