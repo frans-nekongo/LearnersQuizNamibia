@@ -38,26 +38,28 @@ export default async function ProtectedPage() {
                     <div
                         className="bg-btn-background flex flex-col items-center gap-6 p-6 rounded-lg md:w-2/3 w-full max-w-4xl mx-auto">
                         <h2 className="dark:text-yellow-400 font-extrabold text-3xl md:text-4xl mb-4 text-center text-blue-600">
-                            Support Me with a Coffee
+                            Sike, I can't handle coffee—I prefer sugar!
                         </h2>
                         <p className="text-center text-base md:text-lg dark:text-white text-gray-700 mb-8">
-                            Enjoying my work? <br/>Treat this Uni Student to a coffee and keep the creativity flowing!
+                            Enjoying my work? <br/>Treat this Uni Student to some gummy bears and keep the creativity
+                            flowing!
                         </p>
 
                         {/* Pricing Section */}
                         <div className="flex flex-col sm:flex-row gap-6 justify-center w-full">
                             <div
                                 className="dark:bg-black flex flex-col p-4 md:p-6 bg-white rounded-lg shadow-md w-full sm:w-64 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
-                                <h3 className="dark:text-white text-xl font-bold mb-2">☕ Large Coffee</h3>
+                                <h3 className="dark:text-white text-xl font-bold mb-2">🍬 Large Gummy Bears</h3>
                                 <p className="dark:text-white text-gray-700 mb-4">N$40</p>
-                                <p className="dark:text-white text-gray-600 flex-grow">Support with a large coffee</p>
+                                <p className="dark:text-white text-gray-600 flex-grow">Support with a large pack of
+                                    gummy bears</p>
                             </div>
 
                             <div
                                 className="dark:bg-black flex flex-col p-4 md:p-6 bg-white rounded-lg shadow-md w-full sm:w-64 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
-                                <h3 className="dark:text-white text-xl font-bold mb-2">☕ Regular Coffee</h3>
+                                <h3 className="dark:text-white text-xl font-bold mb-2">🍷 Wine Gums</h3>
                                 <p className="dark:text-white text-gray-700 mb-4">N$25</p>
-                                <p className="dark:text-white text-gray-600 flex-grow">Support with a regular coffee</p>
+                                <p className="dark:text-white text-gray-600 flex-grow">Support with some wine gums</p>
                             </div>
                         </div>
 

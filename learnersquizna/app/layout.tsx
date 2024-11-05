@@ -5,6 +5,7 @@ import React from "react";
 import {Providers} from "@/components/NextUI/Providers";
 import {Metadata} from "next";
 import {customMetaDataGenerator} from "@/lib/customMetaDataGenerator";
+import Script from "next/script";
 
 const defaultUrl = "https://namibianlearnerstest.frans-nekongo.com/"
     ? `https://namibianlearnerstest.frans-nekongo.com/`
@@ -23,9 +24,21 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en" className={GeistSans.className}>
+        <head>
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-05GMJSW0YW"></script>
+
+            <Script id="google-analytics">
+                {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', ${'${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}'});
+          `}
+            </Script>
+        </head>
         <body className="bg-background text-foreground ">
         <Providers>
-            <main className="min-h-screen flex flex-col items-center">
+        <main className="min-h-screen flex flex-col items-center">
                 {children}
             </main>
         </Providers>
