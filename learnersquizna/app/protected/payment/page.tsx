@@ -1,15 +1,14 @@
 import AuthButton from "@/components/AuthButton";
 import BackButton from "@/components/Payments/BackButton";
-import {createClient} from "@/utils/supabase/server";
-import {Footer} from "@/components/Footer";
-import {redirect} from "next/navigation";
-// import PaymentCard from "@/components/questionPapers/PaymentCard";
-// import PricingCard from "@/components/Payments/PricingCard";
+import { createClient } from "@/utils/supabase/server";
+import { Footer } from "@/components/Footer";
+import { redirect } from "next/navigation";
+import RevealNumber from "@/components/RevealNumber";
 
 export default async function ProtectedPage() {
     const supabase = createClient();
     const {
-        data: {user},
+        data: { user },
     } = await supabase.auth.getUser();
 
     if (!user) {
@@ -19,7 +18,7 @@ export default async function ProtectedPage() {
     return (
         <div className="flex-1 w-full flex flex-col gap-2 md:gap-2 items-center relative">
             {/* Floating Back Button */}
-            <BackButton destination="/protected/user"/>
+            <BackButton destination="/protected/user" />
 
             <div className="w-full">
                 <nav className="w-full flex justify-center border-b border-b-foreground/10 h-10 md:h-14">
@@ -28,7 +27,7 @@ export default async function ProtectedPage() {
                     </div>
                     <div className="w-full max-w-4xl flex justify-between p-3 items-center text-sm">
                         <a></a>
-                        <AuthButton/>
+                        <AuthButton />
                     </div>
                 </nav>
             </div>
@@ -41,7 +40,7 @@ export default async function ProtectedPage() {
                             Sike, I can't handle coffee—I prefer sugar!
                         </h2>
                         <p className="text-center text-base md:text-lg dark:text-white text-gray-700 mb-8">
-                            Enjoying my work? <br/>Treat this Uni Student to some gummy bears and keep the creativity
+                            Enjoying my work? <br />Treat this Uni Student to some gummy bears and keep the creativity
                             flowing!
                         </p>
 
@@ -64,11 +63,7 @@ export default async function ProtectedPage() {
                         </div>
 
                         {/* Single Payment Instruction */}
-                        <div className="w-full flex flex-col items-center gap-4 mt-8 bg-white p-4 rounded-lg shadow-md">
-                            <p className="text-center text-gray-700">
-                                Send to <strong>+081 7173244</strong>.
-                            </p>
-                        </div>
+                        <RevealNumber />
 
                         {/* Footer */}
                         <footer className="text-center text-gray-500 mt-10">
@@ -79,9 +74,8 @@ export default async function ProtectedPage() {
             </div>
 
             <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
-                <Footer/>
+                <Footer />
             </footer>
         </div>
-
     );
 }
