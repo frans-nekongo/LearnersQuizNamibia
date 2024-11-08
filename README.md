@@ -11,7 +11,7 @@ This repository contains the code for an online Namibian Learners License Test p
 
 - **User Authentication**: Secure login and registration using Supabase Auth
 - **Test Selection**: Choose from multiple question sets (Paper A, B, or C) for each license code (1, 2, or 3)
-- **Instant Feedback**: Immediate scoring with detailed insights on strengths and areas for improvement
+- **Instant Feedback**: Immediate scoring with insights on areas for improvement
 
 ## Screenshots
 
